@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QuestKids">
+<meta name="theme-color" content="#0D0F1A">
+<title>QuestKids</title>
+<link rel="manifest" href="#" id="manifestLink">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0D0F1A; --bg2:#141728; --surface:#1C2040; --surface2:#232848;
+  --border:#2E3460; --border2:#3A4070;
+  --brand:#6C63FF; --brand2:#9B94FF; --brandlt:#1E1840;
+  --amber:#FFB830; --amberlt:#3D2A00;
+  --green:#2ECC8A; --greenlt:#0D2A1A;
+  --red:#FF5E7A; --redlt:#2D0B18;
+  --pink:#FF79C6; --blue:#4FC3F7; --teal:#2DD4BF;
+  --text:#E8EAFF; --text2:#8B93C8; --text3:#4A5080;
+  --r:14px; --r2:20px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:'Nunito',sans-serif;color:var(--text);user-select:none}
+
+/* ── SCREENS ── */
+.screen{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease;
+  transform:translateX(30px);
+  background:var(--bg);
+  overflow:hidden;
+  max-width:480px;margin:0 auto;
+}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.screen.exit{opacity:0;transform:translateX(-30px)}
+
+/* ── SCROLL BODY ── */
+.scroll-body{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:none;padding-bottom:80px;
+}
+.scroll-body::-webkit-scrollbar{display:none}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 10px;flex-shrink:0;
+  background:linear-gradient(to bottom,var(--bg) 80%,transparent);
+  position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-family:'Fredoka One',sans-serif;font-size:19px;color:var(--text)}
+.back-btn{
+  width:36px;height:36px;border-radius:11px;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;transition:transform .15s;
+}
+.back-btn:active{transform:scale(.9)}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px 0 calc(10px + var(--safe-bottom));
+  z-index:100;
+}
+.nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-size:9px;font-weight:800;color:var(--text3);
+  cursor:pointer;padding:0 12px;
+  background:none;border:none;font-family:'Nunito',sans-serif;
+  transition:color .2s;
+}
+.nav-btn.active{color:var(--brand2)}
+.nav-btn .ni{font-size:20px;line-height:1}
+.nav-btn.active .ni{filter:drop-shadow(0 0 5px var(--brand))}
+
+/* ── BUTTONS ── */
+.btn{
+  width:100%;padding:15px;border:none;border-radius:16px;cursor:pointer;
+  font-family:'Fredoka One',sans-serif;font-size:18px;color:#fff;
+  transition:transform .15s,box-shadow .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn:active{transform:scale(.97)}
+.btn-brand{background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 5px 22px #6C63FF44}
+.btn-green{background:linear-gradient(135deg,var(--green),#0D9460);box-shadow:0 5px 22px #2ECC8A44}
+.btn-amber{background:linear-gradient(135deg,var(--amber),#E08000);box-shadow:0 5px 22px #FFB83044}
+.btn-red  {background:linear-gradient(135deg,var(--red),#E03050);box-shadow:0 5px 22px #FF5E7A44}
+.btn:disabled{background:var(--surface2);color:var(--text3);box-shadow:none;cursor:default;transform:none}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);padding:16px;
+  box-shadow:0 4px 20px #00000030;
+}
+
+/* ── INPUTS ── */
+.inp{
+  width:100%;padding:14px 18px;
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r2);color:var(--text);
+  font-family:'Fredoka One',sans-serif;font-size:20px;
+  text-align:center;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  caret-color:var(--brand);
+}
+.inp::placeholder{color:var(--text3)}
+.inp:focus{border-color:var(--brand);box-shadow:0 0 0 3px #6C63FF22}
+.inp-label{font-size:12px;font-weight:800;color:var(--text2);margin-bottom:6px;display:block}
+
+/* ── SECTION TITLE ── */
+.sec{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;margin-bottom:10px;
+}
+.sec h2{font-family:'Fredoka One',sans-serif;font-size:16px;color:var(--text);display:flex;align-items:center;gap:6px}
+.sec-link{font-size:12px;font-weight:800;color:var(--brand2);background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif}
+
+/* ── BADGE / CHIP ── */
+.chip{
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:20px;padding:4px 10px;font-size:11px;font-weight:800;
+}
+.chip-brand{background:var(--brandlt);border:1px solid #6C63FF44;color:var(--brand2)}
+.chip-green{background:var(--greenlt);border:1px solid #2ECC8A44;color:var(--green)}
+.chip-amber{background:var(--amberlt);border:1px solid #FFB83044;color:var(--amber)}
+.chip-red  {background:var(--redlt);  border:1px solid #FF5E7A44;color:var(--red)}
+
+/* ── AVATAR ── */
+.av{
+  border-radius:50%;
+  background:linear-gradient(135deg,#2A2060,#5040A0);
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--brand2);
+  box-shadow:0 0 20px #6C63FF44;
+  animation:avFloat 3s ease-in-out infinite;
+  flex-shrink:0;position:relative;
+}
+@keyframes avFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ── STARFIELD ── */
+.stars-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star-dot{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d) ease-in-out infinite var(--dl)}
+@keyframes tw{0%,100%{opacity:var(--a)}50%{opacity:var(--b)}}
+
+/* ── PARTICLES ── */
+.ptc{position:fixed;pointer-events:none;z-index:9999;font-size:16px;animation:pf 1s ease-out forwards}
+@keyframes pf{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);
+  background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+  border-radius:20px;padding:9px 18px;font-size:12px;font-weight:800;
+  box-shadow:0 6px 20px #00000050;opacity:0;transition:all .3s;z-index:9998;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:#00000080;backdrop-filter:blur(6px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal-sheet{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  padding:16px 20px calc(28px + var(--safe-bottom));
+  width:100%;max-width:480px;
+  transform:translateY(100%);
+  transition:transform .4s cubic-bezier(.34,1.2,.64,1);
+}
+.modal-overlay.show .modal-sheet{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 14px}
+
+/* ════════════════════════════════════
+   SCREEN: LOGIN
+════════════════════════════════════ */
+#s-login{justify-content:center;align-items:center;padding:24px}
+.login-logo{
+  width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#A99BFF,var(--brand) 50%,#3A31C0);
+  display:flex;align-items:center;justify-content:center;font-size:54px;
+  box-shadow:0 0 50px #6C63FF55;margin-bottom:14px;
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.login-title{font-family:'Fredoka One',sans-serif;font-size:36px;color:#fff;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--text2);font-weight:700;margin-bottom:30px;text-align:center;line-height:1.5}
+.login-form{width:100%;display:flex;flex-direction:column;gap:10px}
+.role-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.role-card{
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r2);padding:14px 10px;
+  text-align:center;cursor:pointer;transition:all .2s;
+}
+.role-card:active{transform:scale(.96)}
+.role-card.sel{border-color:var(--brand);background:var(--brandlt);box-shadow:0 0 16px #6C63FF33}
+.role-card .rc-em{font-size:28px;display:block;margin-bottom:4px}
+.role-card .rc-n{font-size:13px;font-weight:800;color:var(--text2)}
+.role-card.sel .rc-n{color:var(--brand2)}
+.login-hint{font-size:11px;color:var(--text3);font-weight:700;text-align:center;margin-top:4px}
+.login-switch{font-size:12px;color:var(--text2);font-weight:700;text-align:center;margin-top:8px;cursor:pointer}
+.login-switch span{color:var(--brand2)}
+
+/* ════════════════════════════════════
+   SCREEN: CHILD ONBOARDING
+════════════════════════════════════ */
+#s-onboard{justify-content:flex-start}
+.ob-progress{display:flex;gap:5px;justify-content:center;padding:16px 20px 0}
+.ob-dot{height:5px;border-radius:3px;background:var(--surface2);transition:all .4s}
+.ob-dot.done{background:var(--green);width:12px}
+.ob-dot.active{background:var(--brand);width:22px}
+.ob-dot.idle{width:12px}
+.ob-slide{display:none;flex:1;flex-direction:column;padding:16px 20px 0}
+.ob-slide.active{display:flex}
+.ob-title{font-family:'Fredoka One',sans-serif;font-size:24px;color:var(--text);margin-bottom:5px;line-height:1.2}
+.ob-sub{font-size:13px;color:var(--text2);font-weight:700;line-height:1.5;margin-bottom:16px}
+/* face grid */
+.face-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.face-card{
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r);aspect-ratio:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  cursor:pointer;transition:all .2s;
+}
+.face-card:active{transform:scale(.9)}
+.face-card.sel{border-color:var(--brand);background:var(--brandlt);box-shadow:0 0 14px #6C63FF44}
+.face-card .fem{font-size:26px;line-height:1}
+.face-card .fnm{font-size:8px;font-weight:800;color:var(--text2)}
+.face-card.sel .fnm{color:var(--brand2)}
+/* style cards */
+.style-card{
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r2);padding:14px;
+  cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:all .2s;margin-bottom:10px;
+}
+.style-card:active{transform:scale(.97)}
+.style-card.sel{border-color:var(--sel-c);background:var(--sel-bg);box-shadow:0 0 18px var(--sel-glow)}
+.style-card .si{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.si-q{background:linear-gradient(135deg,#2A1F6B,var(--brand))}
+.si-s{background:linear-gradient(135deg,#5A1050,var(--pink))}
+.si-b{background:linear-gradient(135deg,#0A3A20,var(--green))}
+.style-card h3{font-family:'Fredoka One',sans-serif;font-size:17px;color:var(--text);margin-bottom:2px}
+.style-card p{font-size:11px;color:var(--text2);font-weight:700;line-height:1.4}
+/* mini avatar */
+.ob-av-preview{display:flex;flex-direction:column;align-items:center;margin-bottom:14px}
+.ob-av-circle{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#2A2060,#5040A0);
+  border:2px solid var(--brand2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;
+  box-shadow:0 0 24px #6C63FF44;
+  animation:avFloat 3s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════
+   SCREEN: CHILD HOME
+════════════════════════════════════ */
+/* hero card */
+.hero-card{
+  margin:0 16px 14px;
+  background:linear-gradient(160deg,#161A30,#1E2240);
+  border:1px solid var(--border);border-radius:var(--r2);
+  padding:16px;display:flex;align-items:center;gap:14px;
+  position:relative;overflow:hidden;
+  box-shadow:0 6px 28px #00000050;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:130px;height:130px;
+  background:radial-gradient(circle,#6C63FF22 0%,transparent 70%);border-radius:50%;
+}
+.hero-info{flex:1}
+.hero-name{font-family:'Fredoka One',sans-serif;font-size:18px;color:var(--text);margin-bottom:3px}
+.hero-streak{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#3D2A00;border:1px solid #FFB83044;
+  border-radius:8px;padding:2px 8px;
+  font-size:10px;font-weight:800;color:var(--amber);margin-bottom:8px;
+}
+.xp-bar-wrap{display:flex;flex-direction:column;gap:3px}
+.xp-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);font-weight:700}
+.xp-bar-bg{height:7px;border-radius:4px;background:var(--surface2);overflow:hidden}
+.xp-bar-fill{
+  height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--brand),var(--brand2));
+  box-shadow:0 0 6px var(--brand);
+  transition:width 1s ease;
+}
+/* progress ring */
+.prog-card{
+  margin:0 16px 14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+}
+.ring-wrap{position:relative;width:60px;height:60px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.r-bg{fill:none;stroke:var(--surface2);stroke-width:6}
+.r-fill{
+  fill:none;stroke:var(--brand);stroke-width:6;stroke-linecap:round;
+  stroke-dasharray:157;stroke-dashoffset:157;
+  filter:drop-shadow(0 0 4px var(--brand));
+  transition:stroke-dashoffset 1.3s ease;
+}
+.ring-text{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Fredoka One',sans-serif;font-size:16px;color:var(--text);
+}
+.prog-info h3{font-family:'Fredoka One',sans-serif;font-size:15px;color:var(--text);margin-bottom:3px}
+.prog-info p{font-size:12px;color:var(--text2);font-weight:600;line-height:1.4}
+/* quest list */
+.quest-list{display:flex;flex-direction:column;gap:9px;padding:0 16px}
+.q-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);padding:12px 14px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.q-card:active{transform:scale(.98)}
+.q-card:hover{border-color:var(--border2)}
+.q-card.done{opacity:.55;background:var(--bg2);border-color:#1A2040}
+.q-card.done .q-name{text-decoration:line-through;color:var(--text3)}
+.q-card.urgent{border-color:var(--red);box-shadow:0 0 14px #FF5E7A22}
+.q-card.urgent::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),transparent)}
+.q-icon{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.qi-morning{background:linear-gradient(135deg,#FF6B35,#FF9500);box-shadow:0 3px 10px #FF6B3540}
+.qi-hw     {background:linear-gradient(135deg,#7C6FFF,var(--brand));box-shadow:0 3px 10px #6C63FF40}
+.qi-pack   {background:linear-gradient(135deg,var(--amber),#E08000);box-shadow:0 3px 10px #FFB83040}
+.qi-sleep  {background:linear-gradient(135deg,var(--green),#0D9460);box-shadow:0 3px 10px #2ECC8A40}
+.qi-move   {background:linear-gradient(135deg,var(--pink),#D040A0);box-shadow:0 3px 10px #FF79C640}
+.q-body{flex:1;min-width:0}
+.q-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.q-time{font-size:11px;color:var(--text2);font-weight:700}
+.q-xp{font-size:11px;font-weight:800;color:#A78BFA;background:#2A206044;border-radius:6px;padding:1px 6px}
+.q-urg{font-size:10px;font-weight:800;color:var(--red);background:#FF5E7A15;border-radius:6px;padding:1px 6px;animation:blnk 1.5s ease-in-out infinite}
+@keyframes blnk{0%,100%{opacity:1}50%{opacity:.4}}
+.q-check{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+  border:none;cursor:pointer;font-size:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px #6C63FF44;transition:transform .2s;
+}
+.q-check:active{transform:scale(.85)}
+.q-done-icon{
+  width:34px;height:34px;border-radius:10px;
+  background:var(--greenlt);border:1px solid #2ECC8A44;
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+}
+
+/* ════════════════════════════════════
+   SCREEN: AVATAR
+════════════════════════════════════ */
+.av-stage{
+  margin:0 16px 14px;
+  background:linear-gradient(160deg,#161A30,#1E2240);
+  border:1px solid var(--border);border-radius:var(--r2);
+  padding:18px;display:flex;flex-direction:column;align-items:center;
+  position:relative;overflow:hidden;
+}
+.av-big{
+  width:100px;height:100px;font-size:50px;
+  cursor:pointer;
+}
+.av-big:active{animation:none;transform:scale(.9)}
+.av-hat-layer{
+  position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  font-size:36px;pointer-events:none;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.eq-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.eq-tag{
+  display:flex;align-items:center;gap:3px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:20px;padding:3px 9px;
+  font-size:10px;font-weight:800;color:var(--text2);
+}
+.eq-tag.on{border-color:var(--brand);color:var(--brand2);background:var(--brandlt)}
+.cat-scroll{display:flex;gap:7px;padding:0 16px 8px;overflow-x:auto;scrollbar-width:none}
+.cat-scroll::-webkit-scrollbar{display:none}
+.cat-tab{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:7px 12px;flex-shrink:0;cursor:pointer;transition:all .2s;
+}
+.cat-tab.active{background:var(--brandlt);border-color:var(--brand);box-shadow:0 3px 12px #6C63FF33}
+.cat-tab .ci{font-size:20px;line-height:1}
+.cat-tab .cl{font-size:9px;font-weight:800;color:var(--text2);white-space:nowrap}
+.cat-tab.active .cl{color:var(--brand2)}
+.item-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:0 16px}
+.it-card{
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r);aspect-ratio:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.it-card:active:not(.locked){transform:scale(.9)}
+.it-card.equipped{border-color:var(--brand);background:var(--brandlt);box-shadow:0 0 12px #6C63FF44}
+.it-card.equipped::before{content:'✓';position:absolute;top:3px;right:4px;font-size:9px;font-weight:900;color:var(--brand2)}
+.it-card.locked{opacity:.5;cursor:default}
+.it-card .ie{font-size:26px;line-height:1}
+.it-card .in{font-size:8px;font-weight:800;color:var(--text2);text-align:center;line-height:1.2}
+.it-card.equipped .in{color:var(--brand2)}
+.it-card .ic{position:absolute;bottom:3px;right:3px;font-size:10px}
+.it-card .ip{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);background:#2A206044;border-radius:4px;padding:1px 4px;font-size:7px;font-weight:800;color:var(--brand2);white-space:nowrap}
+
+/* ════════════════════════════════════
+   SCREEN: PARENT
+════════════════════════════════════ */
+#s-parent{background:#F4F6FF;--text:#1E2048;--text2:#6B7280;--text3:#9CA3AF;--surface:#fff;--surface2:#F8F9FF;--border:#DDE2F5;--bg2:#fff;--brand:#5B52F0;--brand2:#7B74FF;--brandlt:#EAE9FF}
+#s-parent .topbar{background:linear-gradient(to bottom,#F4F6FF 80%,transparent)}
+#s-parent .bottom-nav{background:#fff;border-color:#DDE2F5}
+#s-parent .nav-btn{color:#9CA3AF}
+#s-parent .nav-btn.active{color:#5B52F0}
+.p-summary{
+  margin:0 16px 14px;
+  background:linear-gradient(135deg,#5B52F0,#7B74FF);
+  border-radius:var(--r2);padding:18px;
+  box-shadow:0 6px 28px rgba(91,82,240,.25);
+  position:relative;overflow:hidden;
+}
+.p-summary::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);border-radius:50%}
+.p-av{
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;
+  animation:none;
+}
+.p-child-name{font-family:'Fredoka One',sans-serif;font-size:18px;color:#fff;line-height:1}
+.p-child-meta{font-size:11px;color:rgba(255,255,255,.7);font-weight:700;margin-top:1px}
+.p-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px}
+.p-stat{background:rgba(255,255,255,.15);border-radius:10px;padding:9px;text-align:center}
+.p-stat .pv{font-family:'Fredoka One',sans-serif;font-size:20px;color:#fff;line-height:1}
+.p-stat .pl{font-size:9px;color:rgba(255,255,255,.75);font-weight:700;margin-top:2px}
+.p-insight{background:rgba(255,255,255,.18);border-radius:10px;padding:8px 12px;margin-top:10px;font-size:12px;color:#fff;font-weight:700;line-height:1.4}
+/* module cards */
+.mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 16px;margin-bottom:14px}
+.mod-card{background:#fff;border:1px solid #DDE2F5;border-radius:var(--r2);padding:13px;box-shadow:0 2px 12px rgba(91,82,240,.07)}
+.mod-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.mod-icon{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.mi-morning{background:linear-gradient(135deg,#FEF3C7,#FDE68A)}
+.mi-hw     {background:linear-gradient(135deg,#EDE9FE,#C4B5FD)}
+.mi-pack   {background:linear-gradient(135deg,#D1FAE5,#6EE7B7)}
+.mi-sleep  {background:linear-gradient(135deg,#DBEAFE,#93C5FD)}
+.mi-move   {background:linear-gradient(135deg,#FCE7F3,#F9A8D4)}
+.mi-retry  {background:linear-gradient(135deg,#FEE2E2,#FCA5A5)}
+.mod-pct{font-family:'Fredoka One',sans-serif;font-size:19px}
+.pct-h{color:#10B981}.pct-m{color:#F59E0B}.pct-l{color:#EF4444}
+.mod-name{font-size:11px;font-weight:800;color:#1E2048;margin-bottom:5px}
+.mod-bar-bg{height:5px;border-radius:3px;background:#EEF2FF;overflow:hidden;margin-bottom:4px}
+.mod-bar-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
+.fill-h{background:linear-gradient(90deg,#10B981,#34D399)}
+.fill-m{background:linear-gradient(90deg,#F59E0B,#FCD34D)}
+.fill-l{background:linear-gradient(90deg,#EF4444,#FC8181)}
+.mod-trend{font-size:10px;font-weight:800}
+.tr-up{color:#10B981}.tr-dn{color:#EF4444}.tr-fl{color:#9CA3AF}
+/* praise */
+.praise-card{margin:0 16px 14px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid #BBF7D0;border-radius:var(--r2);padding:14px}
+.praise-card h3{font-family:'Fredoka One',sans-serif;font-size:14px;color:#10B981;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.praise-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.praise-chip{
+  background:#fff;border:1px solid #BBF7D0;border-radius:20px;padding:6px 12px;
+  font-size:11px;font-weight:800;color:#1E2048;cursor:pointer;transition:all .2s;
+}
+.praise-chip:active,.praise-chip.used{background:#D1FAE5;border-color:#10B981;color:#10B981}
+.send-btn{
+  width:100%;padding:11px;border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#10B981,#059669);
+  font-family:'Fredoka One',sans-serif;font-size:15px;color:#fff;
+  box-shadow:0 4px 14px rgba(16,185,129,.3);transition:transform .15s;
+}
+.send-btn:active{transform:scale(.97)}
+
+/* ════════════════════════════════════
+   REWARD POPUP
+════════════════════════════════════ */
+#rewardPopup{
+  position:fixed;inset:0;z-index:800;
+  background:#00000085;backdrop-filter:blur(7px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#rewardPopup.show{opacity:1;pointer-events:all}
+.rp-box{
+  background:linear-gradient(160deg,var(--surface),var(--surface2));
+  border:2px solid var(--brand);border-radius:24px;
+  padding:28px 24px;text-align:center;max-width:300px;width:88%;
+  box-shadow:0 0 60px #6C63FF44;
+  transform:scale(.8);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+#rewardPopup.show .rp-box{transform:scale(1)}
+.rp-emoji{font-size:60px;display:block;margin-bottom:8px;animation:rpSpin .5s ease}
+@keyframes rpSpin{from{transform:scale(.3) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+.rp-title{font-family:'Fredoka One',sans-serif;font-size:26px;color:var(--amber);margin-bottom:5px}
+.rp-msg{font-size:13px;color:var(--text2);font-weight:700;line-height:1.5;margin-bottom:14px}
+.rp-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.rp-chip{display:flex;align-items:center;gap:5px;border-radius:12px;padding:6px 12px;font-size:13px;font-weight:800}
+.rp-xp  {background:#2A206044;border:1px solid #A78BFA44;color:#A78BFA}
+.rp-coin{background:var(--amberlt);border:1px solid #FFB83044;color:var(--amber)}
+.rp-close{
+  width:100%;padding:12px;border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+  font-family:'Fredoka One',sans-serif;font-size:16px;color:#fff;
+  box-shadow:0 4px 18px #6C63FF44;transition:transform .15s;
+}
+.rp-close:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+
+<div class="stars-bg" id="starsEl"></div>
+
+<!-- ═══ SCREEN: LOGIN ═══ -->
+<div class="screen active" id="s-login">
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:24px">
+    <div class="login-logo">⚔️</div>
+    <div class="login-title">QuestKids</div>
+    <div class="login-sub">해야 할 일을 깨면<br>내 캐릭터와 월드가 성장해!</div>
+    <div class="login-form">
+      <div style="margin-bottom:4px">
+        <div style="font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;text-align:center">나는 누구?</div>
+        <div class="role-row" id="roleRow">
+          <div class="role-card sel" data-role="child" onclick="selectRole('child',this)">
+            <span class="rc-em">🧙‍♂️</span>
+            <span class="rc-n">어린이</span>
+          </div>
+          <div class="role-card" data-role="parent" onclick="selectRole('parent',this)">
+            <span class="rc-em">👨‍👩‍👦</span>
+            <span class="rc-n">부모님</span>
+          </div>
+        </div>
+      </div>
+      <label class="inp-label" for="loginName">이름 (닉네임)</label>
+      <input class="inp" id="loginName" type="text" placeholder="예: 민준" maxlength="10">
+      <div style="height:4px"></div>
+      <label class="inp-label" for="loginCode">가족 코드 <span style="color:var(--text3);font-weight:600">(같은 가족은 같은 코드 사용)</span></label>
+      <input class="inp" id="loginCode" type="text" placeholder="예: MJFAM" maxlength="8" style="font-size:16px;text-transform:uppercase">
+      <div style="height:6px"></div>
+      <button class="btn btn-brand" onclick="doLogin()">입장하기 🚀</button>
+      <div class="login-hint">같은 가족 코드를 쓰면 부모님과 연동돼요</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCREEN: CHILD ONBOARD ═══ -->
+<div class="screen" id="s-onboard">
+  <div class="ob-progress" id="obProgress"></div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+
+    <!-- Step 0: face -->
+    <div class="ob-slide active" id="obs-0">
+      <div class="ob-title">캐릭터를 골라봐! 🎭</div>
+      <div class="ob-sub">나를 닮은 캐릭터 하나 골라줘!</div>
+      <div class="ob-av-preview">
+        <div class="ob-av-circle" id="obAvCircle">🧙‍♂️</div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--text2);margin-top:6px" id="obAvName">마법사</div>
+      </div>
+      <div class="face-grid" id="obFaceGrid"></div>
+    </div>
+
+    <!-- Step 1: style -->
+    <div class="ob-slide" id="obs-1" style="overflow-y:auto">
+      <div class="ob-title">플레이 스타일은? 🎮</div>
+      <div class="ob-sub">나중에 바꿀 수 있어!</div>
+      <div class="style-card sel" id="sc-q" style="--sel-c:#6C63FF;--sel-bg:#1E1840;--sel-glow:#6C63FF33" onclick="pickStyle('quest',this)">
+        <div class="si si-q">⚔️</div>
+        <div><h3>모험가형 ⚔️</h3><p>미션 클리어하고 레벨업!</p></div>
+      </div>
+      <div class="style-card" id="sc-s" style="--sel-c:#FF79C6;--sel-bg:#2A0A20;--sel-glow:#FF79C633" onclick="pickStyle('style',this)">
+        <div class="si si-s">✨</div>
+        <div><h3>꾸미기형 ✨</h3><p>아바타와 방을 예쁘게!</p></div>
+      </div>
+      <div class="style-card" id="sc-b" style="--sel-c:#2ECC8A;--sel-bg:#0A2018;--sel-glow:#2ECC8A33" onclick="pickStyle('buddy',this)">
+        <div class="si si-b">🤝</div>
+        <div><h3>친구형 🤝</h3><p>같이 시작하고 응원 주고받기!</p></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:12px 16px calc(16px + var(--safe-bottom))">
+    <button class="btn btn-brand" id="obBtn" onclick="obNext()">다음 →</button>
+    <div style="text-align:center;margin-top:8px;font-size:12px;color:var(--text3);font-weight:700;cursor:pointer" onclick="obSkip()">건너뛰기</div>
+  </div>
+</div>
+
+<!-- ═══ SCREEN: CHILD HOME ═══ -->
+<div class="screen" id="s-home">
+  <div class="topbar">
+    <div>
+      <div style="font-size:11px;color:var(--text2);font-weight:700">⚔️ 오늘도 퀘스트!</div>
+      <div style="font-family:'Fredoka One',sans-serif;font-size:20px" id="homeTitle">민준의 월드</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,#2A1F6B,#3D2F8C);border:1px solid #5B4FBE;border-radius:20px;padding:5px 12px;box-shadow:0 0 14px #6C63FF33">
+      <span style="font-size:13px">⭐</span>
+      <span style="font-family:'Fredoka One',sans-serif;font-size:15px;color:#A78BFA" id="xpDisplay">0</span>
+      <span style="font-size:10px;color:var(--text2);font-weight:700">XP</span>
+    </div>
+  </div>
+  <div class="scroll-body">
+    <!-- Hero -->
+    <div class="hero-card">
+      <div class="av" style="width:68px;height:68px;font-size:34px" id="heroAv">🧙‍♂️</div>
+      <div class="hero-info">
+        <div class="hero-name" id="heroName">퀘스트 마법사</div>
+        <div class="hero-streak" id="streakBadge">🔥 0일 연속</div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-labels">
+            <span>Lv.<span id="heroLv">1</span></span>
+            <span><span id="xpCur">0</span> / <span id="xpMax">200</span> XP</span>
+          </div>
+          <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Progress ring -->
+    <div class="prog-card">
+      <div class="ring-wrap">
+        <svg width="60" height="60" viewBox="0 0 60 60">
+          <circle class="r-bg" cx="30" cy="30" r="25"/>
+          <circle class="r-fill" id="progRing" cx="30" cy="30" r="25"/>
+        </svg>
+        <div class="ring-text" id="progText">0/0</div>
+      </div>
+      <div class="prog-info">
+        <h3>🗺️ 오늘의 진행도</h3>
+        <p id="progDesc">오늘의 퀘스트를 시작해봐!</p>
+      </div>
+    </div>
+    <!-- Quest list -->
+    <div class="sec"><h2>⚡ 오늘의 퀘스트 <span class="chip chip-red" id="remainBadge" style="display:none"></span></h2></div>
+    <div class="quest-list" id="questList"></div>
+    <div style="height:10px"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="goScreen('s-home')"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nav-btn" onclick="goScreen('s-avatar')"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nav-btn" onclick="showToast('홈월드는 곧 열려!')"><span class="ni">🏰</span>월드</button>
+    <button class="nav-btn" onclick="showToast('버디 기능 준비 중!')"><span class="ni">🤝</span>버디</button>
+    <button class="nav-btn" onclick="goScreen('s-retry')"><span class="ni">💔</span>복구</button>
+  </nav>
+</div>
+
+<!-- ═══ SCREEN: AVATAR ═══ -->
+<div class="screen" id="s-avatar">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">✨ 아바타 꾸미기</span>
+    <div class="chip chip-amber">🪙 <span id="coinDisplay">0</span></div>
+  </div>
+  <div class="scroll-body">
+    <div class="av-stage">
+      <div class="av av-big" id="bigAv" onclick="spinAv()" style="position:relative">
+        <span id="bigAvFace">🧙‍♂️</span>
+        <div class="av-hat-layer" id="bigAvHat">🎩</div>
+      </div>
+      <div class="eq-row" id="eqRow"></div>
+    </div>
+    <div class="cat-scroll" id="catScroll"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 16px 8px">
+      <div style="font-family:'Fredoka One',sans-serif;font-size:15px;color:var(--text)" id="catTitle">🎩 모자</div>
+      <div style="font-size:11px;color:var(--text2);font-weight:700" id="catCount"></div>
+    </div>
+    <div class="item-grid" id="itemGrid"></div>
+    <div style="height:10px"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-btn" onclick="goScreen('s-home')"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nav-btn active"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nav-btn" onclick="showToast('홈월드 준비 중!')"><span class="ni">🏰</span>월드</button>
+    <button class="nav-btn" onclick="showToast('버디 준비 중!')"><span class="ni">🤝</span>버디</button>
+    <button class="nav-btn" onclick="goScreen('s-retry')"><span class="ni">💔</span>복구</button>
+  </nav>
+</div>
+
+<!-- ═══ SCREEN: RETRY ═══ -->
+<div class="screen" id="s-retry">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">💔 Retry Mode</span>
+    <div class="chip chip-green">🛡️ <span id="resDisplay">0</span></div>
+  </div>
+  <div class="scroll-body" style="padding:0 16px 0">
+    <!-- Hurt card -->
+    <div class="card" style="margin-bottom:14px;background:linear-gradient(160deg,#2D0B18,#1E0A20);border-color:#FF5E7A33;box-shadow:0 0 30px #FF5E7A18;text-align:center;padding:18px">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#3A1030,#6A1840);border:2px solid #FF5E7A66;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 10px;animation:avFloat 2.5s ease-in-out infinite;box-shadow:0 0 24px #FF5E7A44" id="retryAv">🧙‍♂️</div>
+      <div class="chip chip-red" style="margin-bottom:8px;display:inline-flex">
+        <span style="width:5px;height:5px;border-radius:50%;background:var(--red);animation:blnk 1.5s infinite"></span>
+        Needs Help
+      </div>
+      <div style="font-family:'Fredoka One',sans-serif;font-size:20px;margin-bottom:4px">아바타가 힘들어하고 있어 😔</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:700;line-height:1.5">퀘스트를 놓쳤을 때 아바타 컨디션이 떨어져.<br>같이 복구해 보자!</div>
+    </div>
+    <!-- Missed quests -->
+    <div style="font-family:'Fredoka One',sans-serif;font-size:15px;margin-bottom:10px">🔴 놓친 퀘스트 선택</div>
+    <div id="retryMissedList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+    <!-- Reason -->
+    <div style="font-family:'Fredoka One',sans-serif;font-size:15px;margin-bottom:10px">🤔 왜 못 했어?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px" id="reasonGrid">
+      <div class="it-card" style="aspect-ratio:unset;padding:12px;flex-direction:column" onclick="pickReason('forget',this)"><span class="ie">😅</span><span class="in" style="font-size:11px">까먹었어</span></div>
+      <div class="it-card" style="aspect-ratio:unset;padding:12px;flex-direction:column" onclick="pickReason('lazy',this)"><span class="ie">😒</span><span class="in" style="font-size:11px">하기 싫었어</span></div>
+      <div class="it-card" style="aspect-ratio:unset;padding:12px;flex-direction:column" onclick="pickReason('play',this)"><span class="ie">🎮</span><span class="in" style="font-size:11px">친구랑 놀다 놓쳤어</span></div>
+      <div class="it-card" style="aspect-ratio:unset;padding:12px;flex-direction:column" onclick="pickReason('time',this)"><span class="ie">⏰</span><span class="in" style="font-size:11px">시간이 모자랐어</span></div>
+    </div>
+    <!-- Reaction -->
+    <div class="card" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px" id="reactionCard">
+      <div class="av" style="width:38px;height:38px;font-size:18px;animation:none;flex-shrink:0" id="reactionAv">🧙‍♂️</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:700;line-height:1.6" id="reactionText">이유를 선택하면 아바타가 반응해 💙</div>
+    </div>
+    <button class="btn btn-red" id="retryBtn" onclick="startRecovery()" disabled>퀘스트와 이유를 선택해줘</button>
+    <div style="height:10px"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-btn" onclick="goScreen('s-home')"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nav-btn" onclick="goScreen('s-avatar')"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nav-btn" onclick="showToast('홈월드 준비 중!')"><span class="ni">🏰</span>월드</button>
+    <button class="nav-btn" onclick="showToast('버디 준비 중!')"><span class="ni">🤝</span>버디</button>
+    <button class="nav-btn active"><span class="ni">💔</span>복구</button>
+  </nav>
+</div>
+
+<!-- ═══ SCREEN: PARENT ═══ -->
+<div class="screen" id="s-parent">
+  <div class="topbar" style="background:linear-gradient(to bottom,#F4F6FF 80%,transparent)">
+    <div>
+      <div style="font-family:'Fredoka One',sans-serif;font-size:20px;color:#5B52F0">🧭 코치 대시보드</div>
+      <div style="font-size:11px;color:#6B7280;font-weight:700" id="parentDate"></div>
+    </div>
+    <div style="background:#EAE9FF;border:1px solid #C4C0FC;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:800;color:#5B52F0">👨‍👩‍👦 가족 플랜</div>
+  </div>
+  <div class="scroll-body" style="background:#F4F6FF">
+    <!-- Summary -->
+    <div class="p-summary" style="margin:0 16px 14px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="p-av" id="pAv">🧙‍♂️</div>
+        <div>
+          <div class="p-child-name" id="pChildName">민준</div>
+          <div class="p-child-meta" id="pChildMeta">자녀 · Lv.1</div>
+        </div>
+        <div style="margin-left:auto;font-size:11px;color:rgba(255,255,255,.65);font-weight:700" id="pDateBadge"></div>
+      </div>
+      <div class="p-stats">
+        <div class="p-stat"><div class="pv" id="pToday">0/0</div><div class="pl">오늘 퀘스트</div></div>
+        <div class="p-stat"><div class="pv" id="pWeek">-</div><div class="pl">주간 성공률</div></div>
+        <div class="p-stat"><div class="pv" id="pRetry">-</div><div class="pl">복구율</div></div>
+      </div>
+      <div class="p-insight" id="pInsight">📈 아직 데이터가 쌓이고 있어요!</div>
+    </div>
+    <!-- Module cards -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:10px">
+      <div style="font-family:'Fredoka One',sans-serif;font-size:15px;color:#1E2048">🗂️ 모듈별 성공률</div>
+    </div>
+    <div class="mod-grid" id="modGrid"></div>
+    <!-- Praise -->
+    <div class="praise-card">
+      <h3>💌 칭찬 문구 보내기</h3>
+      <div class="praise-chips" id="praiseChips">
+        <div class="praise-chip" onclick="selectPraise(this)">👏 오늘 정말 잘했어!</div>
+        <div class="praise-chip" onclick="selectPraise(this)">🔥 연속 달성 대단해!</div>
+        <div class="praise-chip" onclick="selectPraise(this)">💪 스스로 해내는 모습이 멋져</div>
+        <div class="praise-chip" onclick="selectPraise(this)">🌟 포기 안 하는 게 최고야</div>
+      </div>
+      <button class="send-btn" onclick="sendPraise()">아바타에게 칭찬 보내기 💌</button>
+    </div>
+    <div style="height:10px"></div>
+  </div>
+  <nav class="bottom-nav" style="background:#fff;border-color:#DDE2F5">
+    <button class="nav-btn active" style="color:#5B52F0"><span class="ni">📊</span>대시보드</button>
+    <button class="nav-btn" style="color:#9CA3AF" onclick="showToast('주간 리포트 준비 중!')"><span class="ni">📋</span>리포트</button>
+    <button class="nav-btn" style="color:#9CA3AF" onclick="showToast('스케줄 설정 준비 중!')"><span class="ni">⚙️</span>설정</button>
+    <button class="nav-btn" style="color:#9CA3AF" onclick="doLogout()"><span class="ni">🚪</span>로그아웃</button>
+  </nav>
+</div>
+
+<!-- REWARD POPUP -->
+<div id="rewardPopup">
+  <div class="rp-box">
+    <span class="rp-emoji" id="rpEmoji">🎉</span>
+    <div class="rp-title" id="rpTitle">퀘스트 클리어!</div>
+    <div class="rp-msg" id="rpMsg"></div>
+    <div class="rp-chips">
+      <div class="rp-chip rp-xp" id="rpXp">⭐ +30 XP</div>
+      <div class="rp-chip rp-coin" id="rpCoin">🪙 +10 코인</div>
+    </div>
+    <button class="rp-close" onclick="closeReward()">확인 ✨</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  DATA LAYER  (localStorage persistence)
+// ══════════════════════════════════════════════════
+const DB = {
+  get(k,def){ try{ const v=localStorage.getItem(k); return v!==null?JSON.parse(v):def; }catch{ return def; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} },
+};
+
+// ── Default quest templates ────────────────────────
+const QUEST_TEMPLATES = [
+  { id:'q1', name:'아침 준비 완료하기',   icon:'qi-morning', em:'🌅', xp:30, coin:10, time:'오전 8:00까지',    urgent:false },
+  { id:'q2', name:'수학 숙제 완료하기',   icon:'qi-hw',      em:'📚', xp:50, coin:15, time:'오후 6:00까지',    urgent:true  },
+  { id:'q3', name:'내일 준비물 체크',     icon:'qi-pack',    em:'🎒', xp:35, coin:12, time:'오늘 밤 9:00까지', urgent:false },
+  { id:'q4', name:'취침 준비 & 기기 주차',icon:'qi-sleep',   em:'🌙', xp:40, coin:12, time:'밤 9:30까지',      urgent:false },
+  { id:'q5', name:'3분 스트레칭',         icon:'qi-move',    em:'🤸', xp:20, coin:8,  time:'귀가 후',          urgent:false },
+];
+
+const FACE_DATA = [
+  { em:'🧙‍♂️',hat:'🎩',name:'마법사'    },
+  { em:'🦊',  hat:'⛑️',name:'여우 탐험가'},
+  { em:'🐱',  hat:'🎓',name:'고양이 학자'},
+  { em:'🐼',  hat:'🪖',name:'판다 전사'  },
+  { em:'🦄',  hat:'🌸',name:'유니콘 기사'},
+  { em:'🐲',  hat:'👑',name:'드래곤 왕'  },
+  { em:'🤖',  hat:'⚡',name:'사이보그'   },
+  { em:'🦁',  hat:'🎪',name:'사자 마술사'},
+];
+
+const CAT_DATA = {
+  hat:   { title:'🎩 모자', items:[
+    {em:'🎩',name:'클래식 탑햇',cost:0}, {em:'⛑️',name:'탐험가 헬멧',cost:0},
+    {em:'🎓',name:'졸업 모자',cost:0},   {em:'🪖',name:'전사 투구',cost:0},
+    {em:'👑',name:'황금 왕관',cost:120}, {em:'🎪',name:'마술사 모자',cost:80},
+    {em:'🐉',name:'드래곤 투구',cost:200},{em:'🌸',name:'벚꽃 화관',cost:60},
+  ]},
+  outfit:{ title:'👕 의상', items:[
+    {em:'🧙',name:'마법사 로브',cost:0}, {em:'⚔️',name:'전사 갑옷',cost:0},
+    {em:'🥷',name:'닌자 복장',cost:80},  {em:'🤖',name:'로봇 슈트',cost:150},
+    {em:'🦸',name:'히어로 슈트',cost:180},{em:'🌈',name:'무지개 망토',cost:130},
+    {em:'🎩',name:'신사 정장',cost:70},  {em:'🧜',name:'인어 의상',cost:90},
+  ]},
+  pet:   { title:'🐾 펫', items:[
+    {em:'🐉',name:'아기 드래곤',cost:100},{em:'🦋',name:'별빛 나비',cost:60},
+    {em:'🐺',name:'늑대',cost:80},       {em:'🦁',name:'사자',cost:120},
+    {em:'🐬',name:'돌고래',cost:90},     {em:'🦅',name:'독수리',cost:110},
+    {em:'🦊',name:'마법 여우',cost:80},  {em:'🌟',name:'별 정령',cost:200},
+  ]},
+};
+
+const REASONS = {
+  forget:{ txt:'<strong>그랬구나~</strong> 까먹을 수 있어! 다음엔 알림을 더 크게 설정해볼까? 🔔 지금 복구 퀘스트 해보자!' },
+  lazy:  { txt:'<strong>솔직하게 말해줘서 고마워 😊</strong> 하기 싫을 때도 있지. 딱 3분만 해볼까?' },
+  play:  { txt:'<strong>재밌었겠다! 🎮</strong> 친구랑 노는 것도 중요해. 이제 잠깐 복구 퀘스트 깨고 다시 놀자!' },
+  time:  { txt:'<strong>바빴구나 ⚡</strong> 복구 퀘스트는 아주 쉽게 만들었으니까 지금 딱 한 번만 해볼게!' },
+};
+
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+let S = {
+  role:'child', name:'', code:'',
+  faceIdx:0, styleChoice:'quest',
+  xp:0, coins:0, lv:1, streak:0, resilience:0,
+  equipped:{ hat:0, outfit:0, pet:-1 },
+  unlockedHat:[0,1,2,3], unlockedOutfit:[0,1], unlockedPet:[],
+  quests:[], // [{id,done,missedReason}]
+  todayDate:'',
+  praises:[],
+};
+
+function loadState(){
+  const saved = DB.get('qk_state', null);
+  if(saved){ Object.assign(S, saved); }
+  // reset quests if new day
+  const today = new Date().toDateString();
+  if(S.todayDate !== today){
+    S.todayDate = today;
+    S.quests = QUEST_TEMPLATES.map(q=>({id:q.id,done:false,missed:false}));
+    saveState();
+  }
+  if(!S.quests.length){
+    S.quests = QUEST_TEMPLATES.map(q=>({id:q.id,done:false,missed:false}));
+  }
+}
+function saveState(){ DB.set('qk_state', S); }
+
+// ══════════════════════════════════════════════════
+//  SCREEN ROUTER
+// ══════════════════════════════════════════════════
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(el=>{
+    if(el.id===id){ el.classList.remove('exit'); el.classList.add('active'); }
+    else           { el.classList.remove('active'); el.classList.add('exit'); setTimeout(()=>el.classList.remove('exit'),350); }
+  });
+  if(id==='s-home')   refreshHome();
+  if(id==='s-avatar') refreshAvatar();
+  if(id==='s-retry')  refreshRetry();
+  if(id==='s-parent') refreshParent();
+}
+
+// ══════════════════════════════════════════════════
+//  STARS
+// ══════════════════════════════════════════════════
+function buildStars(){
+  const el=document.getElementById('starsEl');
+  for(let i=0;i<70;i++){
+    const s=document.createElement('div'); s.className='star-dot';
+    const sz=Math.random()*1.8+.4;
+    const a=(Math.random()*.3+.1).toFixed(2), b=(Math.random()*.5+.5).toFixed(2);
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--a:${a};--b:${b};--d:${(Math.random()*3+2).toFixed(1)}s;--dl:${(Math.random()*4).toFixed(1)}s;opacity:${a}`;
+    el.appendChild(s);
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════════════
+let chosenRole='child';
+function selectRole(r,el){
+  chosenRole=r;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function doLogin(){
+  const name=document.getElementById('loginName').value.trim();
+  const code=document.getElementById('loginCode').value.trim().toUpperCase();
+  if(!name){ showToast('이름을 입력해줘!'); return; }
+  if(!code){ showToast('가족 코드를 입력해줘!'); return; }
+  S.role=chosenRole; S.name=name; S.code=code;
+  loadState();
+  S.name=name; S.code=code; S.role=chosenRole;
+  saveState();
+  if(chosenRole==='parent'){ goScreen('s-parent'); }
+  else {
+    const hasOnboarded = DB.get('qk_onboarded_'+code+'_'+name, false);
+    if(hasOnboarded){ goScreen('s-home'); }
+    else { startOnboard(); }
+  }
+}
+function doLogout(){
+  goScreen('s-login');
+  document.getElementById('loginName').value='';
+  document.getElementById('loginCode').value='';
+}
+
+// ══════════════════════════════════════════════════
+//  ONBOARDING
+// ══════════════════════════════════════════════════
+let obStep=0;
+const OB_STEPS=2;
+function startOnboard(){
+  obStep=0;
+  document.querySelectorAll('.ob-slide').forEach((el,i)=>{ el.classList.toggle('active',i===0); });
+  buildObFaceGrid();
+  buildObProgress();
+  goScreen('s-onboard');
+}
+function buildObProgress(){
+  const row=document.getElementById('obProgress'); row.innerHTML='';
+  for(let i=0;i<OB_STEPS;i++){
+    const d=document.createElement('div');
+    d.className='ob-dot '+(i===obStep?'active':i<obStep?'done':'idle');
+    row.appendChild(d);
+  }
+}
+function buildObFaceGrid(){
+  const grid=document.getElementById('obFaceGrid'); grid.innerHTML='';
+  FACE_DATA.forEach((f,i)=>{
+    const c=document.createElement('div');
+    c.className='face-card'+(i===S.faceIdx?' sel':'');
+    c.innerHTML=`<span class="fem">${f.em}</span><span class="fnm">${f.name}</span>`;
+    c.onclick=()=>{
+      document.querySelectorAll('.face-card').forEach(x=>x.classList.remove('sel'));
+      c.classList.add('sel'); S.faceIdx=i;
+      document.getElementById('obAvCircle').textContent=f.em;
+      document.getElementById('obAvName').textContent=f.name;
+      spawnParticles(window.innerWidth/2, window.innerHeight*.4);
+    };
+    grid.appendChild(c);
+  });
+}
+function pickStyle(s,el){
+  S.styleChoice=s;
+  document.querySelectorAll('.style-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  spawnParticles(window.innerWidth/2, window.innerHeight*.5);
+}
+function obNext(){
+  if(obStep<OB_STEPS-1){
+    obStep++;
+    document.querySelectorAll('.ob-slide').forEach((el,i)=>el.classList.toggle('active',i===obStep));
+    buildObProgress();
+  } else { finishOnboard(); }
+}
+function obSkip(){ finishOnboard(); }
+function finishOnboard(){
+  DB.set('qk_onboarded_'+S.code+'_'+S.name, true);
+  saveState();
+  goScreen('s-home');
+}
+
+// ══════════════════════════════════════════════════
+//  HOME
+// ══════════════════════════════════════════════════
+function refreshHome(){
+  const f=FACE_DATA[S.faceIdx];
+  document.getElementById('homeTitle').textContent=S.name+'의 월드';
+  document.getElementById('heroAv').textContent=f.em;
+  document.getElementById('heroName').textContent=f.name;
+  document.getElementById('streakBadge').textContent='🔥 '+S.streak+'일 연속';
+  document.getElementById('xpDisplay').textContent=S.xp;
+  document.getElementById('retryAv').textContent=f.em;
+
+  // level calc
+  const xpNeeded=[0,200,450,800,1300,2000,3000];
+  let lv=1;
+  for(let i=xpNeeded.length-1;i>=0;i--){ if(S.xp>=xpNeeded[i]){ lv=i+1; break; } }
+  S.lv=Math.min(lv,7); saveState();
+  const xpCur=S.xp-(xpNeeded[S.lv-1]||0);
+  const xpMax=(xpNeeded[S.lv]||xpNeeded[xpNeeded.length-1])-(xpNeeded[S.lv-1]||0);
+  document.getElementById('heroLv').textContent=S.lv;
+  document.getElementById('xpCur').textContent=xpCur;
+  document.getElementById('xpMax').textContent=xpMax;
+  setTimeout(()=>{ document.getElementById('xpBarFill').style.width=Math.min(xpCur/xpMax*100,100)+'%'; },200);
+
+  // progress
+  const total=S.quests.length;
+  const done=S.quests.filter(q=>q.done).length;
+  const pct=total?done/total:0;
+  const circ=2*Math.PI*25;
+  setTimeout(()=>{ document.getElementById('progRing').style.strokeDashoffset=circ*(1-pct); },300);
+  document.getElementById('progText').textContent=done+'/'+total;
+  const rem=total-done;
+  document.getElementById('progDesc').textContent=done===total?'🎉 오늘 퀘스트 전부 완료!':'퀘스트 '+done+'개 완료! '+rem+'개 남았어요.';
+  const rb=document.getElementById('remainBadge');
+  if(rem>0){ rb.style.display=''; rb.textContent=rem+'개 남음'; }
+  else { rb.style.display='none'; }
+
+  buildQuestList();
+}
+
+function buildQuestList(){
+  const list=document.getElementById('questList'); list.innerHTML='';
+  QUEST_TEMPLATES.forEach(qt=>{
+    const qs=S.quests.find(q=>q.id===qt.id)||{done:false};
+    const card=document.createElement('div');
+    card.className='q-card'+(qs.done?' done':'')+(qt.urgent&&!qs.done?' urgent':'');
+    card.innerHTML=`
+      <div class="q-icon ${qt.icon}">${qt.em}</div>
+      <div class="q-body">
+        <div class="q-name">${qt.name}</div>
+        <div class="q-meta">
+          <span class="q-time">⏰ ${qt.time}</span>
+          <span class="q-xp">✨ +${qt.xp} XP</span>
+          ${qt.urgent&&!qs.done?'<span class="q-urg">🔴 긴급</span>':''}
+        </div>
+      </div>
+      ${qs.done
+        ? '<div class="q-done-icon">✅</div>'
+        : `<button class="q-check" onclick="completeQuest('${qt.id}',event)">▶</button>`}
+    `;
+    list.appendChild(card);
+  });
+}
+
+function completeQuest(id,e){
+  e.stopPropagation();
+  const qt=QUEST_TEMPLATES.find(q=>q.id===id);
+  const qs=S.quests.find(q=>q.id===id);
+  if(!qt||!qs||qs.done) return;
+  qs.done=true;
+  S.xp+=qt.xp; S.coins+=qt.coin;
+
+  // streak
+  const today=new Date().toDateString();
+  const lastDate=DB.get('qk_lastquest','');
+  if(lastDate!==today){ S.streak=(lastDate===getYesterday()?S.streak+1:1); DB.set('qk_lastquest',today); }
+  saveState();
+
+  // particles
+  const btn=e.target; const r=btn.getBoundingClientRect();
+  spawnParticles(r.left+r.width/2, r.top+r.height/2);
+
+  // reward popup
+  showReward(qt.em,'퀘스트 클리어!',qt.name+'을(를) 해냈어!<br>아바타 컨디션이 올라갔어 🔥','+'+qt.xp+' XP','+'+qt.coin+' 코인');
+  refreshHome();
+}
+
+function getYesterday(){
+  const d=new Date(); d.setDate(d.getDate()-1); return d.toDateString();
+}
+
+// ══════════════════════════════════════════════════
+//  AVATAR
+// ══════════════════════════════════════════════════
+let curCat='hat';
+function refreshAvatar(){
+  document.getElementById('coinDisplay').textContent=S.coins;
+  document.getElementById('bigAvFace').textContent=FACE_DATA[S.faceIdx].em;
+  const hi=S.equipped.hat;
+  const hatEl=document.getElementById('bigAvHat');
+  hatEl.textContent=hi>=0?CAT_DATA.hat.items[hi].em:'';
+  hatEl.style.transform=hi>=0?'translateX(-50%) scale(1)':'translateX(-50%) scale(0)';
+  buildEqRow();
+  buildCatTabs();
+  renderItemGrid(curCat);
+}
+function buildEqRow(){
+  const row=document.getElementById('eqRow'); row.innerHTML='';
+  const labels={hat:'🎩 모자',outfit:'👕 의상',pet:'🐾 펫'};
+  Object.entries(labels).forEach(([k,lbl])=>{
+    const d=document.createElement('div');
+    const idx=S.equipped[k];
+    const on=idx>=0;
+    d.className='eq-tag'+(on?' on':'');
+    d.textContent=on?(CAT_DATA[k].items[idx].em+' '+CAT_DATA[k].items[idx].name):lbl+' 없음';
+    row.appendChild(d);
+  });
+}
+function buildCatTabs(){
+  const scroll=document.getElementById('catScroll'); scroll.innerHTML='';
+  const tabs=[['hat','🎩','모자'],['outfit','👕','의상'],['pet','🐾','펫']];
+  tabs.forEach(([id,ic,lbl])=>{
+    const t=document.createElement('div');
+    t.className='cat-tab'+(id===curCat?' active':'');
+    t.innerHTML=`<span class="ci">${ic}</span><span class="cl">${lbl}</span>`;
+    t.onclick=()=>{ curCat=id; buildCatTabs(); renderItemGrid(id); };
+    scroll.appendChild(t);
+  });
+}
+function renderItemGrid(cat){
+  const data=CAT_DATA[cat];
+  document.getElementById('catTitle').textContent=data.title;
+  const owned=S['unlocked'+cat.charAt(0).toUpperCase()+cat.slice(1)]||[];
+  document.getElementById('catCount').textContent=owned.length+' / '+data.items.length+' 보유';
+  const grid=document.getElementById('itemGrid'); grid.innerHTML='';
+  data.items.forEach((item,i)=>{
+    const isOwned=owned.includes(i);
+    const isEq=S.equipped[cat]===i;
+    const c=document.createElement('div');
+    c.className='it-card'+(isEq?' equipped':'')+(isOwned?'':' locked');
+    c.innerHTML=`<span class="ie">${item.em}</span><span class="in">${item.name}</span>`;
+    if(!isOwned) c.innerHTML+=`<span class="ic">🔒</span><span class="ip">🪙${item.cost}</span>`;
+    c.onclick=()=>handleItemTap(cat,i,item,isOwned);
+    grid.appendChild(c);
+  });
+}
+function handleItemTap(cat,idx,item,owned){
+  if(!owned){
+    if(S.coins<item.cost){ showToast('코인이 부족해! 퀘스트를 완료해서 모아봐 🪙'); return; }
+    S.coins-=item.cost;
+    const key='unlocked'+cat.charAt(0).toUpperCase()+cat.slice(1);
+    if(!S[key]) S[key]=[];
+    S[key].push(idx);
+    saveState();
+    showToast(item.em+' '+item.name+' 해금! ✨');
+    spawnParticles(window.innerWidth/2, window.innerHeight*.4);
+  }
+  S.equipped[cat]=(S.equipped[cat]===idx?-1:idx);
+  saveState();
+  document.getElementById('coinDisplay').textContent=S.coins;
+  refreshAvatar();
+  spawnParticles(window.innerWidth/2, window.innerHeight*.35);
+}
+function spinAv(){
+  const el=document.getElementById('bigAv');
+  el.style.transition='transform .5s cubic-bezier(.34,1.56,.64,1)';
+  el.style.transform='scale(1.15) rotate(15deg)';
+  setTimeout(()=>el.style.transform='',350);
+  spawnParticles(window.innerWidth/2, window.innerHeight*.3,12);
+}
+
+// ══════════════════════════════════════════════════
+//  RETRY MODE
+// ══════════════════════════════════════════════════
+let retryMissed=null, retryReason=null;
+function refreshRetry(){
+  document.getElementById('resDisplay').textContent=S.resilience;
+  document.getElementById('reactionAv').textContent=FACE_DATA[S.faceIdx].em;
+  retryMissed=null; retryReason=null;
+  buildRetryMissedList();
+  document.querySelectorAll('#reasonGrid .it-card').forEach(c=>c.classList.remove('equipped'));
+  document.getElementById('reactionText').innerHTML='이유를 선택하면 아바타가 반응해 💙';
+  updateRetryBtn();
+}
+function buildRetryMissedList(){
+  const list=document.getElementById('retryMissedList'); list.innerHTML='';
+  const missed=S.quests.filter(q=>!q.done);
+  if(!missed.length){
+    list.innerHTML='<div style="text-align:center;padding:16px;font-size:13px;color:var(--text2);font-weight:700">🎉 놓친 퀘스트가 없어! 다 완료했어!</div>';
+    return;
+  }
+  missed.forEach(qs=>{
+    const qt=QUEST_TEMPLATES.find(q=>q.id===qs.id);
+    if(!qt) return;
+    const c=document.createElement('div');
+    c.className='q-card'+(retryMissed===qs.id?' urgent':'');
+    c.style.cursor='pointer';
+    c.innerHTML=`
+      <div class="q-icon ${qt.icon}">${qt.em}</div>
+      <div class="q-body"><div class="q-name">${qt.name}</div><div class="q-time">⏰ ${qt.time}</div></div>
+      <div class="chip chip-red">미완료</div>
+    `;
+    c.onclick=()=>{ retryMissed=qs.id; buildRetryMissedList(); updateRetryBtn(); spawnParticles(window.innerWidth/2,window.innerHeight*.5,5); };
+    list.appendChild(c);
+  });
+}
+function pickReason(r,el){
+  retryReason=r;
+  document.querySelectorAll('#reasonGrid .it-card').forEach(c=>c.classList.remove('equipped'));
+  el.classList.add('equipped');
+  document.getElementById('reactionText').innerHTML=REASONS[r].txt;
+  updateRetryBtn();
+  spawnParticles(window.innerWidth/2, window.innerHeight*.7, 5);
+}
+function updateRetryBtn(){
+  const btn=document.getElementById('retryBtn');
+  if(retryMissed&&retryReason){
+    btn.disabled=false; btn.className='btn btn-red'; btn.textContent='복구 퀘스트 시작하기 💪';
+  } else if(retryMissed){
+    btn.disabled=true; btn.textContent='이유를 선택해줘 🤔';
+  } else {
+    btn.disabled=true; btn.textContent='퀘스트와 이유를 선택해줘';
+  }
+}
+function startRecovery(){
+  if(!retryMissed||!retryReason) return;
+  const qt=QUEST_TEMPLATES.find(q=>q.id===retryMissed);
+  const qs=S.quests.find(q=>q.id===retryMissed);
+  if(!qs) return;
+  qs.done=true;
+  const bonusXp=Math.floor(qt.xp*.4);
+  const bonusCoin=Math.floor(qt.coin*.4);
+  S.xp+=bonusXp; S.coins+=bonusCoin; S.resilience++;
+  saveState();
+  spawnParticles(window.innerWidth/2, window.innerHeight*.5,14);
+  showReward('🛡️','복구 성공!',qt.name+'<br>포기하지 않은 게 진짜야! 💪<br><span style="font-size:11px;color:var(--green)">회복력 +1 🛡️</span>','+'+bonusXp+' XP','+'+bonusCoin+' 코인');
+  retryMissed=null; retryReason=null;
+  setTimeout(()=>{ refreshRetry(); document.getElementById('xpDisplay').textContent=S.xp; },400);
+}
+
+// ══════════════════════════════════════════════════
+//  PARENT DASHBOARD
+// ══════════════════════════════════════════════════
+function refreshParent(){
+  const today=new Date().toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'short'});
+  document.getElementById('parentDate').textContent=today+' 리포트';
+  document.getElementById('pDateBadge').textContent=today;
+  // load child data from same family code
+  const childState=DB.get('qk_state',S);
+  const f=FACE_DATA[childState.faceIdx||0];
+  document.getElementById('pAv').textContent=f.em;
+  document.getElementById('pChildName').textContent=childState.name||S.name;
+  document.getElementById('pChildMeta').textContent='자녀 · Lv.'+(childState.lv||1);
+
+  const total=childState.quests?.length||0;
+  const done=childState.quests?.filter(q=>q.done).length||0;
+  document.getElementById('pToday').textContent=done+'/'+total;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('pWeek').textContent=pct+'%';
+  document.getElementById('pRetry').textContent=(childState.resilience||0)+'회';
+
+  const insight=done===total&&total>0
+    ?'🎉 오늘 모든 퀘스트를 완료했어요!'
+    :pct>=60?'📈 오늘 '+pct+'% 완료! 잘 하고 있어요.'
+    :'💡 '+(total-done)+'개 퀘스트가 남아 있어요. 응원 메시지를 보내보세요!';
+  document.getElementById('pInsight').textContent=insight;
+
+  buildModGrid(childState);
+}
+function buildModGrid(cs){
+  const grid=document.getElementById('modGrid'); grid.innerHTML='';
+  const mods=[
+    {cls:'mi-morning',em:'🌅',name:'아침 준비',  id:'q1'},
+    {cls:'mi-hw',     em:'📚',name:'숙제 퀘스트',id:'q2'},
+    {cls:'mi-pack',   em:'🎒',name:'준비물 체크', id:'q3'},
+    {cls:'mi-sleep',  em:'🌙',name:'Sleep Gate', id:'q4'},
+    {cls:'mi-move',   em:'🤸',name:'운동·식습관', id:'q5'},
+    {cls:'mi-retry',  em:'🛡️',name:'회복력',     id:'res'},
+  ];
+  mods.forEach(m=>{
+    let pct=0;
+    if(m.id==='res'){ pct=Math.min((cs.resilience||0)*10,100); }
+    else {
+      const qs=(cs.quests||[]).find(q=>q.id===m.id);
+      pct=qs?.done?100:0;
+    }
+    const pc=pct>=70?'pct-h':pct>=40?'pct-m':'pct-l';
+    const fc=pct>=70?'fill-h':pct>=40?'fill-m':'fill-l';
+    const c=document.createElement('div'); c.className='mod-card';
+    c.innerHTML=`
+      <div class="mod-top">
+        <div class="mod-icon ${m.cls}">${m.em}</div>
+        <div class="mod-pct ${pc}">${pct}%</div>
+      </div>
+      <div class="mod-name">${m.name}</div>
+      <div class="mod-bar-bg"><div class="mod-bar-fill ${fc}" style="width:0%" data-w="${pct}%"></div></div>
+      <div class="mod-trend tr-fl">오늘 기준</div>
+    `;
+    grid.appendChild(c);
+  });
+  setTimeout(()=>{ document.querySelectorAll('.mod-bar-fill').forEach(el=>{ el.style.width=el.dataset.w; }); },300);
+}
+let chosenPraise=null;
+function selectPraise(el){
+  document.querySelectorAll('.praise-chip').forEach(c=>c.classList.remove('used'));
+  el.classList.add('used'); chosenPraise=el.textContent;
+}
+function sendPraise(){
+  if(!chosenPraise){ showToast('칭찬 문구를 먼저 선택해주세요 😊'); return; }
+  S.praises=S.praises||[];
+  S.praises.push({ msg:chosenPraise, at:Date.now() });
+  saveState();
+  showToast('💌 '+chosenPraise.trim()+' — 전달됐어요!');
+  chosenPraise=null;
+  setTimeout(()=>document.querySelectorAll('.praise-chip').forEach(c=>c.classList.remove('used')),1500);
+}
+
+// ══════════════════════════════════════════════════
+//  REWARD POPUP
+// ══════════════════════════════════════════════════
+function showReward(em,title,msg,xp,coin){
+  document.getElementById('rpEmoji').textContent=em;
+  document.getElementById('rpTitle').textContent=title;
+  document.getElementById('rpMsg').innerHTML=msg;
+  document.getElementById('rpXp').textContent='⭐ '+xp;
+  document.getElementById('rpCoin').textContent='🪙 '+coin;
+  document.getElementById('rewardPopup').classList.add('show');
+}
+function closeReward(){
+  document.getElementById('rewardPopup').classList.remove('show');
+  document.getElementById('xpDisplay').textContent=S.xp;
+}
+
+// ══════════════════════════════════════════════════
+//  PARTICLES & TOAST
+// ══════════════════════════════════════════════════
+function spawnParticles(cx,cy,count=8){
+  const em=['⭐','✨','💫','🌟','⚡','🎉','💜'];
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div'); p.className='ptc';
+    p.textContent=em[Math.floor(Math.random()*em.length)];
+    const a=(i/count)*360+Math.random()*20, d=50+Math.random()*80;
+    const dx=Math.cos(a*Math.PI/180)*d+'px', dy=(Math.sin(a*Math.PI/180)*d-35)+'px';
+    p.style.cssText=`left:${cx}px;top:${cy}px;--dx:${dx};--dy:${dy};animation-delay:${i*.04}s`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+  }
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ══════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════
+buildStars();
+loadState();
+// if already logged in, restore session
+const savedName=DB.get('qk_session_name','');
+const savedRole=DB.get('qk_session_role','');
+if(savedName&&savedRole){
+  S.name=savedName; S.role=savedRole;
+  document.getElementById('loginName').value=savedName;
+  if(savedRole==='parent') chosenRole='parent';
+}
+</script>
+</body>
+</html>
