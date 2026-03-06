@@ -2198,6 +2198,30 @@ function sendGift(){
 }
 
 // ══════════════════════════════════════════════════
+//  CUSTOM QUEST
+// ══════════════════════════════════════════════════
+function addCustomQ(){
+  const name = (document.getElementById('cName')||{}).value?.trim();
+  if(!name){ showToast('퀘스트 이름을 입력해줘!'); return; }
+  if(S.quests.length >= 10){ showToast('10개 초과 시 부모님 승인이 필요해요!'); return; }
+  const diff = (document.getElementById('cDiff')||{}).value || 'med';
+  const xpMap = {easy:20, med:40, hard:70};
+  const coinMap = {easy:7,  med:12, hard:18};
+  const id = 'c_' + Date.now();
+  const em = cEmo || '🎯';
+  S.customQuests = S.customQuests || [];
+  S.customQuests.push({id, em, name, xp:xpMap[diff], coin:coinMap[diff], diff, time:'자유시간'});
+  S.quests.push({id, done:false});
+  DB.set('qk31_sel', S.quests.map(q=>q.id));
+  saveState();
+  document.getElementById('cName').value = '';
+  showToast(em + ' ' + name + ' 추가됨! ✓');
+  spawnPtc(window.innerWidth/2, window.innerHeight*.6, 8);
+  updateLibCount();
+  renderLibList();
+}
+
+// ══════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════
 loadState();
