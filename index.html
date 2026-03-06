@@ -45,7 +45,8 @@ body{user-select:none}
              radial-gradient(ellipse 50% 40% at 5%  80%, #7B6FFF10,transparent 55%)}
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .s{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d) ease-in-out infinite var(--dl)}
-@keyframes tw{0%,100%{opacity:var(--a)}50%{opacity:var(--b)}}
+@keyframes petBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    @keyframes tw{0%,100%{opacity:var(--a)}50%{opacity:var(--b)}}
 
 /* ══════════════════════════════════════
    APP SHELL
@@ -781,12 +782,42 @@ body{user-select:none}
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px" id="learnRow"></div>
     </div>
     <!-- Library banner -->
-    <div onclick="goScreen('s-lib')" style="margin:12px 16px 0;background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:0 0 20px #7B6FFF22;transition:transform .2s" onmousedown="this.style.transform='scale(.98)'" onmouseup="this.style.transform=''">
-      <div>
-        <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--brand2);line-height:1.3">나만의 퀘스트가 필요해?</div>
-        <div style="font-size:10px;color:var(--txt2);font-weight:700;margin-top:2px">퀘스트를 직접 만들어봐! →</div>
+    <div onclick="goScreen('s-lib')" style="margin:12px 16px 0;background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:0 0 20px #7B6FFF22" onmousedown="this.style.transform='scale(.98)'" onmouseup="this.style.transform=''">
+      <div><div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--brand2)">나만의 퀘스트 만들기</div>
+      <div style="font-size:10px;color:var(--txt2);font-weight:700;margin-top:2px">퀘스트 라이브러리 →</div></div>
+      <span style="font-size:26px">📚</span>
+    </div>
+    <!-- Quick access row: World / Pet / Game / Alarm -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:10px 16px 0">
+      <div onclick="goScreen('s-world')" style="background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:12px 6px;text-align:center;cursor:pointer;transition:transform .15s" onmousedown="this.style.transform='scale(.94)'" onmouseup="this.style.transform=''">
+        <div style="font-size:24px">🏠</div>
+        <div style="font-size:9px;font-weight:800;color:var(--txt2);margin-top:4px">홈월드</div>
       </div>
-      <span style="font-size:28px">📚</span>
+      <div onclick="goScreen('s-pet')" style="background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:12px 6px;text-align:center;cursor:pointer;transition:transform .15s" onmousedown="this.style.transform='scale(.94)'" onmouseup="this.style.transform=''">
+        <div style="font-size:24px" id="homePetEm">🐾</div>
+        <div style="font-size:9px;font-weight:800;color:var(--txt2);margin-top:4px">내 펫</div>
+      </div>
+      <div onclick="goScreen('s-game')" style="background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:12px 6px;text-align:center;cursor:pointer;transition:transform .15s" onmousedown="this.style.transform='scale(.94)'" onmouseup="this.style.transform=''">
+        <div style="font-size:24px">🎮</div>
+        <div style="font-size:9px;font-weight:800;color:var(--txt2);margin-top:4px">미니게임</div>
+        <div id="gamePlayedBadge" style="display:none;font-size:8px;color:var(--green);font-weight:800">완료✓</div>
+      </div>
+      <div onclick="goScreen('s-alarm')" style="background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:12px 6px;text-align:center;cursor:pointer;transition:transform .15s" onmousedown="this.style.transform='scale(.94)'" onmouseup="this.style.transform=''">
+        <div style="font-size:24px">⏰</div>
+        <div style="font-size:9px;font-weight:800;color:var(--txt2);margin-top:4px">알람</div>
+      </div>
+    </div>
+    <!-- Gift shop access -->
+    <div onclick="goScreen('s-giftshop')" style="margin:8px 16px 0;background:linear-gradient(135deg,var(--amberlt),#1A1000);border:1px solid #FFB93044;border-radius:16px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onmousedown="this.style.transform='scale(.98)'" onmouseup="this.style.transform=''">
+      <div><div style="font-family:'Fredoka One',sans-serif;font-size:13px;color:#FFB930">🎁 선물 & 기프티콘 샵</div>
+      <div style="font-size:10px;color:var(--txt2);font-weight:700;margin-top:1px">코인으로 구매하거나 친구에게 선물해봐!</div></div>
+      <span style="font-size:22px">→</span>
+    </div>
+    <!-- Archive access -->
+    <div onclick="goScreen('s-archive')" style="margin:8px 16px 0;background:linear-gradient(135deg,var(--bluelt),#0C1C2E);border:1px solid #4FC8F044;border-radius:16px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onmousedown="this.style.transform='scale(.98)'" onmouseup="this.style.transform=''">
+      <div><div style="font-family:'Fredoka One',sans-serif;font-size:13px;color:var(--blue)">📖 학습 아카이브</div>
+      <div style="font-size:10px;color:var(--txt2);font-weight:700;margin-top:1px">지난 영단어·한자·명언 다시 보기</div></div>
+      <span style="font-size:22px">→</span>
     </div>
     <div style="height:8px"></div>
   </div>
@@ -1025,6 +1056,13 @@ body{user-select:none}
       <button class="btn btn-brand" id="subConfirmBtn" onclick="confirmSub()" disabled>플랜을 선택해주세요</button>
     </div>
   </div>
+  <nav class="bottom-nav show" id="libNav">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on" onclick="navGo('s-lib',this)"><span class="ni">📚</span>라이브러리</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
 </div>
 
 <!-- FRIENDS SCREEN -->
@@ -1295,6 +1333,13 @@ let S = {
   todayDate:'',
   learnDone:{hanja:false,word:false,quote:false},
   learnWeekCount:0,
+  // v3.2 new fields
+  pets:{},         // {petId: {xp,hunger,happy,lastFed,lastPlayed,lastWalked}}
+  curPet:null,     // active pet id
+  world:{},        // {bg,house,tree,deco,light, *_owned:[]}
+  alarms:[],       // [{questId,days,time,notify}]
+  gamePlayed:null, // toDateString of last played
+  gameReward:0,
   praises:[],
   plan:'free',
 };
@@ -1367,18 +1412,24 @@ function goScreen(id){
   });
   curScreen=id;
   // Hide all navs first
-  ['nav','avNav','retryNav','friendNav'].forEach(nid=>{
+  ['nav','avNav','retryNav','friendNav','libNav'].forEach(nid=>{
     const n=document.getElementById(nid); if(n) n.style.display='none';
   });
-  const navForScreen={'s-home':'nav','s-avatar':'avNav','s-lib':'nav','s-retry':'retryNav','s-friends':'friendNav'};
+  const navForScreen={'s-home':'nav','s-avatar':'avNav','s-lib':'libNav','s-retry':'retryNav','s-friends':'friendNav'};
   const activeNav = navForScreen[id];
   if(activeNav){ const n=document.getElementById(activeNav); if(n) n.style.display='flex'; }
-  if(id==='s-home')    refreshHome();
-  if(id==='s-avatar')  refreshAvatar();
-  if(id==='s-retry')   refreshRetry();
-  if(id==='s-parent')  refreshParent();
-  if(id==='s-lib')     refreshLib();
-  if(id==='s-friends') refreshFriends();
+  if(id==='s-home')      refreshHome();
+  if(id==='s-avatar')    refreshAvatar();
+  if(id==='s-retry')     refreshRetry();
+  if(id==='s-parent')    refreshParent();
+  if(id==='s-lib')       refreshLib();
+  if(id==='s-friends')   refreshFriends();
+  if(id==='s-alarm')     refreshAlarm();
+  if(id==='s-giftshop')  refreshGiftShop();
+  if(id==='s-archive')   refreshArchive();
+  if(id==='s-world')     refreshWorld();
+  if(id==='s-pet')       refreshPet();
+  if(id==='s-game')      refreshGame();
 }
 function navGo(id,el){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
@@ -2269,6 +2320,708 @@ function sendGift(){
   document.querySelectorAll('.gift-btn').forEach(b=>b.classList.remove('sel'));
 }
 
+
+// ══════════════════════════════════════════════════
+//  PET SYSTEM DATA
+// ══════════════════════════════════════════════════
+const PET_LIST = [
+  {id:'dragon',   em:'🐲', name:'아기 드래곤',   cost:0,   food:'불꽃사탕',  trait:'용감해'},
+  {id:'hamster',  em:'🐹', name:'햄스터 모찌',   cost:80,  food:'해바라기씨', trait:'귀여워'},
+  {id:'gecko',    em:'🦎', name:'크레스티드 게코',cost:120, food:'귀뚜라미',  trait:'쿨해'},
+  {id:'squirrel', em:'🐿️', name:'피그미 다람쥐', cost:100, food:'도토리',    trait:'빨라'},
+  {id:'fish',     em:'🐠', name:'열대어 니모',   cost:60,  food:'물고기밥',  trait:'예뻐'},
+  {id:'turtle',   em:'🐢', name:'거북이 코코',   cost:70,  food:'채소',      trait:'든든해'},
+  {id:'phoenix',  em:'🦅', name:'불사조 피닉스', cost:250, food:'불꽃열매',  trait:'전설적이야'},
+  {id:'dino',     em:'🦕', name:'공룡 브론토',   cost:150, food:'나뭇잎',    trait:'크고 착해'},
+  {id:'unicorn',  em:'🦄', name:'유니콘 스타',   cost:200, food:'무지개풀',  trait:'마법 같아'},
+  {id:'axolotl',  em:'🦈', name:'아홀로틀',      cost:180, food:'플랑크톤',  trait:'신기해'},
+  {id:'fox',      em:'🦊', name:'여우 루나',     cost:90,  food:'딸기',      trait:'영리해'},
+  {id:'cat',      em:'🐱', name:'고양이 냐옹',   cost:110, food:'참치',      trait:'도도해'},
+];
+const PET_MAX_LV = 5;
+const PET_LV_XP = [0, 30, 80, 160, 280, 450]; // xp needed per level
+
+function getPetData(id){ return PET_LIST.find(p=>p.id===id); }
+function getPetLv(xp){ for(let i=PET_MAX_LV;i>=1;i--){ if(xp>=PET_LV_XP[i]) return i; } return 1; }
+
+function refreshPet(){
+  document.getElementById('petCoins').textContent = '🪙 ' + S.coins;
+  const owned = S.pets || {};
+  const cur = S.curPet;
+  const petData = cur ? getPetData(cur) : null;
+
+  // Status card
+  const statusEl = document.getElementById('petStatus');
+  if(!cur || !owned[cur]){
+    statusEl.innerHTML = `
+      <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:20px;padding:20px;text-align:center;margin-bottom:14px">
+        <div style="font-size:48px;margin-bottom:8px">🐾</div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:16px;color:var(--txt);margin-bottom:4px">펫이 없어요!</div>
+        <div style="font-size:12px;color:var(--txt2);font-weight:700">아래에서 펫을 입양해봐 🥰</div>
+      </div>`;
+    document.getElementById('petActions').innerHTML = '';
+  } else {
+    const p = owned[cur];
+    const d = petData;
+    const lv = getPetLv(p.xp||0);
+    const xpCur = (p.xp||0) - PET_LV_XP[lv];
+    const xpNext = PET_LV_XP[Math.min(lv+1,PET_MAX_LV)] - PET_LV_XP[lv];
+    const hunger = p.hunger||100;
+    const happy = p.happy||100;
+    const hBar = h => `<div style="height:6px;border-radius:4px;background:var(--sur2);overflow:hidden;margin-top:3px"><div style="height:100%;border-radius:4px;background:${h>60?'var(--green)':h>30?'var(--amber)':'var(--red)'};width:${h}%;transition:width .5s"></div></div>`;
+    statusEl.innerHTML = `
+      <div style="background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:16px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="font-size:52px;line-height:1;animation:petBob 1.5s ease-in-out infinite">${d.em}</div>
+          <div style="flex:1">
+            <div style="font-family:'Fredoka One',sans-serif;font-size:18px;color:var(--txt)">${d.name} <span class="lv-badge lv-1">Lv.${lv}</span></div>
+            <div style="font-size:11px;color:var(--brand2);font-weight:700;margin-bottom:6px">"${d.trait}!" · 좋아하는 음식: ${d.food}</div>
+            <div style="font-size:10px;font-weight:800;color:var(--txt2)">🍖 배고픔 ${hunger}%${hBar(hunger)}
+            😊 행복 ${happy}%${hBar(happy)}
+            ⭐ XP ${p.xp||0} (Lv.${lv} → ${Math.max(0,xpNext-xpCur)} XP 필요)</div>
+          </div>
+        </div>
+        ${lv>=PET_MAX_LV?'<div style="text-align:center;margin-top:10px;font-size:12px;font-weight:800;color:#FFD700">🏆 최고 레벨 달성!</div>':''}
+      </div>`;
+    // Actions
+    const today = new Date().toDateString();
+    const fed = p.lastFed === today;
+    const played = p.lastPlayed === today;
+    const walked = p.lastWalked === today;
+    document.getElementById('petActions').innerHTML = `
+      <button onclick="petAction('feed')" style="background:${fed?'var(--sur2)':'var(--greenlt)'};border:1px solid ${fed?'var(--bdr)':'var(--green)'};border-radius:16px;padding:14px;cursor:pointer;text-align:center;transition:all .2s" ${fed?'disabled':''}>
+        <div style="font-size:26px">🍖</div>
+        <div style="font-size:12px;font-weight:800;color:${fed?'var(--txt2)':'var(--green)'};margin-top:4px">${fed?'밥 줌 ✓':'밥 주기'}</div>
+        <div style="font-size:9px;color:var(--txt2);font-weight:700">+10 XP +행복</div>
+      </button>
+      <button onclick="petAction('play')" style="background:${played?'var(--sur2)':'var(--brandlt)'};border:1px solid ${played?'var(--bdr)':'var(--brand2)'};border-radius:16px;padding:14px;cursor:pointer;text-align:center;transition:all .2s" ${played?'disabled':''}>
+        <div style="font-size:26px">🎾</div>
+        <div style="font-size:12px;font-weight:800;color:${played?'var(--txt2)':'var(--brand2)'};margin-top:4px">${played?'놀아줌 ✓':'같이 놀기'}</div>
+        <div style="font-size:9px;color:var(--txt2);font-weight:700">+15 XP +행복</div>
+      </button>
+      <button onclick="petAction('walk')" style="background:${walked?'var(--sur2)':'var(--bluelt)'};border:1px solid ${walked?'var(--bdr)':'var(--blue)'};border-radius:16px;padding:14px;cursor:pointer;text-align:center;transition:all .2s" ${walked?'disabled':''}>
+        <div style="font-size:26px">🌿</div>
+        <div style="font-size:12px;font-weight:800;color:${walked?'var(--txt2)':'var(--blue)'};margin-top:4px">${walked?'산책함 ✓':'산책하기'}</div>
+        <div style="font-size:9px;color:var(--txt2);font-weight:700">+20 XP +기분</div>
+      </button>
+      <button onclick="goScreen('s-game')" style="background:var(--amberlt);border:1px solid #FFB93044;border-radius:16px;padding:14px;cursor:pointer;text-align:center;transition:all .2s">
+        <div style="font-size:26px">🎮</div>
+        <div style="font-size:12px;font-weight:800;color:#FFB930;margin-top:4px">같이 게임</div>
+        <div style="font-size:9px;color:var(--txt2);font-weight:700">코인 보상!</div>
+      </button>`;
+  }
+
+  // Pet shop
+  const shopEl = document.getElementById('petShop');
+  shopEl.innerHTML = '';
+  PET_LIST.forEach(p=>{
+    const isOwned = owned[p.id];
+    const isCur = p.id === cur;
+    const card = document.createElement('div');
+    card.style.cssText = `background:var(--sur);border:2px solid ${isCur?'var(--green)':isOwned?'var(--brand2)':'var(--bdr)'};border-radius:16px;padding:12px;text-align:center;cursor:pointer;transition:all .2s`;
+    card.innerHTML = `
+      <div style="font-size:36px;margin-bottom:6px">${p.em}</div>
+      <div style="font-family:'Fredoka One',sans-serif;font-size:12px;color:var(--txt)">${p.name}</div>
+      <div style="font-size:9px;color:var(--txt2);font-weight:700;margin:2px 0">"${p.trait}"</div>
+      ${isCur?'<div style="font-size:10px;font-weight:800;color:var(--green)">✓ 현재 펫</div>':
+        isOwned?`<button onclick="setCurPet('${p.id}')" style="background:var(--brand);border:none;border-radius:8px;padding:4px 10px;font-size:10px;font-weight:800;color:#fff;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:4px">선택하기</button>`:
+        `<button onclick="adoptPet('${p.id}')" style="background:${S.coins>=p.cost?'var(--green)':'var(--sur2)'};border:none;border-radius:8px;padding:4px 10px;font-size:10px;font-weight:800;color:${S.coins>=p.cost?'#fff':'var(--txt2)'};cursor:pointer;font-family:'Nunito',sans-serif;margin-top:4px">${p.cost===0?'무료 입양':'🪙 '+p.cost}</button>`
+      }`;
+    shopEl.appendChild(card);
+  });
+
+  // Home screen pet icon
+  const homeEm = document.getElementById('homePetEm');
+  if(homeEm) homeEm.textContent = cur && petData ? petData.em : '🐾';
+}
+
+function adoptPet(id){
+  const p = getPetData(id);
+  if(!p) return;
+  if(p.cost > 0 && S.coins < p.cost){ showToast('코인이 부족해요! 퀘스트를 완료해봐 🪙'); return; }
+  if(p.cost > 0){ S.coins -= p.cost; }
+  S.pets = S.pets || {};
+  S.pets[id] = {xp:0, hunger:100, happy:100, lastFed:null, lastPlayed:null, lastWalked:null};
+  if(!S.curPet) S.curPet = id;
+  saveState();
+  showToast(p.em + ' ' + p.name + ' 입양 완료! 🎉');
+  spawnPtc(window.innerWidth/2, window.innerHeight*.5, 12);
+  refreshPet();
+}
+
+function setCurPet(id){
+  S.curPet = id;
+  saveState();
+  refreshPet();
+  showToast(getPetData(id).em + ' ' + getPetData(id).name + '가 활성화됐어!');
+}
+
+function petAction(type){
+  if(!S.curPet || !S.pets || !S.pets[S.curPet]){ showToast('펫을 먼저 입양해줘!'); return; }
+  const p = S.pets[S.curPet];
+  const today = new Date().toDateString();
+  const d = getPetData(S.curPet);
+  if(type==='feed'){
+    if(p.lastFed===today){ showToast('오늘 이미 밥을 줬어요!'); return; }
+    p.lastFed=today; p.hunger=Math.min(100,(p.hunger||0)+30); p.happy=Math.min(100,(p.happy||0)+10); p.xp=(p.xp||0)+10;
+    showToast(d.em+' 냠냠! 배부르게 먹었어 🍖 +10XP');
+  } else if(type==='play'){
+    if(p.lastPlayed===today){ showToast('오늘 이미 같이 놀았어요!'); return; }
+    p.lastPlayed=today; p.happy=Math.min(100,(p.happy||0)+25); p.xp=(p.xp||0)+15;
+    showToast(d.em+' 신나게 놀았어! 🎾 +15XP');
+  } else if(type==='walk'){
+    if(p.lastWalked===today){ showToast('오늘 이미 산책했어요!'); return; }
+    p.lastWalked=today; p.hunger=Math.max(0,(p.hunger||100)-10); p.happy=Math.min(100,(p.happy||0)+20); p.xp=(p.xp||0)+20;
+    showToast(d.em+' 산책 완료! 🌿 +20XP');
+  }
+  const newLv = getPetLv(p.xp);
+  const oldLv = getPetLv(p.xp - (type==='walk'?20:type==='play'?15:10));
+  if(newLv > oldLv){
+    setTimeout(()=>{ confetti(); showToast(d.em+' 레벨업! Lv.'+newLv+' 달성! 🎉'); }, 500);
+  }
+  saveState();
+  spawnPtc(window.innerWidth/2, window.innerHeight*.5, 8);
+  refreshPet();
+}
+
+// ══════════════════════════════════════════════════
+//  HOME WORLD
+// ══════════════════════════════════════════════════
+const WORLD_ITEMS = {
+  bg: [
+    {id:'bg_day',   em:'☀️', name:'맑은 낮',     cost:0,   css:'linear-gradient(180deg,#4FC8F0 0%,#B0E8FF 50%,#88CC44 80%,#558833 100%)'},
+    {id:'bg_night', em:'🌙', name:'별밤',         cost:50,  css:'linear-gradient(180deg,#0A0820 0%,#1A1040 40%,#2A2060 70%,#1A3020 100%)'},
+    {id:'bg_sunset',em:'🌅', name:'노을',         cost:80,  css:'linear-gradient(180deg,#FF6622 0%,#FFAA44 30%,#FFD080 60%,#558833 100%)'},
+    {id:'bg_snow',  em:'❄️', name:'눈 내리는 밤', cost:120, css:'linear-gradient(180deg,#223344 0%,#445566 40%,#667788 70%,#AABBCC 100%)'},
+    {id:'bg_magic', em:'🌌', name:'마법의 숲',    cost:200, css:'linear-gradient(180deg,#220044 0%,#440088 30%,#6600AA 60%,#224422 100%)'},
+  ],
+  house: [
+    {id:'h_tent',   em:'⛺', name:'아늑한 텐트',  cost:0,   pos:{bottom:'15%',left:'20%'}},
+    {id:'h_cabin',  em:'🏡', name:'작은 집',      cost:100, pos:{bottom:'15%',left:'15%'}},
+    {id:'h_castle', em:'🏰', name:'작은 성',      cost:300, pos:{bottom:'12%',left:'10%'}},
+    {id:'h_igloo',  em:'🏔️', name:'이글루',       cost:150, pos:{bottom:'15%',left:'18%'}},
+    {id:'h_treehouse',em:'🌲',name:'나무 집',     cost:180, pos:{bottom:'20%',left:'12%'}},
+  ],
+  tree: [
+    {id:'t_pine',   em:'🌲', name:'소나무',       cost:0,   pos:{bottom:'18%',left:'60%'}},
+    {id:'t_cherry', em:'🌸', name:'벚꽃 나무',    cost:60,  pos:{bottom:'18%',left:'62%'}},
+    {id:'t_palm',   em:'🌴', name:'야자수',       cost:80,  pos:{bottom:'18%',right:'15%'}},
+    {id:'t_rainbow',em:'🌈', name:'무지개 나무',  cost:150, pos:{bottom:'20%',left:'55%'}},
+    {id:'t_cactus', em:'🌵', name:'선인장',       cost:40,  pos:{bottom:'16%',right:'20%'}},
+  ],
+  deco: [
+    {id:'d_flower', em:'🌻', name:'해바라기밭',   cost:30,  pos:{bottom:'14%',left:'40%'}},
+    {id:'d_mushroom',em:'🍄',name:'버섯마을',     cost:50,  pos:{bottom:'14%',right:'30%'}},
+    {id:'d_fountain',em:'⛲',name:'분수대',       cost:120, pos:{bottom:'15%',left:'42%'}},
+    {id:'d_swing',  em:'🎠', name:'그네',         cost:90,  pos:{bottom:'16%',left:'35%'}},
+    {id:'d_flag',   em:'🚩', name:'깃발',         cost:20,  pos:{bottom:'18%',right:'25%'}},
+  ],
+  light: [
+    {id:'l_lamp',   em:'🏮', name:'홍등',         cost:40,  pos:{bottom:'20%',left:'30%'}},
+    {id:'l_star',   em:'⭐', name:'별 조명',      cost:60,  pos:{bottom:'25%',left:'50%'}},
+    {id:'l_fire',   em:'🔥', name:'모닥불',       cost:50,  pos:{bottom:'14%',left:'48%'}},
+    {id:'l_rainbow',em:'🌈', name:'무지개',       cost:100, pos:{top:'15%',left:'30%'}},
+    {id:'l_moon',   em:'🌙', name:'달빛 조명',    cost:80,  pos:{top:'10%',right:'20%'}},
+  ],
+};
+
+let curWorldTab = 'bg';
+
+function switchWorldTab(tab, el){
+  curWorldTab = tab;
+  document.querySelectorAll('[id^="wTab"]').forEach(b=>b.classList.remove('on'));
+  if(el) el.classList.add('on');
+  renderWorldShop();
+}
+
+function refreshWorld(){
+  document.getElementById('worldCoins').textContent = '🪙 ' + S.coins;
+  renderWorldCanvas();
+  renderWorldShop();
+}
+
+function renderWorldCanvas(){
+  const world = S.world || {};
+  const canvas = document.getElementById('worldCanvas');
+  if(!canvas) return;
+  // BG
+  const bgId = world.bg || 'bg_day';
+  const bgItem = WORLD_ITEMS.bg.find(b=>b.id===bgId);
+  canvas.style.background = bgItem ? bgItem.css : '';
+  // Items
+  const itemsEl = document.getElementById('worldItems');
+  if(!itemsEl) return;
+  itemsEl.innerHTML = '';
+  ['house','tree','deco','light'].forEach(cat=>{
+    const placed = world[cat];
+    if(!placed) return;
+    const item = WORLD_ITEMS[cat].find(i=>i.id===placed);
+    if(!item) return;
+    const el = document.createElement('div');
+    el.style.cssText = 'position:absolute;font-size:36px;line-height:1;cursor:default';
+    Object.entries(item.pos).forEach(([k,v])=>el.style[k]=v);
+    el.textContent = item.em;
+    itemsEl.appendChild(el);
+  });
+  // Add avatar + pet
+  const avEl = document.createElement('div');
+  avEl.style.cssText = 'position:absolute;bottom:12%;left:46%;font-size:32px;animation:petBob 1.5s ease-in-out infinite';
+  avEl.textContent = FACES[S.faceIdx]?.em || '🧙‍♂️';
+  itemsEl.appendChild(avEl);
+  if(S.curPet){
+    const petD = getPetData(S.curPet);
+    if(petD){
+      const petEl = document.createElement('div');
+      petEl.style.cssText = 'position:absolute;bottom:10%;left:54%;font-size:24px;animation:petBob 2s ease-in-out infinite .3s';
+      petEl.textContent = petD.em;
+      itemsEl.appendChild(petEl);
+    }
+  }
+}
+
+function renderWorldShop(){
+  const shop = document.getElementById('worldShop');
+  if(!shop) return;
+  const items = WORLD_ITEMS[curWorldTab] || [];
+  const world = S.world || {};
+  shop.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:80px">` +
+    items.map(item=>{
+      const owned = world[curWorldTab + '_owned']?.includes(item.id) || item.cost===0;
+      const isActive = world[curWorldTab] === item.id;
+      return `<div onclick="${owned||item.cost===0?`placeWorldItem('${curWorldTab}','${item.id}')`:`buyWorldItem('${curWorldTab}','${item.id}')`}" style="background:${isActive?'var(--greenlt)':'var(--sur)'};border:2px solid ${isActive?'var(--green)':'var(--bdr)'};border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:all .2s">
+        <div style="font-size:32px;margin-bottom:4px">${item.em}</div>
+        <div style="font-size:11px;font-weight:800;color:var(--txt)">${item.name}</div>
+        ${isActive?'<div style="font-size:9px;color:var(--green);font-weight:800;margin-top:2px">✓ 적용됨</div>':
+          owned?'<div style="font-size:9px;color:var(--brand2);font-weight:800;margin-top:2px">탭하면 적용</div>':
+          `<div style="font-size:9px;font-weight:800;color:${S.coins>=item.cost?'var(--amber)':'var(--red)'};margin-top:2px">🪙 ${item.cost}</div>`}
+      </div>`;
+    }).join('') + '</div>';
+}
+
+function buyWorldItem(cat, id){
+  const item = WORLD_ITEMS[cat]?.find(i=>i.id===id);
+  if(!item) return;
+  if(S.coins < item.cost){ showToast('코인이 부족해요! 🪙 '+item.cost+' 필요'); return; }
+  S.coins -= item.cost;
+  S.world = S.world || {};
+  S.world[cat+'_owned'] = S.world[cat+'_owned'] || [];
+  if(!S.world[cat+'_owned'].includes(id)) S.world[cat+'_owned'].push(id);
+  placeWorldItem(cat, id);
+}
+
+function placeWorldItem(cat, id){
+  S.world = S.world || {};
+  S.world[cat] = id;
+  saveState();
+  renderWorldCanvas();
+  renderWorldShop();
+  showToast('🏠 ' + (WORLD_ITEMS[cat]?.find(i=>i.id===id)?.name||'') + ' 적용됨!');
+  spawnPtc(window.innerWidth/2, window.innerHeight*.4, 6);
+}
+
+// ══════════════════════════════════════════════════
+//  ALARM SYSTEM
+// ══════════════════════════════════════════════════
+const DAYS = ['월','화','수','목','금','토','일'];
+
+function refreshAlarm(){
+  const list = document.getElementById('alarmList');
+  if(!list) return;
+  const alarms = S.alarms || [];
+  const quests = S.quests || [];
+  list.innerHTML = '';
+
+  if(!quests.length){
+    list.innerHTML = '<div style="text-align:center;padding:20px;font-size:13px;color:var(--txt2);font-weight:700">퀘스트를 먼저 추가해줘!</div>';
+    return;
+  }
+
+  quests.forEach((qs, qi)=>{
+    const qt = getAllQuestById(qs.id);
+    if(!qt) return;
+    const existing = alarms.find(a=>a.questId===qs.id) || {questId:qs.id, days:[], time:'08:00', notify:[10]};
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:14px;margin-bottom:10px';
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:22px">${qt.em}</span>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--txt)">${qt.name}</div>
+      </div>
+      <div style="font-size:10px;font-weight:800;color:var(--txt2);margin-bottom:6px">요일 선택</div>
+      <div style="display:flex;gap:5px;margin-bottom:10px">
+        ${DAYS.map((d,i)=>`<button onclick="toggleAlarmDay('${qs.id}',${i},this)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--bdr);background:${(existing.days||[]).includes(i)?'var(--brand)':'var(--sur2)'};color:${(existing.days||[]).includes(i)?'#fff':'var(--txt2)'};font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">${d}</button>`).join('')}
+        <button onclick="toggleAlarmDay('${qs.id}','all',this)" style="flex:1;height:32px;border-radius:8px;border:1px solid var(--bdr);background:var(--sur2);color:var(--txt2);font-size:10px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">매일</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="font-size:10px;font-weight:800;color:var(--txt2)">시간</div>
+        <input type="time" value="${existing.time||'08:00'}" onchange="setAlarmTime('${qs.id}',this.value)" style="background:var(--sur2);border:1px solid var(--bdr);border-radius:8px;padding:4px 8px;color:var(--txt);font-size:13px;font-weight:800;flex:1">
+      </div>
+      <div style="font-size:10px;font-weight:800;color:var(--txt2);margin-bottom:6px">알림 시간 (분 전)</div>
+      <div style="display:flex;gap:6px">
+        ${[5,10,30,60].map(m=>`<button onclick="toggleNotify('${qs.id}',${m},this)" style="flex:1;padding:5px;border-radius:8px;border:1px solid var(--bdr);background:${(existing.notify||[]).includes(m)?'var(--bluelt)':'var(--sur2)'};color:${(existing.notify||[]).includes(m)?'var(--blue)':'var(--txt2)'};font-size:10px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">${m}분</button>`).join('')}
+      </div>`;
+    list.appendChild(card);
+  });
+
+  // Notice
+  const note = document.createElement('div');
+  note.style.cssText = 'background:var(--amberlt);border:1px solid #FFB93044;border-radius:14px;padding:12px 14px;font-size:11px;color:#FFB930;font-weight:700;line-height:1.6;text-align:center;margin-top:8px';
+  note.innerHTML = '⚠️ 현재는 알람 시간 저장만 가능해요.<br><span style="color:var(--txt2)">실제 푸시 알림은 다음 업데이트에 추가 예정!</span>';
+  list.appendChild(note);
+}
+
+function getOrCreateAlarm(questId){
+  S.alarms = S.alarms || [];
+  let a = S.alarms.find(a=>a.questId===questId);
+  if(!a){ a={questId, days:[], time:'08:00', notify:[10]}; S.alarms.push(a); }
+  return a;
+}
+function toggleAlarmDay(qid, day, el){
+  const a = getOrCreateAlarm(qid);
+  if(day==='all'){ a.days = a.days.length===7?[]:[0,1,2,3,4,5,6]; }
+  else { const i=a.days.indexOf(day); if(i>=0)a.days.splice(i,1); else a.days.push(day); }
+  saveState(); refreshAlarm(); showToast('알람 요일 저장됨 ✓');
+}
+function setAlarmTime(qid, time){ const a=getOrCreateAlarm(qid); a.time=time; saveState(); showToast('알람 시간 저장됨 ✓'); }
+function toggleNotify(qid, min, el){
+  const a=getOrCreateAlarm(qid);
+  const i=a.notify.indexOf(min); if(i>=0)a.notify.splice(i,1); else a.notify.push(min);
+  saveState(); refreshAlarm(); showToast('알림 설정 저장됨 ✓');
+}
+
+// ══════════════════════════════════════════════════
+//  GIFT SHOP
+// ══════════════════════════════════════════════════
+let curGiftTab = 'items';
+const GIFT_ITEMS = [
+  {id:'xp_boost',   em:'⚡', name:'XP 부스터',    desc:'다음 퀘스트 XP 2배',  cost:50,  type:'item'},
+  {id:'coin_pack',  em:'🪙', name:'코인 팩',       desc:'코인 +100 즉시 지급', cost:80,  type:'item'},
+  {id:'pet_food',   em:'🍖', name:'특제 펫 푸드',  desc:'펫 XP +50',          cost:40,  type:'item'},
+  {id:'hat_box',    em:'🎩', name:'모자 랜덤 박스', desc:'랜덤 모자 1개',       cost:120, type:'item'},
+  {id:'outfit_box', em:'👗', name:'의상 랜덤 박스', desc:'랜덤 의상 1개',       cost:150, type:'item'},
+];
+const GIFTICONS = [
+  {id:'gc_coffee',  em:'☕', name:'커피빈 아메리카노', brand:'커피빈', price:'4,500원', cost:450},
+  {id:'gc_gs',      em:'🏪', name:'GS25 5천원권',     brand:'GS25',   price:'5,000원', cost:500},
+  {id:'gc_bk',      em:'🍔', name:'버거킹 와퍼 세트',  brand:'버거킹', price:'9,900원', cost:990},
+  {id:'gc_starbucks',em:'🧋',name:'스타벅스 아메리카노',brand:'스타벅스',price:'5,500원',cost:550},
+  {id:'gc_cu',      em:'🏬', name:'CU 3천원권',       brand:'CU',     price:'3,000원', cost:300},
+];
+
+function switchGiftTab(tab, el){
+  curGiftTab = tab;
+  document.querySelectorAll('[id^="gTab"]').forEach(b=>b.classList.remove('on'));
+  if(el) el.classList.add('on');
+  renderGiftContent();
+}
+
+function refreshGiftShop(){
+  document.getElementById('shopCoins').textContent = '🪙 ' + S.coins;
+  renderGiftContent();
+}
+
+function renderGiftContent(){
+  const el = document.getElementById('giftContent');
+  if(!el) return;
+  if(curGiftTab==='items'){
+    el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:80px">` +
+      GIFT_ITEMS.map(g=>`
+        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:14px;text-align:center">
+          <div style="font-size:32px;margin-bottom:6px">${g.em}</div>
+          <div style="font-family:'Fredoka One',sans-serif;font-size:12px;color:var(--txt)">${g.name}</div>
+          <div style="font-size:9px;color:var(--txt2);font-weight:700;margin:3px 0">${g.desc}</div>
+          <button onclick="buyGiftItem('${g.id}')" style="background:${S.coins>=g.cost?'var(--brand)':'var(--sur2)'};border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:800;color:${S.coins>=g.cost?'#fff':'var(--txt2)'};cursor:pointer;font-family:'Nunito',sans-serif;margin-top:6px">🪙 ${g.cost}</button>
+        </div>`).join('') + '</div>';
+  } else if(curGiftTab==='gifticon'){
+    el.innerHTML = `
+      <div style="background:var(--amberlt);border:1px solid #FFB93044;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:11px;color:#FFB930;font-weight:700;text-align:center">
+        🎫 기프티콘은 코인으로 구매할 수 있어요!<br><span style="color:var(--txt2);font-size:10px">실제 발송은 다음 업데이트 예정</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:80px">` +
+      GIFTICONS.map(g=>`
+        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px">
+          <div style="font-size:36px">${g.em}</div>
+          <div style="flex:1">
+            <div style="font-family:'Fredoka One',sans-serif;font-size:13px;color:var(--txt)">${g.name}</div>
+            <div style="font-size:10px;color:var(--txt2);font-weight:700">${g.brand} · ${g.price}</div>
+          </div>
+          <button onclick="buyGifticon('${g.id}')" style="background:${S.coins>=g.cost?'var(--amber)':'var(--sur2)'};border:none;border-radius:10px;padding:7px 12px;font-size:11px;font-weight:800;color:${S.coins>=g.cost?'#fff':'var(--txt2)'};cursor:pointer;font-family:'Nunito',sans-serif;flex-shrink:0">🪙${g.cost}</button>
+        </div>`).join('') + '</div>';
+  } else {
+    const friends = DB.get('qk31_friends', []);
+    el.innerHTML = `
+      <div style="background:var(--bluelt);border:1px solid #4FC8F044;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:11px;color:var(--blue);font-weight:700;text-align:center">
+        📦 친구에게 아이템을 선물할 수 있어요!<br><span style="color:var(--txt2);font-size:10px">실제 전송은 Firebase 연동 후 가능</span>
+      </div>
+      <div style="padding-bottom:80px">` +
+      (friends.length?friends.map(f=>`
+        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="font-size:32px">${['🧙‍♂️','🦊','🐱','🐼','🦄','🐲'][f.faceIdx||0]}</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:800;color:var(--txt)">${f.name}</div>
+            <div style="font-size:10px;color:var(--txt2);font-weight:700">🔥 ${f.streak}일 연속</div>
+          </div>
+          <button onclick="sendFriendGift('${f.name}')" style="background:var(--brandlt);border:1px solid #7B6FFF44;border-radius:10px;padding:6px 12px;font-size:11px;font-weight:800;color:var(--brand2);cursor:pointer;font-family:'Nunito',sans-serif">🎁 선물</button>
+        </div>`).join(''):
+        '<div style="text-align:center;padding:20px;font-size:13px;color:var(--txt2);font-weight:700">친구가 없어요! 친구 탭에서 초대해봐 👫</div>') + '</div>';
+  }
+}
+
+function buyGiftItem(id){
+  const g = GIFT_ITEMS.find(x=>x.id===id);
+  if(!g) return;
+  if(S.coins < g.cost){ showToast('코인이 부족해요! 🪙 '+g.cost+' 필요'); return; }
+  S.coins -= g.cost;
+  if(id==='coin_pack'){ S.coins += 100; showToast('🪙 코인 +100! 현재: '+S.coins); }
+  else if(id==='xp_boost'){ S.xp += 30; showToast('⚡ XP +30! 다음 퀘스트 XP 2배!'); }
+  else if(id==='pet_food' && S.curPet && S.pets?.[S.curPet]){ S.pets[S.curPet].xp=(S.pets[S.curPet].xp||0)+50; showToast(g.em+' 펫 XP +50!'); }
+  else { showToast(g.em+' '+g.name+' 구매 완료!'); }
+  saveState(); spawnPtc(window.innerWidth/2,window.innerHeight*.5,8); refreshGiftShop();
+}
+function buyGifticon(id){
+  const g = GIFTICONS.find(x=>x.id===id);
+  if(!g) return;
+  if(S.coins < g.cost){ showToast('코인이 부족해요! 🪙 '+g.cost+' 필요'); return; }
+  S.coins -= g.cost; saveState();
+  showToast(g.em+' '+g.name+' 구매됨! (실제 발송은 준비중)');
+  spawnPtc(window.innerWidth/2,window.innerHeight*.5,10);
+  refreshGiftShop();
+}
+function sendFriendGift(name){ showToast('🎁 '+name+'에게 선물 전송! (연동 준비중)'); spawnPtc(window.innerWidth/2,window.innerHeight*.5,8); }
+
+// ══════════════════════════════════════════════════
+//  LEARN ARCHIVE
+// ══════════════════════════════════════════════════
+let curArchiveTab = 'word';
+
+function switchArchiveTab(tab, el){
+  curArchiveTab = tab;
+  document.querySelectorAll('[id^="arcTab"]').forEach(b=>b.classList.remove('on'));
+  if(el) el.classList.add('on');
+  renderArchiveContent();
+}
+
+function refreshArchive(){
+  renderArchiveContent();
+}
+
+function renderArchiveContent(){
+  const el = document.getElementById('archiveContent');
+  if(!el) return;
+  if(curArchiveTab==='word'){
+    el.innerHTML = '<div style="display:flex;flex-direction:column;gap:8px;padding-bottom:80px">' +
+      WORDS.map((w,i)=>{
+        const today = getTodayItem(WORDS) === w;
+        return `<div style="background:${today?'var(--bluelt)':'var(--sur)'};border:1px solid ${today?'#4FC8F044':'var(--bdr)'};border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+          <div style="font-family:'Fredoka One',sans-serif;font-size:22px;color:${today?'var(--blue)':'var(--txt)'};min-width:70px">${w.w}</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:800;color:var(--txt)">${w.meaning}</div>
+            <div style="font-size:10px;color:var(--txt2);font-weight:700">${w.ex}</div>
+          </div>
+          <button onclick="speakWord('${w.w}')" style="background:var(--bluelt);border:1px solid #4FC8F044;border-radius:8px;padding:5px 8px;font-size:16px;cursor:pointer">🔊</button>
+          ${today?'<div style="font-size:8px;font-weight:800;color:var(--blue)">오늘</div>':''}
+        </div>`;
+      }).join('') + '</div>';
+  } else if(curArchiveTab==='hanja'){
+    el.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:80px">' +
+      HANJA.map(h=>{
+        const today = getTodayItem(HANJA) === h;
+        return `<div style="background:${today?'var(--brandlt)':'var(--sur)'};border:1px solid ${today?'#7B6FFF44':'var(--bdr)'};border-radius:14px;padding:12px;text-align:center">
+          <div style="font-size:36px;font-weight:900;color:${today?'var(--brand2)':'var(--txt)'}">${h.h}</div>
+          <div style="font-family:'Fredoka One',sans-serif;font-size:12px;color:var(--txt);margin-top:4px">${h.sound} · ${h.meaning}</div>
+          <div style="font-size:9px;color:var(--txt2);font-weight:700;margin-top:2px">${h.use}</div>
+          ${today?'<div style="font-size:8px;font-weight:800;color:var(--brand2);margin-top:3px">오늘의 한자</div>':''}
+        </div>`;
+      }).join('') + '</div>';
+  } else {
+    el.innerHTML = '<div style="display:flex;flex-direction:column;gap:8px;padding-bottom:80px">' +
+      QUOTES.map(q=>{
+        const today = getTodayItem(QUOTES) === q;
+        return `<div style="background:${today?'var(--amberlt)':'var(--sur)'};border:1px solid ${today?'#FFB93044':'var(--bdr)'};border-radius:14px;padding:14px">
+          <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:${today?'#FFB930':'var(--txt)'};line-height:1.4;margin-bottom:4px">${q.q}</div>
+          <div style="font-size:10px;color:var(--txt2);font-weight:700">— ${q.author}</div>
+          ${today?'<div style="font-size:8px;font-weight:800;color:#FFB930;margin-top:4px">오늘의 명언</div>':''}
+        </div>`;
+      }).join('') + '</div>';
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  MINI GAME
+// ══════════════════════════════════════════════════
+const MINI_GAMES = [
+  {
+    id:'quiz', title:'🧠 오늘의 퀴즈', reward:15,
+    build: () => {
+      const word = getTodayItem(WORDS);
+      const wrongs = WORDS.filter(w=>w!==word).sort(()=>Math.random()-.5).slice(0,3).map(w=>w.meaning);
+      const opts = [...wrongs, word.meaning].sort(()=>Math.random()-.5);
+      return {word, opts};
+    }
+  },
+  {
+    id:'hanja_quiz', title:'📘 한자 퀴즈', reward:15,
+    build: () => {
+      const h = getTodayItem(HANJA);
+      const wrongs = HANJA.filter(x=>x!==h).sort(()=>Math.random()-.5).slice(0,3).map(x=>x.meaning);
+      const opts = [...wrongs, h.meaning].sort(()=>Math.random()-.5);
+      return {h, opts};
+    }
+  },
+  {
+    id:'memory', title:'🎯 기억력 게임', reward:20,
+    build: () => {
+      const emojis = ['🍎','🍕','🎸','🌈','⚡','🏆','🎮','🐉'];
+      return {emojis};
+    }
+  },
+];
+
+let curGame = null;
+let gameAnswered = false;
+
+function refreshGame(){
+  const today = new Date().toDateString();
+  const played = S.gamePlayed === today;
+  if(played){
+    document.getElementById('gameArea').innerHTML = `
+      <div style="text-align:center;padding:40px 20px">
+        <div style="font-size:60px;margin-bottom:16px">🎉</div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:20px;color:var(--green);margin-bottom:8px">오늘 게임 완료!</div>
+        <div style="font-size:13px;color:var(--txt2);font-weight:700;margin-bottom:20px">내일 또 새로운 게임이 열려 😊</div>
+        <div style="background:var(--greenlt);border:1px solid var(--green);border-radius:14px;padding:12px;display:inline-block">
+          <div style="font-size:12px;font-weight:800;color:var(--green)">오늘 획득 보상</div>
+          <div style="font-size:22px;font-weight:900;color:var(--green)">+${S.gameReward||10} 🪙</div>
+        </div>
+        <div style="margin-top:20px">
+          <button onclick="goScreen('s-pet')" style="background:var(--brandlt);border:1px solid #7B6FFF44;border-radius:14px;padding:12px 20px;font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--brand2);cursor:pointer">🐾 펫 돌보러 가기</button>
+        </div>
+      </div>`;
+    const badge = document.getElementById('gamePlayedBadge');
+    if(badge) badge.style.display='block';
+    return;
+  }
+
+  const dayIdx = new Date().getDay() % MINI_GAMES.length;
+  curGame = MINI_GAMES[dayIdx];
+  gameAnswered = false;
+
+  document.getElementById('gameTitle').textContent = curGame.title;
+  document.getElementById('gameRewardBadge').textContent = '+' + curGame.reward + ' 🪙';
+
+  let html = '';
+  if(curGame.id === 'quiz'){
+    const data = curGame.build();
+    html = `
+      <div style="background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:20px;margin-bottom:16px;text-align:center">
+        <div style="font-size:12px;font-weight:800;color:var(--brand2);margin-bottom:8px">🔤 이 단어의 뜻은?</div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:36px;color:var(--txt);margin-bottom:4px">${data.word.w}</div>
+        <button onclick="speakWord('${data.word.w}')" style="background:var(--bluelt);border:1px solid #4FC8F044;border-radius:8px;padding:4px 10px;font-size:13px;cursor:pointer">🔊 듣기</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:80px">
+        ${data.opts.map(opt=>`
+          <button onclick="answerQuiz(this,'${opt}','${data.word.meaning}')" style="background:var(--sur);border:2px solid var(--bdr);border-radius:14px;padding:16px;font-size:14px;font-weight:800;color:var(--txt);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s">
+            ${opt}
+          </button>`).join('')}
+      </div>`;
+  } else if(curGame.id === 'hanja_quiz'){
+    const data = curGame.build();
+    html = `
+      <div style="background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:20px;margin-bottom:16px;text-align:center">
+        <div style="font-size:12px;font-weight:800;color:var(--brand2);margin-bottom:8px">📘 이 한자의 뜻은?</div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:56px;color:var(--txt);margin-bottom:4px">${data.h.h}</div>
+        <div style="font-size:12px;color:var(--txt2);font-weight:700">${data.h.sound}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:80px">
+        ${data.opts.map(opt=>`
+          <button onclick="answerQuiz(this,'${opt}','${data.h.meaning}')" style="background:var(--sur);border:2px solid var(--bdr);border-radius:14px;padding:16px;font-size:13px;font-weight:800;color:var(--txt);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s">
+            ${opt}
+          </button>`).join('')}
+      </div>`;
+  } else if(curGame.id === 'memory'){
+    const data = curGame.build();
+    const pairs = [...data.emojis, ...data.emojis].sort(()=>Math.random()-.5);
+    html = `
+      <div style="text-align:center;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:800;color:var(--txt2)">같은 카드를 찾아라! 🧠</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px" id="memoryGrid">
+        ${pairs.map((em,i)=>`
+          <div onclick="flipCard(this,'${em}')" data-em="${em}" data-flipped="false" style="height:64px;background:linear-gradient(135deg,var(--brand),var(--brand2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:all .2s;border:2px solid #7B6FFF44">
+            ❓
+          </div>`).join('')}
+      </div>
+      <div style="text-align:center;font-size:12px;font-weight:800;color:var(--txt2)" id="memScore">맞춘 쌍: 0 / ${data.emojis.length}</div>
+      <div style="height:80px"></div>`;
+    setTimeout(()=>initMemoryGame(data.emojis.length), 100);
+  }
+  document.getElementById('gameArea').innerHTML = html;
+}
+
+function answerQuiz(btn, chosen, correct){
+  if(gameAnswered) return;
+  gameAnswered = true;
+  const isRight = chosen === correct;
+  document.querySelectorAll('#gameArea button').forEach(b=>{
+    const bText = b.textContent.trim();
+    if(bText === correct) b.style.background = 'var(--greenlt)', b.style.borderColor = 'var(--green)';
+    else b.style.background = 'var(--redlt)', b.style.borderColor = 'var(--red)';
+    b.disabled = true;
+  });
+  if(isRight){
+    showToast('🎉 정답! +' + curGame.reward + ' 🪙');
+    spawnPtc(window.innerWidth/2, window.innerHeight*.5, 10);
+    S.coins += curGame.reward;
+  } else {
+    showToast('😅 틀렸어! 정답: ' + correct);
+  }
+  finishGame(isRight ? curGame.reward : 3);
+}
+
+let memFlipped = [], memMatched = 0, memTotal = 0, memLock = false;
+function initMemoryGame(total){ memFlipped=[]; memMatched=0; memTotal=total; memLock=false; }
+function flipCard(el, em){
+  if(memLock || el.dataset.flipped==='true' || el.dataset.matched==='true') return;
+  el.textContent = em;
+  el.dataset.flipped = 'true';
+  el.style.background = 'var(--bluelt)';
+  el.style.borderColor = 'var(--blue)';
+  memFlipped.push(el);
+  if(memFlipped.length === 2){
+    memLock = true;
+    const [a,b] = memFlipped;
+    if(a.dataset.em === b.dataset.em){
+      a.dataset.matched = b.dataset.matched = 'true';
+      a.style.background = b.style.background = 'var(--greenlt)';
+      a.style.borderColor = b.style.borderColor = 'var(--green)';
+      memMatched++;
+      const scoreEl = document.getElementById('memScore');
+      if(scoreEl) scoreEl.textContent = '맞춘 쌍: '+memMatched+' / '+memTotal;
+      memFlipped = []; memLock = false;
+      if(memMatched === memTotal){
+        spawnPtc(window.innerWidth/2, window.innerHeight*.4, 12);
+        showToast('🎉 다 맞췄어! +'+curGame.reward+' 🪙');
+        S.coins += curGame.reward;
+        finishGame(curGame.reward);
+      }
+    } else {
+      setTimeout(()=>{
+        a.textContent = b.textContent = '❓';
+        a.dataset.flipped = b.dataset.flipped = 'false';
+        a.style.background = b.style.background = 'linear-gradient(135deg,var(--brand),var(--brand2))';
+        a.style.borderColor = b.style.borderColor = '#7B6FFF44';
+        memFlipped = []; memLock = false;
+      }, 900);
+    }
+  }
+}
+function finishGame(reward){
+  const today = new Date().toDateString();
+  S.gamePlayed = today;
+  S.gameReward = reward;
+  saveState();
+  setTimeout(()=>refreshGame(), 1800);
+}
 // ══════════════════════════════════════════════════
 //  CUSTOM QUEST
 // ══════════════════════════════════════════════════
@@ -2298,5 +3051,160 @@ function addCustomQ(){
 // ══════════════════════════════════════════════════
 loadState();
 </script>
+
+<!-- ══ SCREEN: ALARM ══ -->
+<div class="screen" id="s-alarm">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">⏰ 알람 설정</span>
+    <div class="chip chip-amber">Beta</div>
+  </div>
+  <div class="sscroll spad spad-b">
+    <div style="background:linear-gradient(135deg,var(--amberlt),#1A1000);border:1px solid #FFB93044;border-radius:20px;padding:14px 16px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:800;color:#FFB930;margin-bottom:4px">⏰ 퀘스트 알람 설정</div>
+      <div style="font-size:11px;color:var(--txt2);font-weight:700;line-height:1.6">퀘스트마다 알람 시간과 요일을 정해봐!<br>🔔 실제 푸시 알림은 업데이트 예정이에요.</div>
+    </div>
+    <div id="alarmList"></div>
+    <div style="height:12px"></div>
+  </div>
+  <nav class="bottom-nav show">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on"><span class="ni">⏰</span>알람</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
+<!-- ══ SCREEN: GIFT / GIFTICON ══ -->
+<div class="screen" id="s-giftshop">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">🎁 선물 & 기프티콘</span>
+    <div id="shopCoins" style="font-size:12px;font-weight:800;color:#FFB930">🪙 0</div>
+  </div>
+  <div class="sscroll spad spad-b">
+    <!-- 탭 -->
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="lm-tab on" id="gTab1" onclick="switchGiftTab('items',this)">🛍️ 아이템</button>
+      <button class="lm-tab" id="gTab2" onclick="switchGiftTab('gifticon',this)">🎫 기프티콘</button>
+      <button class="lm-tab" id="gTab3" onclick="switchGiftTab('send',this)">📦 친구 선물</button>
+    </div>
+    <div id="giftContent"></div>
+  </div>
+  <nav class="bottom-nav show">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on"><span class="ni">🎁</span>선물</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
+<!-- ══ SCREEN: LEARN ARCHIVE ══ -->
+<div class="screen" id="s-archive">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">📖 학습 아카이브</span>
+  </div>
+  <div class="sscroll spad spad-b">
+    <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none">
+      <button class="lm-tab on" id="arcTab1" onclick="switchArchiveTab('word',this)">🔤 영단어</button>
+      <button class="lm-tab" id="arcTab2" onclick="switchArchiveTab('hanja',this)">📘 한자</button>
+      <button class="lm-tab" id="arcTab3" onclick="switchArchiveTab('quote',this)">💬 명언</button>
+    </div>
+    <div id="archiveContent"></div>
+  </div>
+  <nav class="bottom-nav show">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on"><span class="ni">📖</span>아카이브</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
+<!-- ══ SCREEN: WORLD ══ -->
+<div class="screen" id="s-world">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">🏠 나의 홈월드</span>
+    <div id="worldCoins" style="font-size:12px;font-weight:800;color:#FFB930">🪙 0</div>
+  </div>
+  <div class="sscroll spad-b" style="padding:0">
+    <!-- World canvas -->
+    <div id="worldCanvas" style="position:relative;height:220px;background:linear-gradient(180deg,#0A1530 0%,#1A3060 40%,#2A4870 60%,#3A5840 80%,#2A4030 100%);overflow:hidden;flex-shrink:0">
+      <div id="worldItems" style="position:absolute;inset:0"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,#2A4030)"></div>
+      <!-- Stars -->
+      <div style="position:absolute;top:10px;left:15%;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.8"></div>
+      <div style="position:absolute;top:20px;left:45%;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.6"></div>
+      <div style="position:absolute;top:8px;left:75%;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.9"></div>
+      <div style="position:absolute;top:30px;left:60%;width:1px;height:1px;background:#fff;border-radius:50%"></div>
+    </div>
+    <!-- Shop tabs -->
+    <div style="padding:14px 16px 0">
+      <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none">
+        <button class="lm-tab on" id="wTab1" onclick="switchWorldTab('bg',this)">🌅 배경</button>
+        <button class="lm-tab" id="wTab2" onclick="switchWorldTab('house',this)">🏠 집</button>
+        <button class="lm-tab" id="wTab3" onclick="switchWorldTab('tree',this)">🌳 자연</button>
+        <button class="lm-tab" id="wTab4" onclick="switchWorldTab('deco',this)">✨ 장식</button>
+        <button class="lm-tab" id="wTab5" onclick="switchWorldTab('light',this)">💡 조명</button>
+      </div>
+      <div id="worldShop"></div>
+    </div>
+  </div>
+  <nav class="bottom-nav show">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on"><span class="ni">🏠</span>홈월드</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
+<!-- ══ SCREEN: PET ══ -->
+<div class="screen" id="s-pet">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">🐾 나의 펫</span>
+    <div id="petCoins" style="font-size:12px;font-weight:800;color:#FFB930">🪙 0</div>
+  </div>
+  <div class="sscroll spad spad-b">
+    <!-- Current pet status -->
+    <div id="petStatus"></div>
+    <!-- Pet actions -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px" id="petActions"></div>
+    <!-- Pet shop -->
+    <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--txt);margin-bottom:10px">🛒 펫 입양하기</div>
+    <div id="petShop" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+  </div>
+  <nav class="bottom-nav show">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on"><span class="ni">🐾</span>펫</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
+<!-- ══ SCREEN: MINIGAME ══ -->
+<div class="screen" id="s-game">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title" id="gameTitle">🎮 오늘의 게임</span>
+    <div class="chip chip-green" id="gameRewardBadge">+10 🪙</div>
+  </div>
+  <div class="sscroll spad spad-b" id="gameArea">
+  </div>
+  <nav class="bottom-nav show">
+    <button class="nb" onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb" onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on"><span class="ni">🎮</span>게임</button>
+    <button class="nb" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb" onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
 </body>
 </html>
