@@ -1678,7 +1678,12 @@ function buildHomeQList(){
         ?'<div class="qdone">✅</div>'
         :isLearn
           ?`<button class="qbtn" onclick="openLearnModalForType('${qt.learnType}',event)" style="font-size:13px">📖</button>`
-          :`<button class="qbtn" onclick="completeQ('${qt.id}',event)">▶</button>`}`;
+          :`<div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+            <button class="qbtn" onclick="completeQ('${qt.id}',event)">▶</button>
+            <button onclick="openAlarmSheet('${qt.id}',event)" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;opacity:.7" title="알람 설정">
+              ${(()=>{const a=((S||{}).alarms||[]).find(x=>x.questId==='${qt.id}'); return a&&a.days&&a.days.length?'🔔':'🔕';})()}
+            </button>
+          </div>`}`;
     list.appendChild(card);
   });
 }
@@ -2743,47 +2748,52 @@ const DAYS = ['월','화','수','목','금','토','일'];
 function refreshAlarm(){
   const list = document.getElementById('alarmList');
   if(!list) return;
-  const alarms = S.alarms || [];
-  const quests = S.quests || [];
+  const alarms = (S.alarms||[]).filter(a=>a.active && a.days && a.days.length);
   list.innerHTML = '';
 
-  if(!quests.length){
-    list.innerHTML = '<div style="text-align:center;padding:20px;font-size:13px;color:var(--txt2);font-weight:700">퀘스트를 먼저 추가해줘!</div>';
+  if(!alarms.length){
+    list.innerHTML = `
+      <div style="text-align:center;padding:28px 16px">
+        <div style="font-size:44px;margin-bottom:10px">🔕</div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:15px;color:var(--txt);margin-bottom:6px">설정된 알람이 없어요</div>
+        <div style="font-size:11px;color:var(--txt2);font-weight:700;line-height:1.6">퀘스트 화면에서 🔕 버튼을 눌러<br>각 퀘스트에 알람을 설정해봐요!</div>
+        <button onclick="goScreen('s-home')" style="margin-top:14px;background:var(--brandlt);border:1px solid #7B6FFF44;border-radius:12px;padding:10px 20px;font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--brand2);cursor:pointer">⚔️ 퀘스트로 이동</button>
+      </div>`;
     return;
   }
 
-  quests.forEach((qs, qi)=>{
-    const qt = getAllQuestById(qs.id);
+  alarms.forEach(alarm=>{
+    const qt = getAllQuestById(alarm.questId);
     if(!qt) return;
-    const existing = alarms.find(a=>a.questId===qs.id) || {questId:qs.id, days:[], time:'08:00', notify:[10]};
+    const daysStr = alarm.days.map(i=>DAYS_KR[i]).join('·');
+    const notifyStr = alarm.notify&&alarm.notify.length ? alarm.notify.map(m=>m+'분 전').join(', ') : '알림 없음';
     const card = document.createElement('div');
-    card.style.cssText = 'background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:14px;margin-bottom:10px';
+    card.style.cssText = 'background:var(--sur);border:1px solid var(--green);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px';
     card.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <span style="font-size:22px">${qt.em}</span>
+      <div style="font-size:28px">${qt.em}</div>
+      <div style="flex:1">
         <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--txt)">${qt.name}</div>
+        <div style="font-size:10px;color:var(--green);font-weight:800;margin-top:2px">🔔 ${daysStr} · ${alarm.time}</div>
+        <div style="font-size:9px;color:var(--txt2);font-weight:700;margin-top:1px">${notifyStr}</div>
       </div>
-      <div style="font-size:10px;font-weight:800;color:var(--txt2);margin-bottom:6px">요일 선택</div>
-      <div style="display:flex;gap:5px;margin-bottom:10px">
-        ${DAYS.map((d,i)=>`<button onclick="toggleAlarmDay('${qs.id}',${i},this)" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--bdr);background:${(existing.days||[]).includes(i)?'var(--brand)':'var(--sur2)'};color:${(existing.days||[]).includes(i)?'#fff':'var(--txt2)'};font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">${d}</button>`).join('')}
-        <button onclick="toggleAlarmDay('${qs.id}','all',this)" style="flex:1;height:32px;border-radius:8px;border:1px solid var(--bdr);background:var(--sur2);color:var(--txt2);font-size:10px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">매일</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <div style="font-size:10px;font-weight:800;color:var(--txt2)">시간</div>
-        <input type="time" value="${existing.time||'08:00'}" onchange="setAlarmTime('${qs.id}',this.value)" style="background:var(--sur2);border:1px solid var(--bdr);border-radius:8px;padding:4px 8px;color:var(--txt);font-size:13px;font-weight:800;flex:1">
-      </div>
-      <div style="font-size:10px;font-weight:800;color:var(--txt2);margin-bottom:6px">알림 시간 (분 전)</div>
-      <div style="display:flex;gap:6px">
-        ${[5,10,30,60].map(m=>`<button onclick="toggleNotify('${qs.id}',${m},this)" style="flex:1;padding:5px;border-radius:8px;border:1px solid var(--bdr);background:${(existing.notify||[]).includes(m)?'var(--bluelt)':'var(--sur2)'};color:${(existing.notify||[]).includes(m)?'var(--blue)':'var(--txt2)'};font-size:10px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">${m}분</button>`).join('')}
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <button onclick="openAlarmSheet('${alarm.questId}',event)" style="background:var(--brandlt);border:1px solid #7B6FFF44;border-radius:8px;padding:5px 8px;font-size:10px;font-weight:800;color:var(--brand2);cursor:pointer;font-family:'Nunito',sans-serif">수정</button>
+        <button onclick="deleteAlarm('${alarm.questId}')" style="background:var(--redlt,#2A0A0A);border:1px solid var(--red,#CC3333);border-radius:8px;padding:5px 8px;font-size:10px;font-weight:800;color:var(--red,#CC3333);cursor:pointer;font-family:'Nunito',sans-serif">삭제</button>
       </div>`;
     list.appendChild(card);
   });
 
-  // Notice
   const note = document.createElement('div');
-  note.style.cssText = 'background:var(--amberlt);border:1px solid #FFB93044;border-radius:14px;padding:12px 14px;font-size:11px;color:#FFB930;font-weight:700;line-height:1.6;text-align:center;margin-top:8px';
-  note.innerHTML = '⚠️ 현재는 알람 시간 저장만 가능해요.<br><span style="color:var(--txt2)">실제 푸시 알림은 다음 업데이트에 추가 예정!</span>';
+  note.style.cssText = 'background:var(--amberlt);border:1px solid #FFB93044;border-radius:14px;padding:10px 14px;font-size:10px;color:#FFB930;font-weight:700;text-align:center;margin-top:4px';
+  note.innerHTML = '⚠️ 실제 푸시 알림은 다음 업데이트 예정!';
   list.appendChild(note);
+}
+
+function deleteAlarm(questId){
+  S.alarms = (S.alarms||[]).filter(a=>a.questId!==questId);
+  saveState(); refreshAlarm();
+  showToast('🔕 알람이 삭제됐어요');
+  refreshHome();
 }
 
 function getOrCreateAlarm(questId){
@@ -3141,6 +3151,157 @@ function finishGame(reward){
   saveState();
   setTimeout(()=>refreshGame(), 1800);
 }
+
+// ══════════════════════════════════════════════════
+//  ALARM BOTTOM SHEET
+// ══════════════════════════════════════════════════
+const DAYS_KR = ['월','화','수','목','금','토','일'];
+let _alarmSheetQid = null;
+
+function openAlarmSheet(questId, e){
+  if(e){ e.stopPropagation(); }
+  _alarmSheetQid = questId;
+  const qt = getAllQuestById(questId);
+  const sheetTitle = document.getElementById('alarmSheetTitle');
+  if(qt && sheetTitle) sheetTitle.innerHTML = `⏰ ${qt.em} ${qt.name} 알람`;
+
+  // Load existing alarm or defaults
+  S.alarms = S.alarms || [];
+  let alarm = S.alarms.find(a=>a.questId===questId);
+  if(!alarm){ alarm = {questId, days:[], time:'08:00', notify:[10], active:false}; }
+
+  // Render days
+  const daysEl = document.getElementById('ashrDays');
+  if(daysEl){
+    daysEl.innerHTML = '';
+    DAYS_KR.forEach((d,i)=>{
+      const btn = document.createElement('button');
+      const sel = (alarm.days||[]).includes(i);
+      btn.style.cssText = `width:36px;height:36px;border-radius:9px;border:1px solid var(--bdr);background:${sel?'var(--brand)':'var(--sur2)'};color:${sel?'#fff':'var(--txt2)'};font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;flex-shrink:0`;
+      btn.textContent = d;
+      btn.dataset.day = i;
+      btn.onclick = () => {
+        btn.dataset.sel = btn.dataset.sel==='1'?'0':'1';
+        const isSel = btn.dataset.sel==='1';
+        btn.style.background = isSel?'var(--brand)':'var(--sur2)';
+        btn.style.color = isSel?'#fff':'var(--txt2)';
+      };
+      if(sel) btn.dataset.sel = '1';
+      daysEl.appendChild(btn);
+    });
+    // 매일 shortcut
+    const allBtn = document.createElement('button');
+    allBtn.style.cssText = `flex:1;height:36px;border-radius:9px;border:1px solid var(--bdr);background:var(--sur2);color:var(--txt2);font-size:10px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif`;
+    allBtn.textContent = '매일';
+    allBtn.onclick = () => {
+      const allSel = !daysEl.querySelectorAll('[data-sel="1"]').length || daysEl.querySelectorAll('[data-sel="1"]').length < 7;
+      daysEl.querySelectorAll('[data-day]').forEach(b=>{
+        b.dataset.sel = allSel?'1':'0';
+        b.style.background = allSel?'var(--brand)':'var(--sur2)';
+        b.style.color = allSel?'#fff':'var(--txt2)';
+      });
+    };
+    daysEl.appendChild(allBtn);
+  }
+
+  // Time
+  const timeEl = document.getElementById('ashrTime');
+  if(timeEl) timeEl.value = alarm.time || '08:00';
+
+  // Notify
+  const notifyEl = document.getElementById('ashrNotify');
+  if(notifyEl){
+    notifyEl.innerHTML = '';
+    [0,5,10,30,60].forEach(m=>{
+      const btn = document.createElement('button');
+      const sel = m===0 ? !(alarm.notify&&alarm.notify.length) : (alarm.notify||[]).includes(m);
+      btn.style.cssText = `flex:1;padding:7px 4px;border-radius:9px;border:1px solid ${sel?'var(--brand2)':'var(--bdr)'};background:${sel?'var(--brandlt)':'var(--sur2)'};color:${sel?'var(--brand2)':'var(--txt2)'};font-size:10px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif`;
+      btn.textContent = m===0?'안함':m+'분';
+      btn.dataset.min = m;
+      btn.dataset.sel = sel?'1':'0';
+      btn.onclick = ()=>{
+        if(m===0){
+          // 안함 선택 → 나머지 해제
+          notifyEl.querySelectorAll('[data-min]').forEach(b=>{
+            b.dataset.sel='0'; b.style.background='var(--sur2)'; b.style.borderColor='var(--bdr)'; b.style.color='var(--txt2)';
+          });
+          btn.dataset.sel='1'; btn.style.background='var(--brandlt)'; btn.style.borderColor='var(--brand2)'; btn.style.color='var(--brand2)';
+        } else {
+          // 안함 해제
+          const noneBtn = notifyEl.querySelector('[data-min="0"]');
+          if(noneBtn){ noneBtn.dataset.sel='0'; noneBtn.style.background='var(--sur2)'; noneBtn.style.borderColor='var(--bdr)'; noneBtn.style.color='var(--txt2)'; }
+          btn.dataset.sel = btn.dataset.sel==='1'?'0':'1';
+          const isSel = btn.dataset.sel==='1';
+          btn.style.background = isSel?'var(--brandlt)':'var(--sur2)';
+          btn.style.borderColor = isSel?'var(--brand2)':'var(--bdr)';
+          btn.style.color = isSel?'var(--brand2)':'var(--txt2)';
+        }
+      };
+      notifyEl.appendChild(btn);
+    });
+  }
+
+  // Show sheet
+  const overlay = document.getElementById('alarmSheetOverlay');
+  const sheet = document.getElementById('alarmSheet');
+  if(overlay){ overlay.style.opacity='1'; overlay.style.pointerEvents='auto'; }
+  if(sheet){ sheet.style.transform='translateX(-50%) translateY(0)'; }
+}
+
+function closeAlarmSheet(){
+  const overlay = document.getElementById('alarmSheetOverlay');
+  const sheet = document.getElementById('alarmSheet');
+  if(overlay){ overlay.style.opacity='0'; overlay.style.pointerEvents='none'; }
+  if(sheet){ sheet.style.transform='translateX(-50%) translateY(100%)'; }
+  _alarmSheetQid = null;
+}
+
+function saveAlarmSheet(){
+  if(!_alarmSheetQid) return;
+  S.alarms = S.alarms || [];
+  let alarm = S.alarms.find(a=>a.questId===_alarmSheetQid);
+  if(!alarm){ alarm={questId:_alarmSheetQid,days:[],time:'08:00',notify:[],active:false}; S.alarms.push(alarm); }
+
+  // Collect days
+  const daysEl = document.getElementById('ashrDays');
+  alarm.days = [];
+  if(daysEl) daysEl.querySelectorAll('[data-day][data-sel="1"]').forEach(b=>alarm.days.push(parseInt(b.dataset.day)));
+
+  // Time
+  const timeEl = document.getElementById('ashrTime');
+  alarm.time = timeEl ? timeEl.value : '08:00';
+
+  // Notify
+  const notifyEl = document.getElementById('ashrNotify');
+  alarm.notify = [];
+  if(notifyEl) notifyEl.querySelectorAll('[data-min][data-sel="1"]').forEach(b=>{
+    const m = parseInt(b.dataset.min);
+    if(m > 0) alarm.notify.push(m);
+  });
+
+  // Active if days set
+  alarm.active = alarm.days.length > 0;
+
+  saveState();
+  closeAlarmSheet();
+
+  if(alarm.active){
+    const days = alarm.days.map(i=>DAYS_KR[i]).join('·');
+    showToast(`🔔 알람 설정! ${days} ${alarm.time}`);
+  } else {
+    showToast('🔕 알람이 꺼졌어요');
+  }
+  refreshHome();
+}
+
+function clearAlarm(){
+  if(!_alarmSheetQid) return;
+  S.alarms = (S.alarms||[]).filter(a=>a.questId!==_alarmSheetQid);
+  saveState();
+  closeAlarmSheet();
+  showToast('🔕 알람 설정 안함으로 변경됐어요');
+  refreshHome();
+}
 // ══════════════════════════════════════════════════
 //  CUSTOM QUEST
 // ══════════════════════════════════════════════════
@@ -3180,8 +3341,8 @@ loadState();
   </div>
   <div class="sscroll spad spad-b">
     <div style="background:linear-gradient(135deg,var(--amberlt),#1A1000);border:1px solid #FFB93044;border-radius:20px;padding:14px 16px;margin-bottom:14px">
-      <div style="font-size:13px;font-weight:800;color:#FFB930;margin-bottom:4px">⏰ 퀘스트 알람 설정</div>
-      <div style="font-size:11px;color:var(--txt2);font-weight:700;line-height:1.6">퀘스트마다 알람 시간과 요일을 정해봐!<br>🔔 실제 푸시 알림은 업데이트 예정이에요.</div>
+      <div style="font-size:13px;font-weight:800;color:#FFB930;margin-bottom:6px">⏰ 퀘스트 알람 설정</div>
+      <div style="font-size:11px;color:var(--txt2);font-weight:700;line-height:1.7">퀘스트 카드의 🔕 버튼을 눌러 알람을 바로 설정할 수 있어요!<br>여기서는 설정된 알람 목록을 확인할 수 있어요.</div>
     </div>
     <div id="alarmList"></div>
     <div style="height:12px"></div>
@@ -3326,5 +3487,34 @@ loadState();
   </nav>
 </div>
 
+
+<!-- ══ ALARM BOTTOM SHEET ══ -->
+<div id="alarmSheetOverlay" style="position:fixed;inset:0;z-index:500;background:#00000077;opacity:0;pointer-events:none;transition:opacity .25s" onclick="closeAlarmSheet()"></div>
+<div id="alarmSheet" style="position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:440px;z-index:501;background:var(--bg2);border-radius:24px 24px 0 0;padding:20px 20px calc(24px + var(--sb));transition:transform .3s cubic-bezier(.34,1.2,.64,1);box-shadow:0 -8px 40px #00000066">
+  <!-- Handle -->
+  <div style="width:40px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 16px"></div>
+  <!-- Title -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="font-family:'Fredoka One',sans-serif;font-size:17px;color:var(--txt)" id="alarmSheetTitle">⏰ 알람 설정</div>
+    <button onclick="clearAlarm()" style="background:var(--redlt,#2A0A0A);border:1px solid var(--red,#CC3333);border-radius:10px;padding:5px 10px;font-size:10px;font-weight:800;color:var(--red,#CC3333);cursor:pointer;font-family:'Nunito',sans-serif">🔕 알람 안함</button>
+  </div>
+
+  <!-- Days -->
+  <div style="font-size:10px;font-weight:800;color:var(--txt2);margin-bottom:7px">요일 선택</div>
+  <div style="display:flex;gap:5px;margin-bottom:14px" id="ashrDays"></div>
+
+  <!-- Time -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <div style="font-size:10px;font-weight:800;color:var(--txt2);flex-shrink:0">⏰ 시간</div>
+    <input type="time" id="ashrTime" style="flex:1;background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:7px 12px;color:var(--txt);font-size:15px;font-weight:800">
+  </div>
+
+  <!-- Notify before -->
+  <div style="font-size:10px;font-weight:800;color:var(--txt2);margin-bottom:7px">미리 알림 (분 전)</div>
+  <div style="display:flex;gap:6px;margin-bottom:18px" id="ashrNotify"></div>
+
+  <!-- Save -->
+  <button onclick="saveAlarmSheet()" style="width:100%;background:linear-gradient(135deg,var(--brand),var(--brand2));border:none;border-radius:14px;padding:14px;font-family:'Fredoka One',sans-serif;font-size:16px;color:#fff;cursor:pointer">저장하기</button>
+</div>
 </body>
 </html>
