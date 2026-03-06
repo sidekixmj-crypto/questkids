@@ -1281,6 +1281,8 @@ const DB = {
   get(k,d){ try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d}catch{return d} },
   set(k,v){ try{localStorage.setItem(k,JSON.stringify(v))}catch{} },
 };
+// 계정별 고유 키 (이름+코드 조합으로 데이터 분리)
+function uKey(k){ return 'qk31_'+(S.code||'X')+'_'+(S.name||'X')+'_'+k; }
 
 let S = {
   role:'child', name:'', code:'',
@@ -1298,7 +1300,8 @@ let S = {
 };
 
 function loadState(){
-  const sv = DB.get('qk31_state', null);
+  // 먼저 이름/코드로 계정 특정 후 해당 계정 데이터 로드
+  const sv = DB.get(uKey('state'), null);
   if(sv) Object.assign(S, sv);
   const today = new Date().toDateString();
   if(S.todayDate !== today){
@@ -1306,19 +1309,18 @@ function loadState(){
     S.learnDone = {hanja:false,word:false,quote:false};
     resetDailyQuests();
   }
-  if(!S.quests.length) resetDailyQuests();
+  if(!S.quests||!S.quests.length) resetDailyQuests();
   saveState();
 }
 function resetDailyQuests(){
-  // use saved selection or defaults
-  const sel = DB.get('qk31_sel', null);
+  const sel = DB.get(uKey('sel'), null);
   if(sel && sel.length){
     S.quests = sel.map(id=>({id,done:false}));
   } else {
     S.quests = ['m2','m3','h1','p1','sl1','hlt3','lrn1','lrn2','lrn3'].map(id=>({id,done:false}));
   }
 }
-function saveState(){ DB.set('qk31_state',S); }
+function saveState(){ DB.set(uKey('state'),S); }
 
 function getAllQuestById(id){
   for(const cat of Object.values(LIBRARY)){
@@ -1533,7 +1535,7 @@ function obNext(){
 function obSkip(){ finishOb(); }
 function finishOb(){
   if(obPickedIds.size>0){
-    DB.set('qk31_sel',[...obPickedIds]);
+    DB.set(uKey('sel'),[...obPickedIds]);
     S.quests=[...obPickedIds].map(id=>({id,done:false}));
   }
   DB.set('qk31_ob_'+S.code+'_'+S.name,true);
@@ -1633,11 +1635,11 @@ function completeQ(id,e){
   qs.done=true;
   S.xp+=qt.xp; S.coins+=qt.coin;
   const today=new Date().toDateString();
-  const last=DB.get('qk31_lq','');
+  const last=DB.get(uKey('lq'),'');
   if(last!==today){
     const yest=new Date(); yest.setDate(yest.getDate()-1);
     S.streak=(last===yest.toDateString()?S.streak+1:1);
-    DB.set('qk31_lq',today);
+    DB.set(uKey('lq'),today);
   }
   const prevLv=S.lv; saveState();
   if(e){const r=e.target.getBoundingClientRect();spawnPtc(r.left+r.width/2,r.top+r.height/2);}
@@ -1737,24 +1739,35 @@ function renderLMContent(type){
     else{btn.disabled=false;btn.textContent='읽었어요 ✓ (+5 XP)';}
   }
 }
+// 앱 시작 시 음성 목록 미리 캐시
+let _cachedVoices = [];
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices(); // 첫 호출로 로딩 트리거
+  window.speechSynthesis.onvoiceschanged = () => {
+    _cachedVoices = window.speechSynthesis.getVoices();
+  };
+}
+function getEnVoice(){
+  const voices = _cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
+  return voices.find(v=>v.lang==='en-US') ||
+         voices.find(v=>v.lang==='en-GB') ||
+         voices.find(v=>v.lang==='en_US') ||
+         voices.find(v=>v.lang.startsWith('en'));
+}
 function speakWord(w){
   if(!window.speechSynthesis){ showToast('이 기기는 음성을 지원하지 않아요'); return; }
   window.speechSynthesis.cancel();
-  // 영어 음성 강제 선택
   function doSpeak(voice){
     const u = new SpeechSynthesisUtterance(w);
     u.lang = 'en-US';
     u.rate = 0.78;
     u.pitch = 1.0;
-    if(voice) u.voice = voice;
+    if(voice){ u.voice = voice; }
     window.speechSynthesis.speak(u);
     showToast('🔊 ' + w);
   }
-  const voices = window.speechSynthesis.getVoices();
-  // 영어 음성 우선순위: en-US > en-GB > en
-  const enVoice = voices.find(v => v.lang === 'en-US') ||
-                  voices.find(v => v.lang === 'en-GB') ||
-                  voices.find(v => v.lang.startsWith('en'));
+  const enVoice = getEnVoice();
+  const voices = _cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
   function showEnGuide(){
     // 영어 음성 없을 때 안내 팝업
     const existing = document.getElementById('enVoiceGuide');
@@ -1866,7 +1879,7 @@ function toggleLibQuest(id,li,wasAdded){
     showToast('퀘스트 추가됨 ✓');
     spawnPtc(window.innerWidth/2,window.innerHeight*.5,6);
   }
-  DB.set('qk31_sel',S.quests.map(q=>q.id));
+  DB.set(uKey('sel'),S.quests.map(q=>q.id));
   saveState(); renderLibList(); updateLibCount();
 }
 function updateLibCount(){
@@ -1895,7 +1908,7 @@ function addCustomQuest(){
   const q={id,em:customEmoji,name,xp:xpMap[diff],coin:coinMap[diff],diff,time:'자유시간'};
   S.customQuests.push(q);
   S.quests.push({id,done:false});
-  DB.set('qk31_sel',S.quests.map(q=>q.id));
+  DB.set(uKey('sel'),S.quests.map(q=>q.id));
   saveState();
   document.getElementById('customName').value='';
   showToast(customEmoji+' '+name+' 추가됨! ✓');
@@ -2271,7 +2284,7 @@ function addCustomQ(){
   S.customQuests = S.customQuests || [];
   S.customQuests.push({id, em, name, xp:xpMap[diff], coin:coinMap[diff], diff, time:'자유시간'});
   S.quests.push({id, done:false});
-  DB.set('qk31_sel', S.quests.map(q=>q.id));
+  DB.set(uKey('sel'), S.quests.map(q=>q.id));
   saveState();
   document.getElementById('cName').value = '';
   showToast(em + ' ' + name + ' 추가됨! ✓');
