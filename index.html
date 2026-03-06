@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QuestKids">
 <meta name="theme-color" content="#0C0E1C">
-<title>QuestKids v3</title>
+<title>QuestKids</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════
@@ -251,6 +251,27 @@ body{user-select:none}
 .rc-coin{background:var(--amberlt);border:1px solid #FFB93044;color:var(--amber);border-radius:12px;padding:5px 12px;font-size:13px;font-weight:800}
 .rc-shield{background:var(--greenlt);border:1px solid #22D68A44;color:var(--green);border-radius:12px;padding:5px 12px;font-size:13px;font-weight:800}
 
+.lv-badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 9px;font-size:9px;font-weight:800}
+.lv-1{background:#1E1B40;border:1px solid #7B6FFF44;color:#A89EFF}
+.lv-2{background:#0A2818;border:1px solid #22D68A44;color:#22D68A}
+.lv-3{background:#3A2800;border:1px solid #FFB93044;color:#FFB930}
+.lv-4{background:#2A0A14;border:1px solid #FF577544;color:#FF5775}
+.lv-5{background:#0A2030;border:1px solid #4FC8F044;color:#4FC8F0}
+/* Learn mini cards */
+.lc-mini{background:var(--sur2);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 6px;cursor:pointer;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.lc-mini:active{transform:scale(.92)}.lc-mini.done{border-color:var(--green);background:var(--greenlt)}
+.lm-em{font-size:22px;line-height:1}.lm-lbl{font-size:9px;font-weight:800;color:var(--txt2);line-height:1.2}
+.lc-mini.done .lm-lbl{color:var(--green)}
+/* LM modal */
+.lm-tab{background:var(--sur2);border:1px solid var(--bdr);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:800;color:var(--txt2);cursor:pointer;flex-shrink:0;white-space:nowrap;transition:all .2s}
+.lm-tab.on{background:var(--bluelt);border-color:var(--blue);color:var(--blue)}
+.lm-main-card{background:var(--sur2);border:1px solid var(--bdr);border-radius:18px;padding:16px;margin-bottom:14px}
+/* Friend screen */
+.friend-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r2);padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.fa{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#241E60,#4838A8);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;border:2px solid var(--brand2)}
+.fn{font-size:13px;font-weight:800;color:var(--txt)}.fm2{font-size:10px;color:var(--txt2);font-weight:700}
+.f-streak{display:inline-flex;align-items:center;gap:3px;background:var(--amberlt);border:1px solid #FFB93044;border-radius:6px;padding:1px 6px;font-size:9px;font-weight:800;color:var(--amber)}
+
 /* ══════════════════════════════════════
    SCREEN: INTRO
 ══════════════════════════════════════ */
@@ -395,6 +416,7 @@ body{user-select:none}
 .qi-sleep  {background:linear-gradient(135deg,var(--green),#0A9460);box-shadow:0 3px 10px #22D68A40}
 .qi-move   {background:linear-gradient(135deg,var(--pink),#C040A0);box-shadow:0 3px 10px #FF7EC840}
 .qi-social {background:linear-gradient(135deg,var(--teal),#0A9080);box-shadow:0 3px 10px #2DDFC840}
+.qi-custom {background:linear-gradient(135deg,var(--orange,#FF8C42),#CC5000);box-shadow:0 3px 10px #FF8C4240}
 .qi-custom {background:linear-gradient(135deg,var(--blue),#2080C0);box-shadow:0 3px 10px #4FC8F040}
 .qbody{flex:1;min-width:0}
 .qname{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -611,7 +633,7 @@ body{user-select:none}
     <div class="islide on" id="is0">
       <div class="is-planet" style="background:radial-gradient(circle at 35% 35%,#B8AEFF,#7B6FFF 50%,#3020C0);box-shadow:0 0 60px #7B6FFF55">⚔️</div>
       <div class="is-title">현실에서 행동하면<br>게임이 열려!</div>
-      <div class="is-sub">숙제하고, 아침 준비하고, 운동하면 — 진짜 게임처럼 캐릭터가 성장해!</div>
+      <div class="is-sub">숙제, 아침 준비, 운동 — 실제로 해야만 캐릭터가 자라. 앱 안에서 버튼만 누르면 안 돼!</div>
       <div class="is-demo">
         <span>🏃</span><div class="arr">→</div>
         <span>⚔️</span><div class="arr">→</div>
@@ -620,8 +642,8 @@ body{user-select:none}
     </div>
     <div class="islide" id="is1">
       <div class="is-planet" style="background:radial-gradient(circle at 35% 35%,#A8F8D8,#22D68A 50%,#0A6040);box-shadow:0 0 60px #22D68A55">🧙‍♂️</div>
-      <div class="is-title">내 캐릭터와<br>월드가 성장해!</div>
-      <div class="is-sub">퀘스트를 깰수록 아이템이 쌓이고, 내 홈월드가 점점 커져. 모험가, 꾸미기, 친구형 중 골라봐!</div>
+      <div class="is-title">나만의 캐릭터와<br>월드를 키워봐!</div>
+      <div class="is-sub">퀘스트를 깰수록 아이템·홈월드가 커져. 레벨이 오를수록 더 멋진 아이템이 열려!</div>
       <div class="is-demo">
         <span style="opacity:.3">🏰</span><div class="arr">→</div>
         <span style="opacity:.7">🏰</span><div class="arr">→</div>
@@ -631,7 +653,7 @@ body{user-select:none}
     <div class="islide" id="is2">
       <div class="is-planet" style="background:radial-gradient(circle at 35% 35%,#FFE090,#FFB930 50%,#A06000);box-shadow:0 0 60px #FFB93055">👨‍👩‍👦</div>
       <div class="is-title">부모님도<br>함께 응원해!</div>
-      <div class="is-sub">아이가 퀘스트를 깰 때마다 부모님이 확인하고 칭찬을 보낼 수 있어. 감시 말고 응원!</div>
+      <div class="is-sub">아이가 퀘스트를 깰 때마다 부모님이 응원 메시지와 작은 선물을 보낼 수 있어. 감시 말고 응원!</div>
       <div class="is-demo">
         <span>📱</span><div class="arr">→</div>
         <span>💌</span><div class="arr">→</div>
@@ -651,7 +673,7 @@ body{user-select:none}
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:24px;overflow-y:auto">
     <div class="login-logo">⚔️</div>
     <div class="login-title">QuestKids</div>
-    <div class="login-sub">해야 할 일을 깨면<br>내 캐릭터와 월드가 성장해!</div>
+    <div class="login-sub">현실에서 행동하면 나의 캐릭터가 성장해!<br>오늘도 퀘스트를 깨러 가볼까? 🚀</div>
     <div class="login-form">
       <div class="role-row" id="roleRow">
         <div class="role-card sel" onclick="pickRole('child',this)"><span class="re">🧙‍♂️</span><span class="rn">어린이</span></div>
@@ -696,8 +718,8 @@ body{user-select:none}
     <!-- step 2: pick quests -->
     <div class="ob-slide" id="obs2" style="overflow-y:auto">
       <div class="ob-t">오늘의 퀘스트를<br>골라봐! ⚡</div>
-      <div class="ob-s">최대 6개까지 고를 수 있어. 언제든 바꿀 수 있어!</div>
-      <div class="pick-count-bar"><span>선택한 퀘스트</span><span class="cnt" id="obPickCnt">0 / 6</span></div>
+      <div class="ob-s">최대 10개까지 고를 수 있어. 언제든 바꿀 수 있어!</div>
+      <div class="pick-count-bar"><span>선택한 퀘스트</span><span class="cnt" id="obPickCnt">0 / 10</span></div>
       <div class="cat-tabs" id="obCatTabs"></div>
       <div class="qpick-list" id="obPickList"></div>
     </div>
@@ -731,6 +753,7 @@ body{user-select:none}
       <div class="hero-info">
         <div class="hero-name" id="heroName">퀘스트 마법사</div>
         <div class="hero-streak" id="streakBadge">🔥 0일 연속</div>
+        <div style="margin-bottom:4px"><span class="lv-badge lv-1" id="heroTitle">🌱 새싹 퀘스터</span></div>
         <div class="lv-row"><span>Lv.<span id="heroLv">1</span></span><span><span id="xpCur">0</span>/<span id="xpMax">200</span></span></div>
         <div class="xpbar-bg"><div class="xpbar-fill" id="xpFill" style="width:0%"></div></div>
       </div>
@@ -740,27 +763,33 @@ body{user-select:none}
         <svg width="56" height="56" viewBox="0 0 56 56"><circle class="r-bg" cx="28" cy="28" r="23"/><circle class="r-fil" id="progRing" cx="28" cy="28" r="23"/></svg>
         <div class="ring-txt" id="progTxt">0/0</div>
       </div>
-      <div class="prog-info"><h3>🗺️ 오늘의 진행도</h3><p id="progDesc">퀘스트를 시작해봐!</p></div>
+      <div class="prog-info"><h3>🗺️ 나의 퀘스트 현황</h3><p id="progDesc">퀘스트를 시작해봐!</p></div>
     </div>
-    <div class="sec spad"><h2>⚡ 오늘의 퀘스트 <span class="chip chip-red" id="remBadge" style="display:none"></span></h2>
+    <div class="sec spad"><h2>⚡ 나의 퀘스트 <span class="chip chip-red" id="remBadge" style="display:none"></span></h2>
       <button class="sec-btn" onclick="goScreen('s-lib')">+ 퀘스트 추가</button></div>
     <div class="qlist" id="homeQList"></div>
-    <!-- Today's Learning -->
-    <div class="learn-card" id="learnCard" onclick="openLearn()">
-      <div class="lc-top">
-        <div class="lc-badge" id="learnBadge">📘 오늘의 학습</div>
-        <div class="lc-xp">+5 XP</div>
+    <!-- Today's Learning 3-panel -->
+    <div style="margin:10px 16px 0;background:linear-gradient(135deg,var(--bluelt),#0C1C2E);border:1px solid #4FC8F044;border-radius:20px;padding:14px;box-shadow:0 4px 20px #4FC8F018">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:5px;background:#0A283A;border:1px solid #4FC8F044;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:800;color:var(--blue)">📚 오늘의 학습</div>
+        <div style="font-size:10px;font-weight:800;color:#A89EFF">각 +5 XP</div>
       </div>
-      <div class="lc-content" id="learnContent">로딩 중...</div>
-      <div class="lc-sub" id="learnSub"></div>
-      <button class="lc-read-btn" id="learnBtn" onclick="markLearnDone(event)">읽었어요 ✓</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px" id="learnRow"></div>
+    </div>
+    <!-- Library banner -->
+    <div onclick="goScreen('s-lib')" style="margin:12px 16px 0;background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:0 0 20px #7B6FFF22;transition:transform .2s" onmousedown="this.style.transform='scale(.98)'" onmouseup="this.style.transform=''">
+      <div>
+        <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--brand2);line-height:1.3">나만의 퀘스트가 필요해?</div>
+        <div style="font-size:10px;color:var(--txt2);font-weight:700;margin-top:2px">퀘스트를 직접 만들어봐! →</div>
+      </div>
+      <span style="font-size:28px">📚</span>
     </div>
     <div style="height:8px"></div>
   </div>
-  <nav class="bottom-nav" id="nav" style="display:none">
+  <nav class="bottom-nav show" id="nav">
     <button class="nb on"  onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
     <button class="nb"     onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
-    <button class="nb"     onclick="navGo('s-lib',this)"><span class="ni">📚</span>라이브러리</button>
+    <button class="nb"     onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
     <button class="nb"     onclick="navGo('s-retry',this)"><span class="ni">💔</span>복구</button>
     <button class="nb"     onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
   </nav>
@@ -909,14 +938,25 @@ body{user-select:none}
       </div>
     </div>
     <div class="praise-wrap">
-      <h3>💌 칭찬 문구 보내기</h3>
+      <h3>📣 응원하기</h3>
       <div class="pchips" id="pChips">
         <div class="pchip" onclick="pickPraise(this)">👏 오늘 정말 잘했어!</div>
         <div class="pchip" onclick="pickPraise(this)">🔥 연속 달성 대단해!</div>
         <div class="pchip" onclick="pickPraise(this)">💪 스스로 해내는 모습이 멋져</div>
         <div class="pchip" onclick="pickPraise(this)">🌟 포기 안 하는 게 최고야</div>
       </div>
-      <button class="sbtn" onclick="sendPraise()">아바타에게 칭찬 보내기 💌</button>
+      <button class="sbtn" onclick="sendPraise()">아바타에게 응원 보내기 💌</button>
+    </div>
+    <!-- Gift section -->
+    <div style="margin:0 16px 12px;background:#fff;border:1px solid #DDE2F5;border-radius:20px;padding:13px">
+      <div style="font-family:'Fredoka One',sans-serif;font-size:13px;color:#5B52F0;margin-bottom:9px;display:flex;align-items:center;gap:5px">🎁 작은 선물 보내기</div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px">
+        <div class="gift-btn" onclick="selGift('칭찬 스티커',this)" style="background:#EAE9FF;border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;text-align:center;transition:all .2s;font-size:11px;font-weight:800;color:#5B52F0"><span style="font-size:22px;display:block;margin-bottom:2px">⭐</span>칭찬 스티커</div>
+        <div class="gift-btn" onclick="selGift('XP 부스터',this)" style="background:#EAE9FF;border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;text-align:center;transition:all .2s;font-size:11px;font-weight:800;color:#5B52F0"><span style="font-size:22px;display:block;margin-bottom:2px">⚡</span>XP 부스터</div>
+        <div class="gift-btn" onclick="selGift('코인 50개',this)" style="background:#EAE9FF;border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;text-align:center;transition:all .2s;font-size:11px;font-weight:800;color:#5B52F0"><span style="font-size:22px;display:block;margin-bottom:2px">🪙</span>코인 50</div>
+        <div class="gift-btn" onclick="selGift('아이템 상자',this)" style="background:#EAE9FF;border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;text-align:center;transition:all .2s;font-size:11px;font-weight:800;color:#5B52F0"><span style="font-size:22px;display:block;margin-bottom:2px">🎀</span>아이템 상자</div>
+      </div>
+      <button onclick="sendGift()" style="width:100%;padding:10px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#5B52F0,#7B74FF);font-family:'Fredoka One',sans-serif;font-size:14px;color:#fff;box-shadow:0 4px 14px rgba(91,82,240,.3);transition:transform .15s" onmousedown="this.style.transform='scale(.97)'" onmouseup="this.style.transform=''">선물 보내기 🎁</button>
     </div>
     <div style="height:10px"></div>
   </div>
@@ -983,6 +1023,44 @@ body{user-select:none}
   </div>
 </div>
 
+<!-- FRIENDS SCREEN -->
+<div class="screen" id="s-friends">
+  <div class="topbar">
+    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+    <span class="topbar-title">👫 친구 퀘스트</span>
+    <div class="chip chip-brand">Beta</div>
+  </div>
+  <div class="sscroll spad spad-b">
+    <div style="background:linear-gradient(135deg,var(--brandlt),#0A0820);border:1px solid #7B6FFF44;border-radius:20px;padding:16px;margin-bottom:14px;text-align:center">
+      <div style="font-size:36px;margin-bottom:8px">👫</div>
+      <div style="font-family:'Fredoka One',sans-serif;font-size:18px;color:var(--txt);margin-bottom:4px">친구와 함께 퀘스트!</div>
+      <div style="font-size:12px;color:var(--txt2);font-weight:700;line-height:1.6;margin-bottom:14px">같은 퀘스트를 함께 하면 서로 응원할 수 있어.<br>가족 코드로 친구를 초대해봐!</div>
+      <div style="display:flex;gap:8px">
+        <input id="friendCode" class="inp" style="font-size:14px;flex:1" placeholder="친구 코드 입력" oninput="this.value=this.value.toUpperCase()" maxlength="8">
+        <button class="btn btn-brand btn-sm" onclick="addFriend()">초대</button>
+      </div>
+    </div>
+    <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--txt);margin-bottom:10px">👥 내 친구 목록</div>
+    <div id="friendList"></div>
+    <div style="height:10px"></div>
+    <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--txt);margin-bottom:10px">📣 응원 보내기</div>
+    <div style="display:flex;flex-direction:column;gap:7px" id="friendCheerList"></div>
+    <div style="height:10px"></div>
+    <div style="font-family:'Fredoka One',sans-serif;font-size:14px;color:var(--txt);margin-bottom:10px">🎁 아이템 선물하기 <span class="chip chip-amber">준비중</span></div>
+    <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r2);padding:14px;text-align:center;color:var(--txt2);font-size:12px;font-weight:700;line-height:1.6">
+      🚀 아이템 교환·선물 기능은 곧 출시 예정이에요!<br>친구 연동이 완성되면 바로 사용할 수 있어요.
+    </div>
+    <div style="height:10px"></div>
+  </div>
+  <nav class="bottom-nav show" id="friendNav">
+    <button class="nb"    onclick="navGo('s-home',this)"><span class="ni">⚔️</span>퀘스트</button>
+    <button class="nb"    onclick="navGo('s-avatar',this)"><span class="ni">🧙‍♂️</span>아바타</button>
+    <button class="nb on" onclick="navGo('s-friends',this)"><span class="ni">👫</span>친구</button>
+    <button class="nb"    onclick="navGo('s-retry',this)"><span class="ni">💔</span>복구</button>
+    <button class="nb"    onclick="doLogout()"><span class="ni">🚪</span>나가기</button>
+  </nav>
+</div>
+
 <!-- REWARD POPUP -->
 <div id="rpop">
   <div class="rbox">
@@ -998,9 +1076,9 @@ body{user-select:none}
 <div class="overlay" id="learnOverlay" onclick="closeLearnModal(event)">
   <div class="sheet">
     <div class="sheet-handle"></div>
-    <div style="font-family:'Fredoka One',sans-serif;font-size:22px;color:var(--txt);margin-bottom:6px" id="lmTitle"></div>
-    <div style="font-size:13px;color:var(--txt2);font-weight:700;line-height:1.7;margin-bottom:16px" id="lmBody"></div>
-    <button class="btn btn-brand" onclick="markLearnDoneModal()">읽었어요 ✓ (+5 XP)</button>
+    <div style="display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none" id="lmTabs"></div>
+    <div id="lmContentArea"></div>
+    <button class="btn btn-brand" id="lmDoneBtn" onclick="doLearnDone()">읽었어요 ✓ (+5 XP)</button>
   </div>
 </div>
 
@@ -1012,67 +1090,113 @@ body{user-select:none}
 //  DATA — QUEST LIBRARY
 // ══════════════════════════════════════════════════
 const CATS = [
-  {id:'morning', lbl:'🌅 아침', cls:'qi-morning'},
-  {id:'hw',      lbl:'📚 학습', cls:'qi-hw'},
-  {id:'pack',    lbl:'🎒 준비', cls:'qi-pack'},
-  {id:'sleep',   lbl:'🌙 취침', cls:'qi-sleep'},
-  {id:'move',    lbl:'🤸 운동', cls:'qi-move'},
-  {id:'social',  lbl:'🤝 사회', cls:'qi-social'},
+  {id:'morning', lbl:'🌅 아침',   cls:'qi-morning'},
+  {id:'hw',      lbl:'📚 학습',   cls:'qi-hw'},
+  {id:'pack',    lbl:'🎒 준비',   cls:'qi-pack'},
+  {id:'sleep',   lbl:'🌙 취침',   cls:'qi-sleep'},
+  {id:'health',  lbl:'💪 건강',   cls:'qi-move'},
+  {id:'rel',     lbl:'🤝 관계',   cls:'qi-social'},
+  {id:'learn',   lbl:'📖 학습연계',cls:'qi-hw'},
 ];
 const LIBRARY = {
   morning:[
-    {id:'m1',em:'🌅',name:'세수·양치 완료하기',      time:'오전 8시까지', xp:25,coin:8, diff:'easy'},
-    {id:'m2',em:'🍚',name:'아침 밥 먹기',             time:'오전 8시까지', xp:20,coin:7, diff:'easy'},
-    {id:'m3',em:'👕',name:'옷 스스로 입기',           time:'등교 전',      xp:20,coin:7, diff:'easy'},
-    {id:'m4',em:'☀️',name:'창문 열어 환기하기',       time:'아침',         xp:15,coin:5, diff:'easy'},
-    {id:'m5',em:'🧘',name:'기상 후 스트레칭 3분',     time:'일어나자마자', xp:30,coin:10,diff:'med'},
+    {id:'m1',em:'⏰',name:'스스로 일어나기',            time:'기상 알람',    xp:40,coin:12,diff:'hard',note:'알람 연동 예정'},
+    {id:'m2',em:'🪥',name:'세수·양치 하기',              time:'기상 후',      xp:25,coin:8, diff:'easy'},
+    {id:'m3',em:'🍚',name:'아침밥 챙겨 먹기',            time:'등교 전',      xp:25,coin:8, diff:'easy'},
+    {id:'m4',em:'👕',name:'내 취향대로 옷 입기',         time:'등교 전',      xp:20,coin:7, diff:'easy'},
+    {id:'m5',em:'📋',name:'오늘의 준비물 확인하기',      time:'등교 전',      xp:30,coin:10,diff:'easy'},
+    {id:'m6',em:'🏫',name:'제 시간에 등교하기',          time:'등교 알람',    xp:45,coin:13,diff:'med', note:'알람 연동 예정',urg:true},
   ],
   hw:[
-    {id:'h1',em:'📐',name:'수학 숙제 완료하기',       time:'저녁 6시까지', xp:50,coin:15,diff:'hard',urg:true},
-    {id:'h2',em:'✏️',name:'받아쓰기 연습하기',        time:'저녁 6시까지', xp:40,coin:12,diff:'med'},
-    {id:'h3',em:'📖',name:'독서 15분',                 time:'귀가 후',      xp:35,coin:10,diff:'med'},
-    {id:'h4',em:'🔤',name:'영어 단어 5개 외우기',     time:'저녁 7시까지', xp:40,coin:12,diff:'med'},
-    {id:'h5',em:'🎨',name:'미술 숙제 완료하기',       time:'귀가 후',      xp:45,coin:13,diff:'med'},
-    {id:'h6',em:'🎵',name:'피아노 연습 10분',         time:'귀가 후',      xp:35,coin:10,diff:'med'},
+    {id:'h1',em:'📝',name:'학교 숙제 완료하기',          time:'귀가 후',      xp:50,coin:15,diff:'hard',urg:true},
+    {id:'h2',em:'🏫',name:'학원 숙제 완료하기',          time:'저녁',         xp:45,coin:14,diff:'hard',customName:true,nameHint:'어떤 학원?'},
+    {id:'h3',em:'📖',name:'오늘의 독서 15분',            time:'자유시간',     xp:35,coin:11,diff:'med'},
+    {id:'h4',em:'🔁',name:'오늘 수업 복습 15분',         time:'귀가 후',      xp:40,coin:12,diff:'med'},
+    {id:'h5',em:'👀',name:'내일 수업 예습 15분',         time:'저녁',         xp:40,coin:12,diff:'med'},
+    {id:'h6',em:'🎵',name:'악기 연습하기',               time:'방과 후',      xp:40,coin:12,diff:'med', customName:true,nameHint:'악기 이름?'},
   ],
   pack:[
-    {id:'p1',em:'🎒',name:'내일 가방 싸기',           time:'밤 9시까지',   xp:35,coin:12,diff:'easy'},
-    {id:'p2',em:'📋',name:'준비물 체크리스트 확인',   time:'밤 9시까지',   xp:25,coin:8, diff:'easy'},
-    {id:'p3',em:'🗂️',name:'책상 정리정돈',            time:'저녁 후',      xp:20,coin:7, diff:'easy'},
-    {id:'p4',em:'👔',name:'내일 옷 미리 꺼내두기',   time:'밤 9시까지',   xp:20,coin:7, diff:'easy'},
+    {id:'p1',em:'🎒',name:'내일 가방 싸기',              time:'밤 9시까지',   xp:35,coin:11,diff:'easy'},
+    {id:'p2',em:'📋',name:'준비물 체크리스트 확인',      time:'밤 9시까지',   xp:25,coin:8, diff:'easy'},
+    {id:'p3',em:'🗂️',name:'책상 정리정돈',               time:'저녁 후',      xp:20,coin:7, diff:'easy'},
+    {id:'p4',em:'👔',name:'내일 옷 미리 꺼내두기',      time:'밤 9시까지',   xp:20,coin:7, diff:'easy'},
   ],
   sleep:[
-    {id:'sl1',em:'📱',name:'기기 충전 코너 주차',     time:'밤 9:30까지',  xp:40,coin:12,diff:'med'},
-    {id:'sl2',em:'🌙',name:'취침 전 스트레칭',        time:'잠자리 전',    xp:30,coin:10,diff:'easy'},
-    {id:'sl3',em:'📔',name:'일기 3줄 쓰기',           time:'잠자리 전',    xp:45,coin:14,diff:'med'},
-    {id:'sl4',em:'🦷',name:'밤 양치질',               time:'잠자리 전',    xp:20,coin:7, diff:'easy'},
-    {id:'sl5',em:'😴',name:'밤 10시 전 취침',         time:'밤 10시까지',  xp:50,coin:15,diff:'hard'},
+    {id:'sl1',em:'📱',name:'기기 충전 코너 주차',        time:'밤 9:30',      xp:40,coin:12,diff:'med'},
+    {id:'sl2',em:'🧘',name:'취침 전 스트레칭',           time:'잠자리 전',    xp:30,coin:10,diff:'easy'},
+    {id:'sl3',em:'📔',name:'일기 3줄 쓰기',              time:'잠자리 전',    xp:45,coin:14,diff:'med'},
+    {id:'sl4',em:'🦷',name:'밤 양치질 완료',             time:'잠자리 전',    xp:20,coin:7, diff:'easy'},
+    {id:'sl5',em:'😴',name:'밤 10시 전 취침',            time:'밤 10시',      xp:50,coin:15,diff:'hard'},
   ],
-  move:[
-    {id:'mv1',em:'🤸',name:'줄넘기 50개',             time:'방과 후',      xp:35,coin:11,diff:'med'},
-    {id:'mv2',em:'🚶',name:'30분 산책',               time:'방과 후',      xp:40,coin:12,diff:'med'},
-    {id:'mv3',em:'💧',name:'물 2컵 마시기',           time:'귀가 후',      xp:15,coin:5, diff:'easy'},
-    {id:'mv4',em:'🥗',name:'채소 반찬 먹기',          time:'저녁 식사',    xp:25,coin:8, diff:'easy'},
-    {id:'mv5',em:'🏃',name:'달리기 10분',             time:'방과 후',      xp:50,coin:15,diff:'hard'},
+  health:[
+    {id:'hlt1',em:'🤸',name:'줄넘기 50개',               time:'방과 후',      xp:35,coin:11,diff:'med'},
+    {id:'hlt2',em:'🚶',name:'30분 산책·걷기',            time:'방과 후',      xp:40,coin:12,diff:'med'},
+    {id:'hlt3',em:'💧',name:'물 2컵 마시기',             time:'귀가 후',      xp:15,coin:5, diff:'easy'},
+    {id:'hlt4',em:'🥗',name:'채소 반찬 먹기',            time:'저녁 식사',    xp:25,coin:8, diff:'easy'},
+    {id:'hlt5',em:'🏃',name:'달리기 10분',               time:'방과 후',      xp:50,coin:15,diff:'hard'},
+    {id:'hlt6',em:'🧴',name:'손씻기 (귀가 즉시)',        time:'귀가 후',      xp:15,coin:5, diff:'easy'},
   ],
-  social:[
-    {id:'sc1',em:'🤝',name:'동생 10분 놀아주기',      time:'방과 후',      xp:35,coin:11,diff:'med'},
-    {id:'sc2',em:'🍽️',name:'저녁 설거지 도움',       time:'저녁 후',      xp:30,coin:10,diff:'med'},
-    {id:'sc3',em:'👋',name:'부모님께 인사하기',       time:'하루 중',      xp:15,coin:5, diff:'easy'},
-    {id:'sc4',em:'🌸',name:'친구에게 먼저 인사',      time:'등교 시',      xp:20,coin:7, diff:'easy'},
+  rel:[
+    {id:'r1',em:'🤝',name:'동생 10분 놀아주기',          time:'방과 후',      xp:35,coin:11,diff:'med'},
+    {id:'r2',em:'🍽️',name:'저녁 설거지 도움',           time:'저녁 후',      xp:30,coin:10,diff:'med'},
+    {id:'r3',em:'👋',name:'부모님께 인사하기',           time:'하루 중',      xp:15,coin:5, diff:'easy'},
+    {id:'r4',em:'🌸',name:'친구에게 먼저 인사',          time:'등교 시',      xp:20,coin:7, diff:'easy'},
+    {id:'r5',em:'😊',name:'오늘 감사한 일 말하기',       time:'저녁 식사',    xp:25,coin:8, diff:'easy'},
+  ],
+  learn:[
+    {id:'lrn1',em:'📘',name:'오늘의 한자 확인·외우기',   time:'오늘 중',      xp:20,coin:7, diff:'easy',learnType:'hanja'},
+    {id:'lrn2',em:'🔤',name:'오늘의 영단어 확인·외우기', time:'오늘 중',      xp:20,coin:7, diff:'easy',learnType:'word'},
+    {id:'lrn3',em:'💬',name:'오늘의 명언 확인하기',      time:'오늘 중',      xp:15,coin:5, diff:'easy',learnType:'quote'},
   ],
 };
 
-// ── Today's Learning data ────────────────────────────────────
-const LEARN_DATA = [
-  {type:'한자',  badge:'📘 오늘의 한자',   content:'學 (배울 학)',      sub:'배우다 · 학교 · 공부하다\n예문: 학교에서 배운다 (學校)',  detail:'學는 "배우다"는 뜻이에요. 학교(學校), 학생(學生)에 들어가는 한자예요. 배움을 멈추지 않는 사람이 가장 강해요!'},
-  {type:'영단어',badge:'🔤 오늘의 영단어', content:'brave (브레이브)',   sub:'형용사 · 용감한, 두려움 없는\n예문: Be brave! 용감해져!',    detail:'"brave"는 "용감한"이라는 뜻이에요. "Be brave!" 는 "용감해져!"라는 뜻이에요. 어떤 도전도 피하지 말고 brave하게!'},
-  {type:'명언',  badge:'💬 오늘의 명언',   content:'"시작이 반이다"',    sub:'— 아리스토텔레스\n무언가를 시작하는 것 자체가 이미 절반을 이룬 것',   detail:'고대 철학자 아리스토텔레스의 말이에요. 무서워서 시작 못 하고 있는 일이 있나요? 오늘 딱 한 발짝만 내디뎌 봐요. 그게 이미 절반이에요!'},
-  {type:'한자',  badge:'📘 오늘의 한자',   content:'勇 (날랠 용)',      sub:'용기 · 용감하다 · 용사\n예문: 용기를 내다 (勇氣)',       detail:'勇는 "용기", "용감하다"는 뜻이에요. 용기(勇氣), 용사(勇士)에 들어가요. 작은 퀘스트를 깨는 것도 勇이에요!'},
-  {type:'영단어',badge:'🔤 오늘의 영단어', content:'goal (고울)',       sub:'명사 · 목표, 골\n예문: I have a goal. 나는 목표가 있다.', detail:'"goal"은 "목표"라는 뜻이에요. 축구의 골도 같은 단어예요! 오늘 하루의 퀘스트도 여러분의 goal이에요.'},
-  {type:'명언',  badge:'💬 오늘의 명언',   content:'"천 리 길도 한 걸음부터"', sub:'— 노자 (老子)\n큰 목표도 작은 시작에서 출발한다',  detail:'중국의 철학자 노자의 말이에요. 오늘 퀘스트 하나 하나가 미래의 나를 만들어가는 한 걸음이에요. 포기하지 말아요!'},
-  {type:'한자',  badge:'📘 오늘의 한자',   content:'力 (힘 력)',         sub:'힘 · 노력 · 능력\n예문: 노력하다 (努力)',              detail:'力는 "힘"이에요. 노력(努力), 능력(能力), 체력(體力) 모두 이 한자가 들어가요. 매일 퀘스트를 깨는 것이 바로 力을 키우는 방법!'},
+// ── Learning data (Words / Quotes / Hanja) ───────────────────
+const WORDS = [
+  {w:'apple',  meaning:'사과',    ex:'I eat an apple every day.',     exKo:'나는 매일 사과를 먹어.'},
+  {w:'brave',  meaning:'용감한',  ex:'Be brave and try it!',          exKo:'용감하게 도전해봐!'},
+  {w:'clean',  meaning:'깨끗한',  ex:'Keep your room clean.',         exKo:'방을 깨끗하게 유지해.'},
+  {w:'dream',  meaning:'꿈',      ex:'Follow your dream.',            exKo:'네 꿈을 따라가.'},
+  {w:'energy', meaning:'에너지',  ex:'You have so much energy!',      exKo:'너는 에너지가 넘쳐!'},
+  {w:'friend', meaning:'친구',    ex:'A good friend listens.',        exKo:'좋은 친구는 잘 들어줘.'},
+  {w:'goal',   meaning:'목표',    ex:'Set a goal every day.',         exKo:'매일 목표를 세워봐.'},
+  {w:'happy',  meaning:'행복한',  ex:'Be happy with yourself.',       exKo:'스스로에게 만족해.'},
+  {w:'idea',   meaning:'아이디어',ex:'What a great idea!',            exKo:'정말 좋은 생각이야!'},
+  {w:'kind',   meaning:'친절한',  ex:'Always be kind to others.',     exKo:'항상 다른 사람에게 친절해.'},
+  {w:'learn',  meaning:'배우다',  ex:'Never stop learning.',          exKo:'배움을 멈추지 마.'},
+  {w:'morning',meaning:'아침',    ex:'Good morning, everyone!',       exKo:'모두 좋은 아침!'},
+  {w:'nature', meaning:'자연',    ex:"Let's protect nature.",         exKo:'자연을 보호하자.'},
+  {w:'open',   meaning:'열다',    ex:'Open your heart.',              exKo:'마음을 열어봐.'},
+  {w:'proud',  meaning:'자랑스러운',ex:'I am proud of you.',          exKo:'네가 자랑스러워.'},
+  {w:'quest',  meaning:'모험·탐구',ex:'Every day is a new quest.',    exKo:'매일이 새로운 모험이야.'},
+  {w:'ready',  meaning:'준비된',  ex:'Are you ready? Let's go!',     exKo:'준비됐어? 가보자!'},
+  {w:'strong', meaning:'강한',    ex:'You are strong inside.',        exKo:'너는 마음이 강해.'},
+  {w:'try',    meaning:'시도하다',ex:'Always try your best.',         exKo:'항상 최선을 다해봐.'},
+  {w:'winner', meaning:'승자',    ex:'A true winner never gives up.', exKo:'진짜 승자는 포기하지 않아.'},
 ];
+const QUOTES = [
+  {q:'"시작이 반이다"',           author:'아리스토텔레스 (그리스)', detail:'무언가를 시작하는 것이 이미 절반이에요. 오늘 딱 한 발짝만!'},
+  {q:'"천 리 길도 한 걸음부터"',  author:'노자 (중국)',            detail:'큰 목표도 작은 시작에서 나와요. 퀘스트 하나가 미래를 만들어요.'},
+  {q:'"실패는 성공의 어머니"',    author:'토마스 에디슨 (미국)',   detail:'실패를 두려워하지 마세요. 실패할수록 성공에 가까워져요!'},
+  {q:'"자신을 믿으면 이미 반은 성공"', author:'루스벨트 (미국)', detail:'나 자신을 믿는 힘이 가장 강한 힘이에요. 오늘도 도전!'},
+  {q:'"배움에 늦은 때란 없다"',   author:'조지 엘리엇 (영국)',    detail:'언제든 새롭게 시작할 수 있어요. 오늘 학습도 늦지 않았어요!'},
+  {q:'"넘어진 것이 실패가 아니라, 일어나지 않는 것이 실패"', author:'공자 (중국)', detail:'Retry Mode가 이 말을 위해 있어요. 다시 일어나는 것이 진짜 용기!'},
+  {q:'"작은 일에 충실한 사람이 큰 일도 해낸다"', author:'루카복음 (성경)', detail:'퀘스트 하나 하나 성실하게 완료하면 큰 변화가 생겨요.'},
+];
+const HANJA = [
+  {h:'學', sound:'학', meaning:'배울 학', use:'학교(學校), 학생(學生)', detail:'"배우다"는 뜻이에요. 학교에서 열심히 배우는 것이 바로 學이에요!'},
+  {h:'勇', sound:'용', meaning:'날랠 용', use:'용기(勇氣), 용사(勇士)', detail:'"용기"를 뜻해요. 오늘 퀘스트에 도전하는 것도 勇이에요!'},
+  {h:'力', sound:'력', meaning:'힘 력',   use:'노력(努力), 능력(能力)', detail:'"힘"이에요. 매일 퀘스트를 깨는 것이 力을 키우는 방법!'},
+  {h:'心', sound:'심', meaning:'마음 심', use:'마음(心), 심장(心臟)',   detail:'"마음"이에요. 따뜻한 마음씨가 가장 큰 보물!'},
+  {h:'友', sound:'우', meaning:'벗 우',   use:'우정(友情), 친구(親友)', detail:'"친구"예요. 좋은 友를 소중히 여겨요!'},
+  {h:'時', sound:'시', meaning:'때 시',   use:'시간(時間), 시계(時計)', detail:'"시간"이에요. 時를 잘 활용하는 사람이 퀘스트왕!'},
+  {h:'正', sound:'정', meaning:'바를 정', use:'정직(正直), 정확(正確)', detail:'"바르다"예요. 매일 정직하게 퀘스트를 완료해요!'},
+];
+
+function getTodayItem(arr) {
+  const d = new Date();
+  const idx = (d.getFullYear()*366 + d.getMonth()*31 + d.getDate()) % arr.length;
+  return arr[idx];
+}
 
 // ── Avatar data ─────────────────────────────────────────────
 const FACES = [
@@ -1081,26 +1205,7 @@ const FACES = [
   {em:'🦄',hat:'🌸',name:'유니콘 기사'},{em:'🐲',hat:'👑',name:'드래곤 왕'},
   {em:'🤖',hat:'⚡',name:'사이보그'},    {em:'🦁',hat:'🎪',name:'사자 마술사'},
 ];
-const AV_CATS = {
-  hat:   {title:'🎩 모자',  items:[
-    {em:'🎩',name:'탑햇',  cost:0},  {em:'⛑️',name:'헬멧',cost:0},
-    {em:'🎓',name:'학사모',cost:0},  {em:'🪖',name:'전투모',cost:0},
-    {em:'👑',name:'왕관',  cost:120},{em:'🎪',name:'마술모',cost:80},
-    {em:'🌸',name:'화관',  cost:60}, {em:'⚡',name:'번개관',cost:100},
-  ]},
-  outfit:{title:'👕 의상',  items:[
-    {em:'🧙',name:'마법사 로브',cost:0},{em:'⚔️',name:'전사 갑옷',cost:0},
-    {em:'🥷',name:'닌자 복장',cost:80},{em:'🤖',name:'로봇 슈트',cost:150},
-    {em:'🦸',name:'히어로',   cost:180},{em:'🌈',name:'무지개 망토',cost:130},
-    {em:'🧜',name:'인어 의상',cost:90},{em:'🦊',name:'여우 망토',cost:70},
-  ]},
-  pet:   {title:'🐾 펫',    items:[
-    {em:'🐉',name:'아기 드래곤',cost:100},{em:'🦋',name:'별빛 나비',cost:60},
-    {em:'🐺',name:'늑대',cost:80},       {em:'🦁',name:'사자',cost:120},
-    {em:'🐬',name:'돌고래',cost:90},     {em:'🦅',name:'독수리',cost:110},
-    {em:'🦊',name:'마법 여우',cost:80},  {em:'🌟',name:'별 정령',cost:200},
-  ]},
-};
+// AV_CATS defined above with expanded items
 
 const REASONS = {
   forget:{txt:'<strong style="color:var(--brand2)">그랬구나~</strong> 까먹을 수 있어! 다음엔 알림을 크게 설정해볼까? 🔔 지금 복구 퀘스트 해보자!'},
@@ -1108,6 +1213,62 @@ const REASONS = {
   play:  {txt:'<strong style="color:var(--brand2)">재밌었겠다! 🎮</strong> 친구랑 노는 것도 중요해. 이제 잠깐 복구 퀘스트 깨고 다시 놀자!'},
   time:  {txt:'<strong style="color:var(--brand2)">바빴구나 ⚡</strong> 복구 퀘스트는 아주 쉽게 만들었으니까 지금 딱 한 번만!'},
 };
+
+// ── Level & Loyalty System ───────────────────────
+const LV_DATA = [
+  {lv:1, xp:0,    title:'🌱 새싹 퀘스터',   cls:'lv-1', unlock:'기본 아이템 해금'},
+  {lv:2, xp:200,  title:'⚡ 모험 시작',      cls:'lv-1', unlock:'모자 2종 해금'},
+  {lv:3, xp:450,  title:'🗡️ 퀘스트 용사',   cls:'lv-2', unlock:'의상 3종 해금'},
+  {lv:4, xp:800,  title:'🌟 빛나는 도전자',  cls:'lv-2', unlock:'펫 등장!'},
+  {lv:5, xp:1300, title:'🏆 습관의 달인',    cls:'lv-3', unlock:'왕관·희귀 아이템'},
+  {lv:6, xp:2000, title:'🔥 연속 파괴자',    cls:'lv-3', unlock:'특별 이펙트'},
+  {lv:7, xp:3000, title:'👑 퀘스트 왕',      cls:'lv-4', unlock:'전설 아이템'},
+  {lv:8, xp:4500, title:'🌌 전설의 영웅',    cls:'lv-5', unlock:'모든 아이템 해금'},
+];
+function getLvInfo(xp) {
+  let cur = LV_DATA[0];
+  for (const l of LV_DATA) { if (xp >= l.xp) cur = l; else break; }
+  const nextIdx = LV_DATA.indexOf(cur) + 1;
+  const next = LV_DATA[nextIdx] || null;
+  return { cur, next, prevXp: cur.xp, nextXp: next ? next.xp : cur.xp + 2000 };
+}
+
+// ── Avatar expanded categories ───────────────────
+const AV_CATS = {
+  hat: { title:'🎩 모자', items:[
+    {em:'🎩',name:'탑햇',cost:0},     {em:'⛑️',name:'헬멧',cost:0},
+    {em:'🎓',name:'학사모',cost:0},   {em:'🪖',name:'전투모',cost:0},
+    {em:'👑',name:'왕관',cost:100},   {em:'🎪',name:'마술모',cost:80},
+    {em:'🌸',name:'화관',cost:60},    {em:'⚡',name:'번개관',cost:90},
+    {em:'🏆',name:'챔피언관',cost:150},{em:'🌙',name:'달 머리띠',cost:70},
+    {em:'🎭',name:'탈',cost:55},      {em:'🪄',name:'요술모',cost:120},
+    {em:'🦋',name:'나비핀',cost:45},  {em:'🌺',name:'꽃 머리띠',cost:50},
+    {em:'🔥',name:'불꽃모',cost:180}, {em:'❄️',name:'눈왕관',cost:160},
+  ]},
+  outfit:{ title:'👕 의상', items:[
+    {em:'🧙',name:'마법 로브',cost:0},    {em:'⚔️',name:'전사 갑옷',cost:0},
+    {em:'🥷',name:'닌자 복장',cost:80},   {em:'🤖',name:'로봇 슈트',cost:150},
+    {em:'🦸',name:'히어로 슈트',cost:180},{em:'🌈',name:'무지개 망토',cost:130},
+    {em:'🧜',name:'인어 의상',cost:90},   {em:'🦊',name:'여우 망토',cost:70},
+    {em:'🎩',name:'신사 정장',cost:100},  {em:'🏋️',name:'운동복',cost:60},
+    {em:'🎨',name:'예술가 스모크',cost:85},{em:'🌿',name:'자연 드레스',cost:75},
+    {em:'🔮',name:'예언자 가운',cost:200},{em:'⭐',name:'별빛 드레스',cost:220},
+    {em:'🎸',name:'록스타 재킷',cost:160},{em:'🌊',name:'파도 서퍼복',cost:110},
+  ]},
+  pet:{ title:'🐾 펫', items:[
+    {em:'🐉',name:'아기 드래곤',cost:100},{em:'🦋',name:'별빛 나비',cost:60},
+    {em:'🐺',name:'늑대',cost:80},       {em:'🦁',name:'사자',cost:120},
+    {em:'🐬',name:'돌고래',cost:90},     {em:'🦅',name:'독수리',cost:110},
+    {em:'🦊',name:'마법 여우',cost:80},  {em:'🌟',name:'별 정령',cost:200},
+    {em:'🐧',name:'펭귄',cost:70},       {em:'🦄',name:'유니콘',cost:250},
+    {em:'🐸',name:'마법 개구리',cost:55},{em:'🦉',name:'부엉이',cost:95},
+    {em:'🐙',name:'문어',cost:85},       {em:'🦔',name:'고슴도치',cost:65},
+    {em:'🐊',name:'아기 악어',cost:130}, {em:'🦀',name:'집게사자',cost:75},
+  ]},
+};
+
+// ── Custom emojis expanded ───────────────────────
+const CUSTOM_EMOJIS = ['🎯','🎲','🎸','🏋️','🧩','🌿','🎤','🏊','🚴','✍️','🍳','🧹','📸','🎭','🧪','🌍','💻','🎺','🏄','🥊','🧗','🎬','🎻','🧶','🪁','🎿','🤿','🥋','🎮','🎱'];
 
 // ══════════════════════════════════════════════════
 //  STATE
@@ -1126,19 +1287,19 @@ let S = {
   quests:[],       // [{id,done}]
   customQuests:[], // [{id,em,name,xp,coin,diff}]
   todayDate:'',
-  learnDone:false,
+  learnDone:{hanja:false,word:false,quote:false},
   learnWeekCount:0,
   praises:[],
   plan:'free',
 };
 
 function loadState(){
-  const sv = DB.get('qk3_state', null);
+  const sv = DB.get('qk31_state', null);
   if(sv) Object.assign(S, sv);
   const today = new Date().toDateString();
   if(S.todayDate !== today){
     S.todayDate = today;
-    S.learnDone = false;
+    S.learnDone = {hanja:false,word:false,quote:false};
     resetDailyQuests();
   }
   if(!S.quests.length) resetDailyQuests();
@@ -1146,14 +1307,14 @@ function loadState(){
 }
 function resetDailyQuests(){
   // use saved selection or defaults
-  const sel = DB.get('qk3_selected_quests', null);
+  const sel = DB.get('qk31_sel', null);
   if(sel && sel.length){
     S.quests = sel.map(id=>({id,done:false}));
   } else {
-    S.quests = ['m1','h1','p1','sl1','mv3'].map(id=>({id,done:false}));
+    S.quests = ['m2','m3','h1','p1','sl1','hlt3','lrn1','lrn2','lrn3'].map(id=>({id,done:false}));
   }
 }
-function saveState(){ DB.set('qk3_state',S); }
+function saveState(){ DB.set('qk31_state',S); }
 
 function getAllQuestById(id){
   for(const cat of Object.values(LIBRARY)){
@@ -1168,6 +1329,11 @@ function getCatForId(id){
     if(arr.find(q=>q.id===id)) return k;
   }
   return 'custom';
+}
+function getCatCls(id){
+  const catId=getCatForId(id);
+  const cat=CATS.find(c=>c.id===catId);
+  return cat?cat.cls:'qi-custom';
 }
 
 // ══════════════════════════════════════════════════
@@ -1194,28 +1360,19 @@ function goScreen(id){
     else{ el.classList.remove('active'); el.classList.add('exit'); setTimeout(()=>el.classList.remove('exit'),400); }
   });
   curScreen=id;
-  const childScreens=['s-home','s-avatar','s-lib','s-retry'];
-  // show/hide navs
-  document.getElementById('nav').style.display = childScreens.includes(id) ? 'flex':'none';
-  document.getElementById('avNav').style.display = 'none';
-  document.getElementById('retryNav').style.display = 'none';
-  if(id==='s-avatar'){ document.getElementById('nav').style.display='none'; document.getElementById('avNav').style.display='flex'; }
-  if(id==='s-retry') { document.getElementById('nav').style.display='none'; document.getElementById('retryNav').style.display='flex'; }
-
-  // mark active nav btn
-  if(childScreens.includes(id)){
-    const navMap={'s-home':0,'s-avatar':1,'s-lib':2,'s-retry':3};
-    const idx = navMap[id] ?? 0;
-    ['nav','avNav','retryNav'].forEach(nid=>{
-      document.getElementById(nid).querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===idx));
-    });
-  }
-
-  if(id==='s-home')   refreshHome();
-  if(id==='s-avatar') refreshAvatar();
-  if(id==='s-retry')  refreshRetry();
-  if(id==='s-parent') refreshParent();
-  if(id==='s-lib')    refreshLib();
+  // Hide all navs first
+  ['nav','avNav','retryNav','friendNav'].forEach(nid=>{
+    const n=document.getElementById(nid); if(n) n.style.display='none';
+  });
+  const navForScreen={'s-home':'nav','s-avatar':'avNav','s-lib':'nav','s-retry':'retryNav','s-friends':'friendNav'};
+  const activeNav = navForScreen[id];
+  if(activeNav){ const n=document.getElementById(activeNav); if(n) n.style.display='flex'; }
+  if(id==='s-home')    refreshHome();
+  if(id==='s-avatar')  refreshAvatar();
+  if(id==='s-retry')   refreshRetry();
+  if(id==='s-parent')  refreshParent();
+  if(id==='s-lib')     refreshLib();
+  if(id==='s-friends') refreshFriends();
 }
 function navGo(id,el){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
@@ -1271,7 +1428,7 @@ function doLogin(){
   loadState();
   S.name=name; S.code=code; S.role=chosenRole; saveState();
   if(chosenRole==='parent'){ goScreen('s-parent'); return; }
-  const done=DB.get('qk3_ob_'+code+'_'+name,false);
+  const done=DB.get('qk31_ob_'+code+'_'+name,false);
   if(done) goScreen('s-home');
   else startOb();
 }
@@ -1340,17 +1497,18 @@ function renderObPickList(){
   const ul=document.getElementById('obPickList'); ul.innerHTML='';
   const items=LIBRARY[obFaceCat]||[];
   const cat=CATS.find(c=>c.id===obFaceCat);
+  const catCls=cat?cat.cls:'qi-custom';
   items.forEach(q=>{
     const on=obPickedIds.has(q.id);
     const li=document.createElement('div');
     li.className='qpick-item'+(on?' on':'');
-    li.innerHTML=`<div class="qi ${cat.cls}">${q.em}</div>
+    li.innerHTML=`<div class="qi ${catCls}">${q.em}</div>
       <div><h4>${q.name}</h4><p>⏰ ${q.time} · ⭐+${q.xp} XP</p></div>
       <div class="qchk">${on?'✅':'⬜'}</div>`;
     li.onclick=()=>{
-      if(!on && obPickedIds.size>=6){showToast('최대 6개까지 선택할 수 있어!');return}
+      if(!on && obPickedIds.size>=10){showToast('최대 10개까지 선택할 수 있어!');return}
       if(on) obPickedIds.delete(q.id); else obPickedIds.add(q.id);
-      document.getElementById('obPickCnt').textContent=obPickedIds.size+' / 6';
+      document.getElementById('obPickCnt').textContent=obPickedIds.size+' / 10';
       renderObPickList();
       spawnPtc(window.innerWidth/2,window.innerHeight*.6,4);
     };
@@ -1371,10 +1529,10 @@ function obNext(){
 function obSkip(){ finishOb(); }
 function finishOb(){
   if(obPickedIds.size>0){
-    DB.set('qk3_selected_quests',[...obPickedIds]);
+    DB.set('qk31_sel',[...obPickedIds]);
     S.quests=[...obPickedIds].map(id=>({id,done:false}));
   }
-  DB.set('qk3_ob_'+S.code+'_'+S.name,true);
+  DB.set('qk31_ob_'+S.code+'_'+S.name,true);
   saveState();
   goScreen('s-home');
 }
@@ -1392,15 +1550,15 @@ function refreshHome(){
   document.getElementById('coinTop').textContent=S.coins;
   document.getElementById('resTop').textContent=S.resilience;
 
-  const XP_LV=[0,200,450,800,1300,2000,3000,4500];
-  let lv=1; for(let i=XP_LV.length-1;i>=0;i--){if(S.xp>=XP_LV[i]){lv=i+1;break;}}
-  S.lv=Math.min(lv,8); saveState();
-  const xc=S.xp-(XP_LV[S.lv-1]||0);
-  const xm=(XP_LV[S.lv]||XP_LV[XP_LV.length-1])-(XP_LV[S.lv-1]||0);
+  const lvi=getLvInfo(S.xp);
+  S.lv=lvi.cur.lv; saveState();
+  const xc=S.xp-lvi.prevXp, xm=lvi.nextXp-lvi.prevXp;
   document.getElementById('heroLv').textContent=S.lv;
   document.getElementById('xpCur').textContent=xc;
   document.getElementById('xpMax').textContent=xm;
   setTimeout(()=>document.getElementById('xpFill').style.width=Math.min(xc/xm*100,100)+'%',200);
+  const titleEl=document.getElementById('heroTitle');
+  if(titleEl){titleEl.textContent=lvi.cur.title;titleEl.className='lv-badge '+lvi.cur.cls;}
 
   const total=S.quests.length;
   const done=S.quests.filter(q=>q.done).length;
@@ -1415,6 +1573,18 @@ function refreshHome(){
 
   buildHomeQList();
   refreshLearnCard();
+  // Missed quest banner
+  const missed = S.quests.filter(q=>!q.done);
+  const missedBanner = document.getElementById('missedBanner');
+  if(missedBanner) {
+    if(missed.length > 0 && S.quests.some(q=>q.done)) {
+      missedBanner.style.display='flex';
+      const mt = document.getElementById('missedBannerTxt');
+      if(mt) mt.textContent = missed.length+'개 퀘스트가 미완료예요. 지금 복구할 수 있어! 💙';
+    } else {
+      missedBanner.style.display='none';
+    }
+  }
 }
 function buildHomeQList(){
   const list=document.getElementById('homeQList'); list.innerHTML='';
@@ -1422,23 +1592,34 @@ function buildHomeQList(){
     const qt=getAllQuestById(qs.id); if(!qt) return;
     const cat=CATS.find(c=>c.id===getCatForId(qt.id));
     const cls=cat ? cat.cls : 'qi-custom';
+    const isLearn=!!qt.learnType;
+    const learnDone=isLearn&&S.learnDone&&S.learnDone[qt.learnType];
+    const isDone=qs.done||learnDone;
     const card=document.createElement('div');
-    card.className='qc'+(qs.done?' done':'')+(qt.urg&&!qs.done?' urg':'');
+    card.className='qc'+(isDone?' done':'')+(qt.urg&&!isDone?' urg':'');
     card.innerHTML=`
       <div class="qc-icon ${cls}">${qt.em}</div>
       <div class="qbody">
-        <div class="qname">${qt.name}</div>
+        <div class="qname">${qt.name}${qt.note?'<span style="font-size:9px;color:var(--blue);margin-left:5px">'+qt.note+'</span>':''}</div>
         <div class="qmeta">
           <span class="qtime">⏰ ${qt.time||''}</span>
-          <span class="qxp">✨ +${qt.xp} XP</span>
-          ${qt.urg&&!qs.done?'<span class="qurg-tag">🔴 긴급</span>':''}
+          <span class="qxp">✨ +${qt.xp} XP · 🪙+${qt.coin}</span>
+          ${qt.urg&&!isDone?'<span class="qurg-tag">🔴 긴급</span>':''}
         </div>
       </div>
-      ${qs.done
+      ${isDone
         ?'<div class="qdone">✅</div>'
-        :`<button class="qbtn" onclick="completeQ('${qt.id}',event)">▶</button>`}`;
+        :isLearn
+          ?`<button class="qbtn" onclick="openLearnModalForType('${qt.learnType}',event)" style="font-size:13px">📖</button>`
+          :`<button class="qbtn" onclick="completeQ('${qt.id}',event)">▶</button>`}`;
     list.appendChild(card);
   });
+}
+function openLearnModalForType(type, e){
+  if(e) e.stopPropagation();
+  curLearnType=type;
+  buildLMTabs();renderLMContent(type);
+  document.getElementById('learnOverlay').classList.add('show');
 }
 function completeQ(id,e){
   e.stopPropagation();
@@ -1448,48 +1629,128 @@ function completeQ(id,e){
   qs.done=true;
   S.xp+=qt.xp; S.coins+=qt.coin;
   const today=new Date().toDateString();
-  const last=DB.get('qk3_lastq','');
+  const last=DB.get('qk31_lq','');
   if(last!==today){
     const yest=new Date(); yest.setDate(yest.getDate()-1);
     S.streak=(last===yest.toDateString()?S.streak+1:1);
-    DB.set('qk3_lastq',today);
+    DB.set('qk31_lq',today);
   }
-  saveState();
-  const btn=e.target; const r=btn.getBoundingClientRect();
-  spawnPtc(r.left+r.width/2,r.top+r.height/2);
-  showRpop(qt.em,'퀘스트 클리어!',qt.name+'을(를) 해냈어!<br>아바타 컨디션이 올라갔어 🔥',
-    [{cls:'rc-xp',txt:'⭐ +'+qt.xp+' XP'},{cls:'rc-coin',txt:'🪙 +'+qt.coin+' 코인'}]);
+  const prevLv=S.lv; saveState();
+  if(e){const r=e.target.getBoundingClientRect();spawnPtc(r.left+r.width/2,r.top+r.height/2);}
+  const newLvi=getLvInfo(S.xp);
+  if(newLvi.cur.lv>prevLv){
+    S.lv=newLvi.cur.lv;saveState();
+    setTimeout(()=>{
+      confetti();
+      showRpop('👑','레벨 업!','Lv.'+S.lv+' <strong>'+newLvi.cur.title+'</strong> 달성!<br>'+newLvi.cur.unlock+' 🎉',[{cls:'rc-xp',txt:'🏆 '+newLvi.cur.title}]);
+    },400);
+  } else {
+    showRpop(qt.em,'퀘스트 클리어!',qt.name+'<br>아바타 컨디션이 올라갔어 🔥',[{cls:'rc-xp',txt:'⭐ +'+qt.xp+' XP'},{cls:'rc-coin',txt:'🪙 +'+qt.coin+' 코인'}]);
+  }
   refreshHome();
   document.getElementById('ambient').classList.toggle('green-mode', S.quests.filter(q=>q.done).length === S.quests.length);
 }
 
-// ── Learning card ────────────────────────────────
-function getTodayLearn(){
-  const d=new Date(); const idx=(d.getFullYear()*366+d.getMonth()*31+d.getDate()) % LEARN_DATA.length;
-  return LEARN_DATA[idx];
-}
+
+// ─ Learn card (3 mini tiles) ─────────────────────
 function refreshLearnCard(){
-  const l=getTodayLearn();
-  document.getElementById('learnBadge').textContent=l.badge;
-  document.getElementById('learnContent').textContent=l.content;
-  document.getElementById('learnSub').textContent=l.sub.split('\n')[0];
-  const btn=document.getElementById('learnBtn');
-  if(S.learnDone){btn.disabled=true;btn.textContent='✅ 오늘 학습 완료!'}
-  else{btn.disabled=false;btn.textContent='읽었어요 ✓ (+5 XP)'}
+  const row = document.getElementById('learnRow');
+  if(!row) return;
+  row.innerHTML='';
+  const types=[
+    {t:'hanja',  e:'📘', lbl:'한자'},
+    {t:'word',   e:'🔤', lbl:'영단어'},
+    {t:'quote',  e:'💬', lbl:'명언'},
+  ];
+  types.forEach(({t,e,lbl})=>{
+    const done = S.learnDone && S.learnDone[t];
+    const d=document.createElement('div');
+    d.className='lc-mini'+(done?' done':'');
+    d.innerHTML=`<span class="lm-em">${e}</span><span class="lm-lbl">${done?'✅ 완료':lbl+' 보기'}</span>`;
+    d.onclick=()=>openLearnModalForType(t,null);
+    row.appendChild(d);
+  });
 }
-function openLearn(){
-  const l=getTodayLearn();
-  document.getElementById('lmTitle').textContent=l.content;
-  document.getElementById('lmBody').textContent=l.detail+'\n\n'+l.sub.replace(/\n/g,' · ');
-  document.getElementById('learnOverlay').classList.add('show');
+
+// ─ Learn modal logic ──────────────────────────────
+let curLearnType='hanja';
+function buildLMTabs(){
+  const el=document.getElementById('lmTabs');
+  if(!el){return;}
+  el.innerHTML='';
+  [['hanja','📘 한자'],['word','🔤 영단어'],['quote','💬 명언']].forEach(([t,lbl])=>{
+    const d=document.createElement('div');
+    d.className='lm-tab'+(t===curLearnType?' on':'');
+    d.textContent=lbl;
+    d.onclick=()=>{curLearnType=t;buildLMTabs();renderLMContent(t);};
+    el.appendChild(d);
+  });
 }
-function closeLearnModal(e){ if(e.target===document.getElementById('learnOverlay')) document.getElementById('learnOverlay').classList.remove('show'); }
-function markLearnDone(e){ e.stopPropagation(); if(S.learnDone) return; _doLearnDone(); }
-function markLearnDoneModal(){ document.getElementById('learnOverlay').classList.remove('show'); if(S.learnDone) return; _doLearnDone(); }
-function _doLearnDone(){
-  S.learnDone=true; S.xp+=5; S.learnWeekCount=(S.learnWeekCount||0)+1; saveState();
-  spawnPtc(window.innerWidth/2,window.innerHeight*.7,6);
-  showToast('📘 +5 XP 획득! 학습 완료 ✓');
+function renderLMContent(type){
+  const el=document.getElementById('lmContentArea');
+  if(!el) return;
+  el.innerHTML='';
+  const done=S.learnDone&&S.learnDone[type];
+  if(type==='word'){
+    const w=getTodayItem(WORDS);
+    el.innerHTML=`
+      <div class="lm-main-card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <span style="font-family:'Fredoka One',sans-serif;font-size:32px;color:var(--txt)">${w.w}</span>
+          <button onclick="speakWord('${w.w}')" style="background:var(--blue);border:none;border-radius:10px;padding:6px 12px;font-size:16px;cursor:pointer;transition:transform .15s" onmousedown="this.style.transform='scale(.88)'" onmouseup="this.style.transform=''">🔊</button>
+        </div>
+        <div style="font-size:13px;color:var(--txt2);font-weight:700;margin-bottom:8px">🇰🇷 <strong style="color:var(--txt)">${w.meaning}</strong> · 초등 필수 영단어</div>
+        <div style="background:var(--bg3);border-radius:12px;padding:11px 13px">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:3px">📌 ${w.ex}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--txt2)">💡 ${w.exKo}</div>
+        </div>
+      </div>`;
+  } else if(type==='quote'){
+    const q=getTodayItem(QUOTES);
+    el.innerHTML=`
+      <div class="lm-main-card">
+        <div style="font-family:'Fredoka One',sans-serif;font-size:20px;color:var(--txt);line-height:1.4;margin-bottom:8px">${q.q}</div>
+        <div style="font-size:11px;color:var(--txt2);font-weight:700;margin-bottom:10px">— ${q.author}</div>
+        <div style="background:var(--bg3);border-radius:12px;padding:11px 13px">
+          <div style="font-size:12px;font-weight:700;color:var(--txt2)">${q.detail}</div>
+        </div>
+      </div>`;
+  } else {
+    const h=getTodayItem(HANJA);
+    el.innerHTML=`
+      <div class="lm-main-card">
+        <div style="font-family:'Fredoka One',sans-serif;font-size:52px;color:var(--txt);margin-bottom:4px">${h.h}</div>
+        <div style="font-size:14px;font-weight:800;color:var(--txt2);margin-bottom:8px">${h.sound} · ${h.meaning}</div>
+        <div style="background:var(--bg3);border-radius:12px;padding:11px 13px">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:3px">📌 쓰임새: ${h.use}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--txt2)">💡 ${h.detail}</div>
+        </div>
+      </div>`;
+  }
+  const btn=document.getElementById('lmDoneBtn');
+  if(btn){
+    if(done){btn.disabled=true;btn.textContent='✅ 오늘 이미 확인했어!';}
+    else{btn.disabled=false;btn.textContent='읽었어요 ✓ (+5 XP)';}
+  }
+}
+function speakWord(w){
+  if(!window.speechSynthesis)return;
+  const u=new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.82;
+  window.speechSynthesis.cancel();window.speechSynthesis.speak(u);showToast('🔊 '+w);
+}
+function closeLearnModal(e){if(e.target===document.getElementById('learnOverlay'))document.getElementById('learnOverlay').classList.remove('show');}
+function doLearnDone(){
+  if(!curLearnType||S.learnDone[curLearnType])return;
+  if(!S.learnDone) S.learnDone={};
+  S.learnDone[curLearnType]=true;
+  S.xp+=5;S.learnWeekCount=(S.learnWeekCount||0)+1;saveState();
+  // Also complete linked quest
+  const lq=S.quests.find(q=>{const qt=getAllQuestById(q.id);return qt&&qt.learnType===curLearnType&&!q.done;});
+  if(lq){lq.done=true;const qt2=getAllQuestById(lq.id);if(qt2){S.xp+=qt2.xp;S.coins+=qt2.coin;}saveState();}
+  document.getElementById('learnOverlay').classList.remove('show');
+  spawnPtc(window.innerWidth/2,window.innerHeight*.5,8);
+  const names={hanja:'한자',word:'영단어',quote:'명언'};
+  showToast('📚 +5 XP! 오늘의 '+names[curLearnType]+' 완료 ✓');
   refreshHome();
 }
 
@@ -1497,7 +1758,7 @@ function _doLearnDone(){
 //  QUEST LIBRARY
 // ══════════════════════════════════════════════════
 let libCat='morning';
-const CUSTOM_EMOJIS=['🎯','🎲','🎸','🏋️','🧩','🌿','🎤','🏊','🚴','✍️','🍳','🧹'];
+// CUSTOM_EMOJIS defined above with expanded set
 let customEmoji='🎯';
 
 function refreshLib(){
@@ -1520,12 +1781,17 @@ function renderLibList(){
   const ul=document.getElementById('libList'); ul.innerHTML='';
   const items=LIBRARY[libCat]||[];
   const cat=CATS.find(c=>c.id===libCat);
+  const cls=cat?cat.cls:'qi-custom';
   items.forEach(q=>{
     const added=S.quests.some(qs=>qs.id===q.id);
     const li=document.createElement('div');
     li.className='lib-item'+(added?' added':'');
-    li.innerHTML=`<div class="li-icon ${cat.cls}">${q.em}</div>
-      <div><h4>${q.name}</h4><p>⏰ ${q.time} · ⭐+${q.xp} XP · 🪙+${q.coin}</p></div>
+    li.innerHTML=`<div class="li-icon ${cls}">${q.em}</div>
+      <div style="flex:1;min-width:0">
+        <h4>${q.name}${q.customName?'<span style="font-size:9px;color:var(--brand2);margin-left:4px">(이름 설정 가능)</span>':''}</h4>
+        <p>⏰ ${q.time} · ⭐+${q.xp} XP · 🪙+${q.coin}</p>
+        ${q.note?'<p style="color:var(--blue);font-size:9px">📌 '+q.note+'</p>':''}
+      </div>
       <div class="li-add">${added?'✅':'➕'}</div>`;
     li.onclick=()=>toggleLibQuest(q.id,li,added);
     ul.appendChild(li);
@@ -1536,12 +1802,12 @@ function toggleLibQuest(id,li,wasAdded){
     S.quests=S.quests.filter(q=>q.id!==id);
     showToast('퀘스트 제거됨');
   } else {
-    if(S.quests.length>=6){showToast('최대 6개까지 추가할 수 있어!');return}
+    if(S.quests.length>=10){showToast('10개 초과 시 부모님 승인이 필요해요!');return}
     S.quests.push({id,done:false});
     showToast('퀘스트 추가됨 ✓');
     spawnPtc(window.innerWidth/2,window.innerHeight*.5,6);
   }
-  DB.set('qk3_selected_quests',S.quests.map(q=>q.id));
+  DB.set('qk31_sel',S.quests.map(q=>q.id));
   saveState(); renderLibList(); updateLibCount();
 }
 function updateLibCount(){
@@ -1562,7 +1828,7 @@ function buildCustomEmojiRow(){
 function addCustomQuest(){
   const name=document.getElementById('customName').value.trim();
   if(!name){showToast('퀘스트 이름을 입력해줘!');return}
-  if(S.quests.length>=6){showToast('최대 6개! 기존 퀘스트를 먼저 제거해줘');return}
+  if(S.quests.length>=10){showToast('10개 초과 시 부모님 승인이 필요해요!');return}
   const diff=document.getElementById('customDiff').value;
   const xpMap={easy:20,med:40,hard:70};
   const coinMap={easy:7,med:12,hard:18};
@@ -1570,7 +1836,7 @@ function addCustomQuest(){
   const q={id,em:customEmoji,name,xp:xpMap[diff],coin:coinMap[diff],diff,time:'자유시간'};
   S.customQuests.push(q);
   S.quests.push({id,done:false});
-  DB.set('qk3_selected_quests',S.quests.map(q=>q.id));
+  DB.set('qk31_sel',S.quests.map(q=>q.id));
   saveState();
   document.getElementById('customName').value='';
   showToast(customEmoji+' '+name+' 추가됨! ✓');
@@ -1769,12 +2035,14 @@ function pickPraise(el){
   el.classList.add('on'); chosenPraise=el.textContent;
 }
 function sendPraise(){
-  if(!chosenPraise){showToast('칭찬 문구를 먼저 선택해주세요 😊');return}
-  S.praises=S.praises||[];
-  S.praises.push({msg:chosenPraise,at:Date.now()});
-  saveState();
-  showToast('💌 칭찬이 전달됐어요!');
+  const custom=(document.getElementById('customPraiseInp')||{}).value||'';
+  const msg=custom.trim()||chosenPraise;
+  if(!msg){showToast('응원 문구를 선택하거나 직접 입력해주세요 😊');return;}
+  S.praises=S.praises||[];S.praises.push({msg,at:Date.now()});saveState();
+  showToast('📣 "'+msg.slice(0,15)+(msg.length>15?'…':'')+'" 전달됐어요!');
+  spawnPtc(window.innerWidth/2,window.innerHeight*.5,8);
   chosenPraise=null;
+  const inp=document.getElementById('customPraiseInp');if(inp)inp.value='';
   setTimeout(()=>document.querySelectorAll('.pchip').forEach(c=>c.classList.remove('on')),1500);
 }
 
@@ -1847,6 +2115,86 @@ function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('on');
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2300);
+}
+
+// ══════════════════════════════════════════════════
+//  FRIENDS
+// ══════════════════════════════════════════════════
+const DEMO_FRIENDS = [
+  {code:'SUJIN', name:'수진', faceIdx:2, xp:380, streak:5, todayDone:3, todayTotal:5},
+  {code:'MINJUN', name:'민준', faceIdx:0, xp:720, streak:12, todayDone:5, todayTotal:5},
+  {code:'YUNA', name:'유나', faceIdx:4, xp:140, streak:2, todayDone:1, todayTotal:4},
+];
+const FACES_EM = ['🧙‍♂️','🦊','🐱','🐼','🦄','🐲','🤖','🦁'];
+const CHEER_MSGS = ['🔥 오늘도 파이팅!','👏 잘하고 있어!','💪 포기하지 마!','⭐ 최고야!','🚀 같이 달리자!','💙 응원해!'];
+
+function refreshFriends(){
+  const list = document.getElementById('friendList');
+  if(!list) return;
+  const friends = DB.get('qk31_friends', DEMO_FRIENDS);
+  list.innerHTML = '';
+  if(!friends.length){
+    list.innerHTML='<div style="text-align:center;padding:20px;font-size:13px;color:var(--txt2);font-weight:700">아직 친구가 없어요.<br>친구 코드로 초대해봐! 👆</div>';
+    return;
+  }
+  friends.forEach(f=>{
+    const d=document.createElement('div');d.className='friend-card';
+    const lvi=getLvInfo(f.xp||0);
+    const pct=f.todayTotal?Math.round((f.todayDone||0)/f.todayTotal*100):0;
+    d.innerHTML=`
+      <div class="fa">${FACES_EM[f.faceIdx||0]}</div>
+      <div style="flex:1;min-width:0">
+        <div class="fn">${f.name} <span class="lv-badge lv-1">${lvi.cur.title}</span></div>
+        <div class="fm2">오늘 ${f.todayDone||0}/${f.todayTotal||0} 완료 · <span class="f-streak">🔥 ${f.streak||0}일 연속</span></div>
+        <div style="height:4px;border-radius:3px;background:var(--sur2);overflow:hidden;margin-top:5px">
+          <div style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--teal));width:${pct}%;transition:width 1s ease"></div>
+        </div>
+      </div>
+      <button onclick="sendCheerToFriend('${f.name}')" style="background:var(--brandlt);border:1px solid #7B6FFF44;border-radius:10px;padding:6px 10px;font-size:12px;cursor:pointer;color:var(--brand2);font-weight:800;font-family:'Nunito',sans-serif;flex-shrink:0">📣</button>`;
+    list.appendChild(d);
+  });
+  // cheer panel
+  const cl=document.getElementById('friendCheerList');
+  if(cl){
+    cl.innerHTML='';
+    CHEER_MSGS.forEach(msg=>{
+      const d=document.createElement('div');
+      d.style.cssText='background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer';
+      d.innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--txt)">${msg}</span><button onclick="sendCheerMsg('${msg}')" style="background:var(--brand);border:none;border-radius:9px;padding:5px 10px;font-size:11px;font-weight:800;color:#fff;cursor:pointer;font-family:'Nunito',sans-serif">보내기</button>`;
+      cl.appendChild(d);
+    });
+  }
+}
+function addFriend(){
+  const code=document.getElementById('friendCode').value.trim().toUpperCase();
+  if(!code){showToast('친구 코드를 입력해줘!');return;}
+  if(code===S.code){showToast('내 코드는 안 돼요 😅');return;}
+  const friends=DB.get('qk31_friends',DEMO_FRIENDS);
+  if(friends.find(f=>f.code===code)){showToast('이미 친구예요!');return;}
+  friends.push({code,name:'친구 '+code.slice(0,3),faceIdx:Math.floor(Math.random()*8),xp:100,streak:1,todayDone:2,todayTotal:5});
+  DB.set('qk31_friends',friends);
+  document.getElementById('friendCode').value='';
+  showToast('👫 '+code+' 친구 추가됨!');
+  spawnPtc(window.innerWidth/2,window.innerHeight*.5,10);
+  refreshFriends();
+}
+function sendCheerToFriend(name){showToast('📣 '+name+'에게 응원 보냄!');spawnPtc(window.innerWidth/2,window.innerHeight*.5,8);}
+function sendCheerMsg(msg){showToast('📣 "'+msg.slice(0,12)+'..." 전송!');spawnPtc(window.innerWidth/2,window.innerHeight*.5,8);}
+
+// ── Parent enhancements ───────────────────────────
+let chosenGift=null;
+function selGift(name,el){
+  chosenGift=name;
+  document.querySelectorAll('.gift-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function sendGift(){
+  if(!chosenGift){showToast('선물을 먼저 선택해주세요 🎁');return;}
+  S.xp+=30;S.coins+=50;saveState();
+  showToast('🎁 '+chosenGift+' 선물 전달됨! (+50코인, +30XP)');
+  spawnPtc(window.innerWidth/2,window.innerHeight*.5,12);confetti();
+  chosenGift=null;
+  document.querySelectorAll('.gift-btn').forEach(b=>b.classList.remove('sel'));
 }
 
 // ══════════════════════════════════════════════════
