@@ -88,7 +88,7 @@ body{user-select:none}
 /* ══════════════════════════════════════
    BOTTOM NAV
 ══════════════════════════════════════ */
-#nav{
+#nav,#avNav,#retryNav,#friendNav,#libNav,.bottom-nav{
   position:fixed;bottom:0;left:50%;transform:translateX(-50%);
   width:100%;max-width:440px;
   background:var(--bg2);border-top:1px solid var(--bdr);
@@ -96,7 +96,7 @@ body{user-select:none}
   padding:8px 0 calc(8px + var(--sb));z-index:200;
   box-shadow:0 -4px 24px #00000050;
 }
-#nav.show{display:flex}
+#nav.show,#avNav.show,#retryNav.show,#friendNav.show,#libNav.show,.bottom-nav.show{display:flex}
 .nb{display:flex;flex-direction:column;align-items:center;gap:2px;
   font-size:9px;font-weight:800;color:var(--txt3);cursor:pointer;
   padding:0 10px;background:none;border:none;font-family:'Nunito',sans-serif;
@@ -1287,15 +1287,25 @@ const AV_CATS = {
     {em:'🦋',name:'나비핀',cost:45},  {em:'🌺',name:'꽃 머리띠',cost:50},
     {em:'🔥',name:'불꽃모',cost:180}, {em:'❄️',name:'눈왕관',cost:160},
   ]},
-  outfit:{ title:'👕 의상', items:[
-    {em:'🧙',name:'마법 로브',cost:0},    {em:'⚔️',name:'전사 갑옷',cost:0},
-    {em:'🥷',name:'닌자 복장',cost:80},   {em:'🤖',name:'로봇 슈트',cost:150},
-    {em:'🦸',name:'히어로 슈트',cost:180},{em:'🌈',name:'무지개 망토',cost:130},
-    {em:'🧜',name:'인어 의상',cost:90},   {em:'🦊',name:'여우 망토',cost:70},
-    {em:'🎩',name:'신사 정장',cost:100},  {em:'🏋️',name:'운동복',cost:60},
-    {em:'🎨',name:'예술가 스모크',cost:85},{em:'🌿',name:'자연 드레스',cost:75},
-    {em:'🔮',name:'예언자 가운',cost:200},{em:'⭐',name:'별빛 드레스',cost:220},
-    {em:'🎸',name:'록스타 재킷',cost:160},{em:'🌊',name:'파도 서퍼복',cost:110},
+  outfit:{ title:'👗 의상', items:[
+    {em:'👗',name:'프린세스 드레스',cost:0},  {em:'👘',name:'한복',cost:0},
+    {em:'🥻',name:'사리',cost:80},            {em:'🩱',name:'수영복',cost:60},
+    {em:'🧥',name:'코트',cost:100},           {em:'👔',name:'정장 셔츠',cost:90},
+    {em:'👚',name:'캐주얼 티셔츠',cost:50},   {em:'🩲',name:'반바지 세트',cost:55},
+    {em:'🥋',name:'도복',cost:80},            {em:'🎽',name:'운동복',cost:65},
+    {em:'🦺',name:'조끼 세트',cost:70},       {em:'🩴',name:'여름 드레스',cost:75},
+    {em:'🌟',name:'별빛 드레스',cost:200},    {em:'❄️',name:'아이스 드레스',cost:180},
+    {em:'🌈',name:'무지개 드레스',cost:160},  {em:'🌊',name:'파도 서퍼복',cost:120},
+  ]},
+  item:{ title:'🎒 아이템', items:[
+    {em:'🧙',name:'마법사 코스튬',cost:0},   {em:'⚔️',name:'전사 갑옷 세트',cost:0},
+    {em:'🥷',name:'닌자 복장',cost:80},      {em:'🤖',name:'로봇 슈트',cost:150},
+    {em:'🦸',name:'히어로 슈트',cost:180},   {em:'🌈',name:'무지개 망토',cost:130},
+    {em:'🧜',name:'인어 의상',cost:90},      {em:'🦊',name:'여우 망토',cost:70},
+    {em:'🎩',name:'신사 정장',cost:100},     {em:'🎨',name:'예술가 스모크',cost:85},
+    {em:'🔮',name:'예언자 가운',cost:200},   {em:'🎸',name:'록스타 재킷',cost:160},
+    {em:'🦄',name:'유니콘 코스튬',cost:220}, {em:'🐉',name:'드래곤 코스튬',cost:250},
+    {em:'🧚',name:'요정 의상',cost:140},     {em:'🤺',name:'검사 갑옷',cost:170},
   ]},
   pet:{ title:'🐾 펫', items:[
     {em:'🐉',name:'아기 드래곤',cost:100},{em:'🦋',name:'별빛 나비',cost:60},
@@ -1326,8 +1336,8 @@ let S = {
   role:'child', name:'', code:'',
   faceIdx:0, styleChoice:'quest',
   xp:0, coins:0, lv:1, streak:0, resilience:0,
-  equipped:{hat:0,outfit:0,pet:-1},
-  unlockedHat:[0,1,2,3], unlockedOutfit:[0,1], unlockedPet:[],
+  equipped:{hat:0,outfit:0,item:-1,pet:-1},
+  unlockedHat:[0,1,2,3], unlockedOutfit:[0,1], unlockedItem:[0,1], unlockedPet:[],
   quests:[],       // [{id,done}]
   customQuests:[], // [{id,em,name,xp,coin,diff}]
   todayDate:'',
@@ -1982,7 +1992,7 @@ function refreshAvatar(){
 }
 function buildAvEqRow(){
   const row=document.getElementById('avEqRow'); row.innerHTML='';
-  [['hat','🎩'],['outfit','👕'],['pet','🐾']].forEach(([k,icon])=>{
+  [['hat','🎩'],['outfit','👗'],['item','🎒'],['pet','🐾']].forEach(([k,icon])=>{
     const idx=S.equipped[k]; const on=idx>=0;
     const d=document.createElement('div');
     d.className='eq-tag'+(on?' on':'');
@@ -1992,7 +2002,7 @@ function buildAvEqRow(){
 }
 function buildAvCatTabs(){
   const el=document.getElementById('avCatScroll'); el.innerHTML='';
-  [['hat','🎩','모자'],['outfit','👕','의상'],['pet','🐾','펫']].forEach(([id,ic,lbl])=>{
+  [['hat','🎩','모자'],['outfit','👗','의상'],['item','🎒','아이템'],['pet','🐾','펫']].forEach(([id,ic,lbl])=>{
     const t=document.createElement('div');
     t.className='ctab2'+(id===avCat?' on':'');
     t.innerHTML=`<span class="ci">${ic}</span><span class="cl">${lbl}</span>`;
@@ -2130,26 +2140,60 @@ function refreshParent(){
 }
 function buildModGrid(done,total){
   const grid=document.getElementById('pModGrid'); grid.innerHTML='';
-  const mods=[
-    {cls:'qi-morning',em:'🌅',name:'아침 준비',  id:'m1'},
-    {cls:'qi-hw',     em:'📚',name:'학습·숙제',  id:'h1'},
-    {cls:'qi-pack',   em:'🎒',name:'준비물 체크', id:'p1'},
-    {cls:'qi-sleep',  em:'🌙',name:'Sleep Gate', id:'sl1'},
-    {cls:'qi-move',   em:'🤸',name:'운동·식습관', id:'mv3'},
-    {cls:'qi-move',   em:'🛡️',name:'회복력',     id:'_res'},
-  ];
-  mods.forEach(m=>{
-    let pct=m.id==='_res'?Math.min(S.resilience*10,100)
-      :(S.quests.find(q=>q.id===m.id)?.done?100:0);
+  
+  // Map quest IDs to categories
+  const CAT_MAP = {
+    morning:  {em:'🌅', name:'아침 준비',   ids:['m1','m2','m3','m4','m5','m6']},
+    study:    {em:'📚', name:'학습·숙제',   ids:['h1','h2','h3','h4','lrn1','lrn2','lrn3']},
+    pack:     {em:'🎒', name:'준비물 체크', ids:['p1','p2','p3']},
+    sleep:    {em:'🌙', name:'Sleep Gate',  ids:['sl1','sl2','sl3']},
+    health:   {em:'🤸', name:'운동·건강',   ids:['hlt1','hlt2','hlt3','mv1','mv2','mv3']},
+    relation: {em:'🤝', name:'관계·성장',   ids:['r1','r2','r3','rl1','rl2']},
+  };
+
+  // Build module cards from ACTUAL quests
+  Object.entries(CAT_MAP).forEach(([catId, cat]) => {
+    // Find quests in this category
+    const catQuests = S.quests.filter(q => cat.ids.includes(q.id));
+    // Also check custom quests if they match any label
+    const total_cat = catQuests.length;
+    const done_cat = catQuests.filter(q=>q.done).length;
+    const pct = total_cat > 0 ? Math.round(done_cat/total_cat*100) : 0;
+    
     const pc=pct>=70?'ph':pct>=40?'pm':'pl';
     const fc=pct>=70?'fh':pct>=40?'fm':'fl';
     const mc=document.createElement('div'); mc.className='mcard';
-    mc.innerHTML=`<div class="mc-top"><div class="mc-icon" style="background:linear-gradient(135deg,#1A1D30,#2A2D50)">${m.em}</div><div class="mc-pct ${pc}">${pct}%</div></div>
-      <div class="mc-name">${m.name}</div>
+    mc.style.cursor = 'pointer';
+    
+    // Show actual quest names in this category
+    const questNames = catQuests.map(q=>{
+      const qData = getAllQuestById(q.id);
+      return `<span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;color:${q.done?'var(--green)':'var(--txt2)'}">${q.done?'✓':'○'} ${qData?qData.name:q.id}</span>`;
+    }).join('');
+    
+    mc.innerHTML=`
+      <div class="mc-top">
+        <div class="mc-icon" style="background:linear-gradient(135deg,#1A1D30,#2A2D50)">${cat.em}</div>
+        <div class="mc-pct ${pc}">${total_cat>0?pct+'%':'—'}</div>
+      </div>
+      <div class="mc-name">${cat.name}</div>
       <div class="mc-bg"><div class="mc-fill ${fc}" style="width:0%" data-w="${pct}%"></div></div>
-      <div class="mc-tr">오늘 기준</div>`;
+      ${total_cat > 0 
+        ? `<div style="margin-top:6px;display:flex;flex-direction:column;gap:2px">${questNames}</div>`
+        : `<div style="font-size:9px;color:var(--txt3);font-weight:700;margin-top:4px">이 카테고리 퀘스트 없음</div>`
+      }`;
     grid.appendChild(mc);
   });
+  
+  // Resilience special card
+  const res = S.resilience || 0;
+  const resPct = Math.min(res*10, 100);
+  const mc2=document.createElement('div'); mc2.className='mcard';
+  mc2.innerHTML=`<div class="mc-top"><div class="mc-icon" style="background:linear-gradient(135deg,#1A1D30,#2A2D50)">🛡️</div><div class="mc-pct ${resPct>=70?'ph':resPct>=40?'pm':'pl'}">${resPct}%</div></div>
+    <div class="mc-name">회복력 점수</div>
+    <div class="mc-bg"><div class="mc-fill ${resPct>=70?'fh':resPct>=40?'fm':'fl'}" style="width:0%" data-w="${resPct}%"></div></div>
+    <div style="font-size:9px;color:var(--txt3);font-weight:700;margin-top:4px">누적 ${res}회 완료</div>`;
+  grid.appendChild(mc2);
   setTimeout(()=>document.querySelectorAll('.mc-fill').forEach(el=>el.style.width=el.dataset.w),300);
 }
 let chosenPraise=null;
@@ -2552,31 +2596,103 @@ function renderWorldCanvas(){
   const itemsEl = document.getElementById('worldItems');
   if(!itemsEl) return;
   itemsEl.innerHTML = '';
+
+  const SIZES = {house:52, tree:44, deco:36, light:32};
+
   ['house','tree','deco','light'].forEach(cat=>{
     const placed = world[cat];
     if(!placed) return;
     const item = WORLD_ITEMS[cat].find(i=>i.id===placed);
     if(!item) return;
+    // Default positions if not saved
+    const savedPos = world['pos_'+cat] || item.pos;
     const el = document.createElement('div');
-    el.style.cssText = 'position:absolute;font-size:36px;line-height:1;cursor:default';
-    Object.entries(item.pos).forEach(([k,v])=>el.style[k]=v);
+    const sz = SIZES[cat]||36;
+    el.style.cssText = `position:absolute;font-size:${sz}px;line-height:1;cursor:grab;user-select:none;touch-action:none;filter:drop-shadow(0 2px 4px #00000060)`;
+    Object.entries(savedPos).forEach(([k,v])=>el.style[k]=v);
     el.textContent = item.em;
+    el.title = item.name + ' (드래그해서 이동)';
+    // Make draggable
+    makeDraggableWorld(el, cat);
     itemsEl.appendChild(el);
   });
-  // Add avatar + pet
+
+  // Avatar
+  const avPos = world.pos_avatar || {bottom:'12%', left:'44%'};
   const avEl = document.createElement('div');
-  avEl.style.cssText = 'position:absolute;bottom:12%;left:46%;font-size:32px;animation:petBob 1.5s ease-in-out infinite';
+  avEl.style.cssText = `position:absolute;font-size:36px;line-height:1;cursor:grab;user-select:none;touch-action:none;animation:petBob 1.5s ease-in-out infinite`;
+  Object.entries(avPos).forEach(([k,v])=>avEl.style[k]=v);
   avEl.textContent = FACES[S.faceIdx]?.em || '🧙‍♂️';
+  makeDraggableWorld(avEl, 'avatar');
   itemsEl.appendChild(avEl);
+
   if(S.curPet){
     const petD = getPetData(S.curPet);
     if(petD){
+      const petPos = world.pos_pet || {bottom:'10%', left:'56%'};
       const petEl = document.createElement('div');
-      petEl.style.cssText = 'position:absolute;bottom:10%;left:54%;font-size:24px;animation:petBob 2s ease-in-out infinite .3s';
+      petEl.style.cssText = 'position:absolute;font-size:26px;line-height:1;cursor:grab;user-select:none;touch-action:none;animation:petBob 2s ease-in-out infinite .3s';
+      Object.entries(petPos).forEach(([k,v])=>petEl.style[k]=v);
       petEl.textContent = petD.em;
+      makeDraggableWorld(petEl, 'pet');
       itemsEl.appendChild(petEl);
     }
   }
+}
+
+function makeDraggableWorld(el, key){
+  let startX, startY, startLeft, startBottom;
+  const getParent = () => document.getElementById('worldCanvas');
+
+  function onStart(ex, ey){
+    const parent = getParent();
+    const pr = parent.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    startX = ex; startY = ey;
+    startLeft = er.left - pr.left;
+    startBottom = pr.bottom - er.bottom;
+    el.style.cursor = 'grabbing';
+    el.style.zIndex = '10';
+    el.style.left = startLeft + 'px';
+    el.style.bottom = startBottom + 'px';
+    el.style.right = ''; el.style.top = '';
+  }
+
+  function onMove(ex, ey){
+    const parent = getParent();
+    const pr = parent.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const dx = ex - startX, dy = ey - startY;
+    const newLeft = Math.max(0, Math.min(startLeft + dx, pr.width - er.width));
+    const newBottom = Math.max(0, Math.min(startBottom - dy, pr.height - er.height));
+    el.style.left = newLeft + 'px';
+    el.style.bottom = newBottom + 'px';
+  }
+
+  function onEnd(ex, ey){
+    el.style.cursor = 'grab'; el.style.zIndex = '';
+    // Save position
+    S.world = S.world || {};
+    S.world['pos_'+key] = { left: el.style.left, bottom: el.style.bottom };
+    saveState();
+  }
+
+  // Mouse
+  el.addEventListener('mousedown', e=>{
+    e.preventDefault(); onStart(e.clientX, e.clientY);
+    const mm = e2=>onMove(e2.clientX, e2.clientY);
+    const mu = e2=>{ onEnd(e2.clientX, e2.clientY); window.removeEventListener('mousemove',mm); window.removeEventListener('mouseup',mu); };
+    window.addEventListener('mousemove', mm);
+    window.addEventListener('mouseup', mu);
+  });
+  // Touch
+  el.addEventListener('touchstart', e=>{
+    e.preventDefault(); const t=e.touches[0]; onStart(t.clientX, t.clientY);
+  }, {passive:false});
+  el.addEventListener('touchmove', e=>{
+    e.preventDefault(); const t=e.touches[0]; onMove(t.clientX, t.clientY);
+  }, {passive:false});
+  el.addEventListener('touchend', e=>{ const t=e.changedTouches[0]; onEnd(t.clientX, t.clientY); });
 }
 
 function renderWorldShop(){
@@ -2701,11 +2817,14 @@ const GIFT_ITEMS = [
   {id:'outfit_box', em:'👗', name:'의상 랜덤 박스', desc:'랜덤 의상 1개',       cost:150, type:'item'},
 ];
 const GIFTICONS = [
-  {id:'gc_coffee',  em:'☕', name:'커피빈 아메리카노', brand:'커피빈', price:'4,500원', cost:450},
-  {id:'gc_gs',      em:'🏪', name:'GS25 5천원권',     brand:'GS25',   price:'5,000원', cost:500},
-  {id:'gc_bk',      em:'🍔', name:'버거킹 와퍼 세트',  brand:'버거킹', price:'9,900원', cost:990},
-  {id:'gc_starbucks',em:'🧋',name:'스타벅스 아메리카노',brand:'스타벅스',price:'5,500원',cost:550},
-  {id:'gc_cu',      em:'🏬', name:'CU 3천원권',       brand:'CU',     price:'3,000원', cost:300},
+  {id:'gc_gs',      em:'🏪', name:'GS25 3천원권',        brand:'GS25',       price:'3,000원', cost:300},
+  {id:'gc_cu',      em:'🏬', name:'CU 3천원권',          brand:'CU',         price:'3,000원', cost:300},
+  {id:'gc_baskin',  em:'🍦', name:'배스킨라빈스 싱글컵',  brand:'배스킨라빈스', price:'3,800원', cost:380},
+  {id:'gc_gong',    em:'🧋', name:'공차 버블티',          brand:'공차',       price:'4,500원', cost:450},
+  {id:'gc_mcdo',    em:'🍟', name:'맥도날드 해피밀 세트',  brand:'맥도날드',    price:'6,900원', cost:690},
+  {id:'gc_lotteria',em:'🍔', name:'롯데리아 불고기버거',   brand:'롯데리아',    price:'4,200원', cost:420},
+  {id:'gc_paris',   em:'🥐', name:'파리바게뜨 3천원권',   brand:'파리바게뜨',  price:'3,000원', cost:300},
+  {id:'gc_gu',      em:'🎮', name:'구글 플레이 5천원권',  brand:'구글 플레이', price:'5,000원', cost:500},
 ];
 
 function switchGiftTab(tab, el){
@@ -3133,7 +3252,8 @@ loadState();
   </div>
   <div class="sscroll spad-b" style="padding:0">
     <!-- World canvas -->
-    <div id="worldCanvas" style="position:relative;height:220px;background:linear-gradient(180deg,#0A1530 0%,#1A3060 40%,#2A4870 60%,#3A5840 80%,#2A4030 100%);overflow:hidden;flex-shrink:0">
+    <div id="worldCanvas" style="position:relative;height:240px;background:linear-gradient(180deg,#0A1530 0%,#1A3060 40%,#2A4870 60%,#3A5840 80%,#2A4030 100%);overflow:hidden;flex-shrink:0">
+      <div style="position:absolute;top:8px;right:10px;background:#00000066;border-radius:8px;padding:3px 8px;font-size:9px;font-weight:800;color:#fff;z-index:5;pointer-events:none">✋ 드래그로 위치 조정</div>
       <div id="worldItems" style="position:absolute;inset:0"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,#2A4030)"></div>
       <!-- Stars -->
